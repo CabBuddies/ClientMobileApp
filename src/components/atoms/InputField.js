@@ -1,10 +1,12 @@
 import React from 'react';
-import { TextInput } from 'react-native';
+import { TextInput, View } from 'react-native';
 
-export default function InputField() {
+export default function InputField(props) {
     return(
+        <View style = {{flex: 1, padding:10}}>
         <TextInput
-            placeholder="Text Entry Field"
+            {...props}
         />
+        </View>
     )
 }

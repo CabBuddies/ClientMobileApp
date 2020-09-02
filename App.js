@@ -9,7 +9,7 @@ import AppNavigator from './src/navigations/AppNavigator';
 export default function App() {
 
   // placeholder variable
-  const isSignedIn = true
+  const isSignedIn = false
 
   return (
     <NavigationContainer>

@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text } from "react-native";
-
+import Form from '../organisms/Form'
 export default function SignInForm() {
   return (
-    <View>
-      <Text>This is Sign In Form</Text>
+    <View style={{flex:1}}>
+      <Form type="login"/>
     </View>
   );
 }

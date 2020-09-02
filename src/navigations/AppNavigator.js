@@ -5,7 +5,7 @@ import PackageDeliveryScreen from '../screens/app-screens/PackageDeliveryScreen'
 import ChatScreen from '../screens/app-screens/ChatScreen';
 import RideScreen from '../screens/app-screens/RideScreen';
 
-import ProfileNaviagtor from './ProfileNavigator';
+import ProfileNavigator from './ProfileNavigator';
 
 const AppNavigator = createBottomTabNavigator();
 
