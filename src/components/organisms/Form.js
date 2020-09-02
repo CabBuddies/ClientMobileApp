@@ -1,12 +1,11 @@
 import React from 'react'
-import { StyleSheet, Button, KeyboardAvoidingView, Platform, View } from 'react-native'
-import InputField from '../atoms/InputField'
+import { StyleSheet,View, Alert } from 'react-native'
+import { CustomButton as Button } from '../atoms'
+import { InputField }  from '../atoms'
 
 export default function Form(props) {
     const exp = (props.type === "login")?
-        (<View style={styles.container}
-        behavior = {Platform.OS == "ios" ? "padding" : "height"}
-        >
+        (<View style={styles.container}>
         <InputField
               style={styles.input}
               multiline
@@ -26,12 +25,12 @@ export default function Form(props) {
             //   value={props.values.rating}
               
             />
-            <Button color="black" title="Login" onPress={() => console.log('Login pressed')} />
+            <Button style = {styles.btnContainer} color="#000" title="Login" onPress={() => Alert.alert('Login pressed')} />
 
             
         </View>)
     :
-       ( <View>
+       ( <View style = {styles.container}>
             <InputField
               style={styles.input}
               placeholder='First Name'
@@ -82,7 +81,7 @@ export default function Form(props) {
             //   value={props.values.rating}
               
             />
-            <Button color="black" title="Sign Up" onPress={() => console.log('Register pressed')} /> 
+            <Button style = {styles.btnContainer} color="#000" title="Sign Up" onPress={() => Alert.alert('Register pressed')} /> 
         </View>
         )
             
@@ -92,15 +91,25 @@ export default function Form(props) {
 const styles = StyleSheet.create({
     container: {
         flex:1,
+        // flexDirection:"row",
         paddingVertical: 20,
         paddingHorizontal: 24,
-        alignContent:"center"
+        justifyContent:"space-around",
+        alignItems: "stretch",
+        alignContent:"stretch"
     },
     input:{
         borderColor:'#000',
-        borderWidth:2,
-        fontSize: 24,
-        borderRadius: 8
+        borderBottomWidth:1,
+        fontSize: 18,
+        borderRadius: 2,
+        padding: 5,
+        marginTop: 10,
+    },
+    btnContainer:
+    {
+      paddingVertical: 10, 
     }
+
 })
 
