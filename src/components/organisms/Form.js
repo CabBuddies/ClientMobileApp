@@ -1,10 +1,10 @@
 import React from 'react'
-import { StyleSheet, Button, KeyboardAvoidingView, Platform } from 'react-native'
+import { StyleSheet, Button, KeyboardAvoidingView, Platform, View } from 'react-native'
 import InputField from '../atoms/InputField'
 
 export default function Form(props) {
     const exp = (props.type === "login")?
-        (<KeyboardAvoidingView style={styles.container}
+        (<View style={styles.container}
         behavior = {Platform.OS == "ios" ? "padding" : "height"}
         >
         <InputField
@@ -26,18 +26,17 @@ export default function Form(props) {
             //   value={props.values.rating}
               
             />
-            <Button color="purple" title="Login" onPress={() => console.log('Login pressed')} />
-        </KeyboardAvoidingView>)
-    :
-       ( <KeyboardAvoidingView 
-            style={styles.container}
-            behavior = {Platform.OS == "ios" ? "padding" : "height"}
-         >
+            <Button color="black" title="Login" onPress={() => console.log('Login pressed')} />
+
             
+        </View>)
+    :
+       ( <View>
             <InputField
               style={styles.input}
               placeholder='First Name'
               autoCapitalize="none"
+              placeholderTextColor = "#999"
             //   onChangeText={props.handleChange('title')}
             //   value={props.values.title}
             />
@@ -46,6 +45,7 @@ export default function Form(props) {
               style={styles.input}
               placeholder='Last name'
               autoCapitalize="none"
+              placeholderTextColor = "#999"
             //   onChangeText={props.handleChange('body')}
             //   value={props.values.body}
             />
@@ -55,6 +55,7 @@ export default function Form(props) {
               multiline
               placeholder='email'
               autoCapitalize="none"
+              placeholderTextColor = "#999"
             //   onChangeText={props.handleChange('body')}
               keyboardType = "email-address"
             //   value={props.values.body}
@@ -65,6 +66,7 @@ export default function Form(props) {
               placeholder='password'
               autoCapitalize="none"
               secureTextEntry
+              placeholderTextColor = "#999"
             //   onChangeText={props.handleChange('rating')}
             //   value={props.values.rating}
               
@@ -75,12 +77,13 @@ export default function Form(props) {
               placeholder='confirm password'
               autoCapitalize="none"
               secureTextEntry
+              placeholderTextColor = "#999"
             //   onChangeText={props.handleChange('rating')}
             //   value={props.values.rating}
               
             />
-            <Button color="purple" title="Sign Up" onPress={() => console.log('Register pressed')} /> 
-        </KeyboardAvoidingView>
+            <Button color="black" title="Sign Up" onPress={() => console.log('Register pressed')} /> 
+        </View>
         )
             
         return exp
@@ -90,14 +93,14 @@ const styles = StyleSheet.create({
     container: {
         flex:1,
         paddingVertical: 20,
-        paddingHorizontal: 24
+        paddingHorizontal: 24,
+        alignContent:"center"
     },
     input:{
-        borderColor:'purple',
-        borderWidth:1,
-        padding: 10,
-        fontSize: 18,
-        borderRadius: 6,
+        borderColor:'#000',
+        borderWidth:2,
+        fontSize: 24,
+        borderRadius: 8
     }
 })
 

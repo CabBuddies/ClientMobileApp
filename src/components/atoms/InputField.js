@@ -1,12 +1,14 @@
 import React from 'react';
-import { TextInput, View } from 'react-native';
+import { TextInput, View, StyleSheet } from 'react-native';
 
 export default function InputField(props) {
+
     return(
-        <View style = {{flex: 1, padding:10}}>
+        <View style = {{paddingBottom:15, justifyContent:"space-around"}}>
         <TextInput
             {...props}
         />
         </View>
     )
+    
 }
