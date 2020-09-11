@@ -1,114 +1,83 @@
 import React from 'react'
 import { StyleSheet,View, Alert } from 'react-native'
-import { CustomButton as Button } from '../atoms'
+import { CButton as Button } from '../atoms'
 import { InputField }  from '../atoms'
+import { Form, Item, Input, Icon, Label, Text } from 'native-base';
+import { Grid, Col, Row} from 'react-native-easy-grid';
 
-export default function Form(props) {
+export default function CustomForm(props) {
     const exp = (props.type === "login")?
-        (<View style={styles.container}>
-        <InputField
-              style={styles.input}
-              multiline
-              placeholder='email'
-              autoCapitalize="none"
-            //   onChangeText={props.handleChange('body')}
-              keyboardType = "email-address"
-            //   value={props.values.body}
-            />
-
-            <InputField 
-              style={styles.input}
-              placeholder='password'
-              autoCapitalize="none"
-              secureTextEntry
-            //   onChangeText={props.handleChange('rating')}
-            //   value={props.values.rating}
-              
-            />
-            <Button style = {styles.btnContainer} color="#000" title="Login" onPress={() => Alert.alert('Login pressed')} />
-
+        (
+            <Form style = {{flex:1}}>
+              <Item floatingLabel>
+                <Icon name = "md-person"/>
+                <Label>Email</Label>
+                <Input />
+              </Item>
             
-        </View>)
+              <Item floatingLabel>
+                <Icon name = "key"/>
+                <Label>Password</Label>
+                <Input secureTextEntry/>
+              </Item>
+              
+              <Button rounded primary hasText
+              onPress= {() => Alert.alert('Sign in Pressed')}
+              style = {styles.btn}
+              title = "Sign In"
+              />
+            </Form>
+        )
     :
-       ( <View style = {styles.container}>
-            <InputField
-              style={styles.input}
-              placeholder='First Name'
-              autoCapitalize="none"
-              placeholderTextColor = "#999"
-            //   onChangeText={props.handleChange('title')}
-            //   value={props.values.title}
-            />
+       ( 
+        <Form style ={{flex:1}}>
+        
+          <Item floatingLabel>
+            <Label>First Name</Label>
+            <Input />
+          </Item>
 
-            <InputField
-              style={styles.input}
-              placeholder='Last name'
-              autoCapitalize="none"
-              placeholderTextColor = "#999"
-            //   onChangeText={props.handleChange('body')}
-            //   value={props.values.body}
-            />
+          <Item floatingLabel>
+            <Label>Last Name</Label>
+            <Input />
+          </Item>
+          
+          <Item floatingLabel>
+            <Label>Email</Label>
+            <Input />
+          </Item>
+          
+          <Item floatingLabel>
+            <Label>Password</Label>
+            <Input secureTextEntry/>
+          </Item>
+          
+          <Item floatingLabel last>
+            <Label>Confirm Password</Label>
+            <Input secureTextEntry/>
+          </Item>
 
-            <InputField
-              style={styles.input}
-              multiline
-              placeholder='email'
-              autoCapitalize="none"
-              placeholderTextColor = "#999"
-            //   onChangeText={props.handleChange('body')}
-              keyboardType = "email-address"
-            //   value={props.values.body}
-            />
-
-            <InputField 
-              style={styles.input}
-              placeholder='password'
-              autoCapitalize="none"
-              secureTextEntry
-              placeholderTextColor = "#999"
-            //   onChangeText={props.handleChange('rating')}
-            //   value={props.values.rating}
-              
-            />
-
-            <InputField 
-              style={styles.input}
-              placeholder='confirm password'
-              autoCapitalize="none"
-              secureTextEntry
-              placeholderTextColor = "#999"
-            //   onChangeText={props.handleChange('rating')}
-            //   value={props.values.rating}
-              
-            />
-            <Button style = {styles.btnContainer} color="#000" title="Sign Up" onPress={() => Alert.alert('Register pressed')} /> 
-        </View>
+          <Button rounded hasText primary
+          onPress= {() => Alert.alert('Signup Pressed')}
+          style = {styles.btn}
+          title = "Sign Up"
+          />
+      </Form>
         )
             
         return exp
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex:1,
-        // flexDirection:"row",
-        paddingVertical: 20,
-        paddingHorizontal: 24,
-        justifyContent:"space-around",
-        alignItems: "stretch",
-        alignContent:"stretch"
-    },
-    input:{
-        borderColor:'#000',
-        borderBottomWidth:1,
-        fontSize: 18,
-        borderRadius: 2,
-        padding: 5,
-        marginTop: 10,
+    btn:
+    {
+      marginTop: 20,
     },
     btnContainer:
     {
-      paddingVertical: 10, 
+      flex:1,
+      paddingVertical: 10,
+      paddingHorizontal:24
     }
 
 })
