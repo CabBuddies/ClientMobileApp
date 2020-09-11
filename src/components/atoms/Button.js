@@ -17,7 +17,7 @@ export default function CButton({container = containerStyle, title = "Button", s
     return(
         <Grid style = {container}>
             <Button style = {style} {...rest}>
-                {hasIcon?(<Icon name={icon}/>):null}
+                {hasIcon?(<Icon name={icon} />):null}
                 {(!iconOnly)?(<Text>{title}</Text>):null}
             </Button>
         </Grid>

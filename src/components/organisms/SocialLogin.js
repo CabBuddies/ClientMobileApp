@@ -7,19 +7,19 @@ export default function SocialLogin() {
     <Grid>
         <Col>
             <Row>
-            <Button hasIcon rounded
-            bordered
-            icon= "logo-google"
-            title = "google"
-            />
+                <Button hasIcon rounded
+                bordered
+                icon= "logo-google"
+                title = "google"
+                />
             </Row>
             <Row>
-            <Button hasIcon rounded
-            bordered
-            icon= "logo-linkedin"
-            title = "linkedIn"
-            />
-        </Row>
+                <Button hasIcon rounded
+                bordered
+                icon= "logo-linkedin"
+                title = "linkedIn"
+                />
+            </Row>
         </Col>
         
         <Col>

@@ -10,7 +10,7 @@ export default function CustomForm(props) {
         (
             <Form style = {{flex:1}}>
               <Item floatingLabel>
-                <Icon name = "md-person"/>
+                <Icon name = "ios-mail"  />
                 <Label>Email</Label>
                 <Input />
               </Item>
@@ -33,26 +33,31 @@ export default function CustomForm(props) {
         <Form style ={{flex:1}}>
         
           <Item floatingLabel>
+          <Icon name="ios-text"/>
             <Label>First Name</Label>
             <Input />
           </Item>
 
           <Item floatingLabel>
+            <Icon name="ios-text"/>
             <Label>Last Name</Label>
             <Input />
           </Item>
           
           <Item floatingLabel>
+            <Icon name="ios-mail"/>
             <Label>Email</Label>
             <Input />
           </Item>
           
           <Item floatingLabel>
+            <Icon name="key"/>
             <Label>Password</Label>
             <Input secureTextEntry/>
           </Item>
           
           <Item floatingLabel last>
+            <Icon name="key"/>
             <Label>Confirm Password</Label>
             <Input secureTextEntry/>
           </Item>
