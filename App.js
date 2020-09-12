@@ -1,24 +1,23 @@
 import "react-native-gesture-handler";
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
-
-import AuthNavigator from './src/navigations/AuthNavigator';
-import AppNavigator from './src/navigations/AppNavigator';
+import { Platform, StatusBar, StyleSheet, View } from "react-native";
+import RootStackNavigator from "./src/navigations/RootNavigator";
 
 export default function App() {
 
   // placeholder variable
-  const isSignedIn = false
+  const isSignedIn = true;
 
   return (
-    <NavigationContainer>
-        <StatusBar style="auto" />
-        {
-          isSignedIn ?
-          <AppNavigator /> :
-          <AuthNavigator />
-        }
-    </NavigationContainer>
+      <View style={styles.container}>
+        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+        <RootStackNavigator isLoggedIn={isSignedIn} />
+      </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
