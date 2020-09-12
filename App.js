@@ -1,19 +1,15 @@
 import "react-native-gesture-handler";
 import React from "react";
-import { useState , useEffect } from "react"; 
-import { NavigationContainer } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
+import { Platform, StatusBar, StyleSheet, View } from "react-native";
+import RootStackNavigator from "./src/navigations/RootNavigator";
 import { Root } from "native-base";
 import { AppLoading } from "expo";
 import { useFonts } from "expo-font";
 
-import AuthNavigator from './src/navigations/AuthNavigator';
-import AppNavigator from './src/navigations/AppNavigator';
-
 export default function App() {
 
   // placeholder variable
-  const isSignedIn = false
+  const isSignedIn = true;
 
   let [fontsLoaded] = useFonts(
     {
@@ -33,15 +29,18 @@ export default function App() {
     (
     
     <Root>
-      <NavigationContainer>
-          <StatusBar style="auto" />
-          {
-            isSignedIn ?
-            <AppNavigator /> :
-            <AuthNavigator />
-          }
-      </NavigationContainer>
+      <View style={styles.container}>
+        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+        <RootStackNavigator isLoggedIn={isSignedIn} />
+      </View>
     </Root>
     )
+
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

@@ -1,3 +1,6 @@
+/**
+ * AuthStackNavigator - Let's user Navigate between Sign Up and Sign In screen.
+ */
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack'
 
