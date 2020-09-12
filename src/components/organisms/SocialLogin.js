@@ -11,6 +11,7 @@ export default function SocialLogin() {
                 bordered
                 icon= "logo-google"
                 title = "google"
+                iconLeft
                 />
             </Row>
             <Row>
@@ -18,6 +19,7 @@ export default function SocialLogin() {
                 bordered
                 icon= "logo-linkedin"
                 title = "linkedIn"
+                iconLeft
                 />
             </Row>
         </Col>
@@ -28,6 +30,7 @@ export default function SocialLogin() {
                 bordered
                 icon= "logo-facebook"
                 title = "facebook"
+                iconLeft
                 />
             </Row>
             <Row>
@@ -35,6 +38,7 @@ export default function SocialLogin() {
                 bordered
                 icon= "logo-twitter"
                 title = "twitter"
+                iconLeft
                 />
             </Row>
         </Col>

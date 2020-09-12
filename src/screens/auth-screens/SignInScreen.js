@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CButton as Button } from '../../components/atoms';
 import { CForm, SocialLogin }  from '../../components/organisms'
-import { Container, Content, Text, Thumbnail, Footer } from 'native-base'
+import { Container, Content, Text, Thumbnail, Footer, FooterTab } from 'native-base'
 import {Grid, Row, Col} from 'react-native-easy-grid'
 import phi from '../../../assets/placeholderIcon.png'
 
@@ -35,12 +35,16 @@ export default function SignInScreen({ navigation }) {
                     </Grid>
                 </Content>
                 <Footer style= {{backgroundColor:"#fff"}}>
-                <Button
-                    hasText transparent
-                    onPress = {nav}
-                    title = " Continue without signup "
-                    container = {{flex:1, justifyContent:"center"}}
-                />
+                    <Button
+                        transparent 
+                        onPress = {nav}
+                        icon = "ios-arrow-forward"
+                        iconStyle = {{ color: "#6975a6" }}
+                        hasIcon icRight iconRight
+                        title = " Continue Without Signup "
+                        container = {{flex:1, justifyContent:"center"}}
+                        textStyle = {{ fontWeight:"bold",color:"#6975a6"}}
+                    />
                 </Footer>
             </Container>
         
