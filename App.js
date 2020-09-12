@@ -1,21 +1,46 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import "react-native-gesture-handler";
+import React from "react";
+import { Platform, StatusBar, StyleSheet, View } from "react-native";
+import RootStackNavigator from "./src/navigations/RootNavigator";
+import { Root } from "native-base";
+import { AppLoading } from "expo";
+import { useFonts } from "expo-font";
 
 export default function App() {
+
+  // placeholder variable
+  const isSignedIn = true;
+
+  let [fontsLoaded] = useFonts(
+    {
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+    }
+  )
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    (!fontsLoaded)?
+    (
+      <Root>
+      <AppLoading/>
+    </Root>
+    )
+    :
+    (
+    
+    <Root>
+      <View style={styles.container}>
+        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+        <RootStackNavigator isLoggedIn={isSignedIn} />
+      </View>
+    </Root>
+    )
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
