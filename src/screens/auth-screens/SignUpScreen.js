@@ -1,14 +1,13 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import Form from '../../components/organisms';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { CForm }   from '../../components/organisms';
+import {Container, Content} from 'native-base';
 export default function SignUpScreen() {
     return(
-        <KeyboardAwareScrollView>
-        <View style={{ flex: 1, paddingTop:40, paddingHorizontal:24 }}>
-            {/* <Text>This is Sign Up Screen.</Text> */}
-            <Form/>
-        </View>
-        </KeyboardAwareScrollView>
+            <Container>
+                <Content>
+                    <CForm/>
+                </Content>
+            </Container>
     )
 }

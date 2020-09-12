@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { CustomButton } from '../../components/atoms';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import Form from '../../components/organisms'
-// import SignInForm from '../../components/organisms/SignInForm'
+import { View, StyleSheet } from 'react-native';
+import { CButton as Button } from '../../components/atoms';
+import { CForm, SocialLogin }  from '../../components/organisms'
+import { Container, Content, Text, Thumbnail, Footer } from 'native-base'
+import {Grid, Row, Col} from 'react-native-easy-grid'
+import phi from '../../../assets/placeholderIcon.png'
 
 export default function SignInScreen({ navigation }) {
     const nav = (nav) => {
@@ -11,37 +12,65 @@ export default function SignInScreen({ navigation }) {
         navigation.navigate('SignUp')
     }
     return(
-        <KeyboardAwareScrollView>
-        <View style={styles.formContainer}>
-            <Form type="login"/>
-            <Text style = {{ paddingHorizontal: 24 }}>Don't have an account? </Text>
-            <CustomButton 
-                title="Sign Up"
-                onPress={nav}
-                style ={styles.btnContainer} 
-                color = {styles.btnContainer.color}
-            />
-        </View>
-        </KeyboardAwareScrollView>
+            <Container>
+                <Content>   
+                    <Grid style = {styles.container}>
+                        <Row style={{ justifyContent:"center" }}>
+                            <Thumbnail source={phi} style = {{ marginTop:20 }}/>
+                        </Row>
+                        <Row >
+                            <SocialLogin/>
+                        </Row>
+                        <Row > 
+                            <CForm type="login"/>
+                        </Row>
+                        <Row>  
+                        <Button
+                                hasText transparent
+                                onPress = {nav}
+                                title = " New to CabBuddies? SignUp "
+                                container = {{flex:1, justifyContent:"center"}}
+                            />
+                        </Row>    
+                    </Grid>
+                </Content>
+                <Footer style= {{backgroundColor:"#fff"}}>
+                <Button
+                    hasText transparent
+                    onPress = {nav}
+                    title = " Continue without signup "
+                    container = {{flex:1, justifyContent:"center"}}
+                />
+                </Footer>
+            </Container>
+        
     )
 }
 const styles = StyleSheet.create(
     {
         btnContainer:
         {
-            paddingHorizontal: 24,
-            paddingVertical:15,
-            color: '#000'
+            marginTop: 20, 
         },
         formContainer:
         {
             flex:1,
             padding: 24,
-            backgroundColor: '#fffa',
+            // backgroundColor: '#fffa',
             justifyContent:'center',
             alignItems: 'stretch',
             alignContent: 'space-between'
-        }
+        },
+        row:
+        {
+            borderWidth: 2,
+            borderTopColor: "#99f"
+        },
+        col:
+        {
+            borderLeftWidth: 2,
+            borderLeftColor: "#99f"
+        },
 
     }
 )
