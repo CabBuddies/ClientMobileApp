@@ -8,7 +8,7 @@ export default function TravelQueryScreen() {
         {key:1, username: "Ed", body: {question: "How to get to San Salvador?", desc: "I need to get there ASAP"}},
         {key:2, username: "Al", body: {question: "How to get to Edford?", desc: "I need to get there ASAP"}},
         {key:3, username: "Winry", body: {question: "How to get to Edford?", desc: "I need to get there ASAP"}},
-        {key:4, username: "Lola", body: {question: "How to get Briggs?", desc: "I need to get there ASAP"}},
+        {key:4, username: "Lola", body: {question: "How to get to Briggs?", desc: "I need to get there ASAP"}},
     ]
 
     const renderItem = ({item}) => {

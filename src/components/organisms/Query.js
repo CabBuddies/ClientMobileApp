@@ -22,16 +22,19 @@ export default function Query({ username = "user", time = new Date().toISOString
             </CardItem>
             <CardItem cardBody>
                 <Body>
-                    <Text style = {{fontSize:30}}> {body.question} </Text>
+                    <Text style = {{fontSize:25}}> {body.question} </Text>
                     <Text note style = {{fontSize:20}}> {body.desc} </Text> 
                 </Body>
             </CardItem>
             <CardItem footer bordered>
                 <CardItem button onPress={()=>setLike('blue')}>
-                    <Text style = {{fontSize:10,color: likeColor}}> like</Text>
+                    <Text style = {{fontSize:15,color: likeColor}}> like</Text>
+                </CardItem>
+                <CardItem button >
+                    <Text > comments</Text>
                 </CardItem>
                 <CardItem button onPress={()=>setDislike('red')}>
-                    <Text style = {{fontSize:10,color: dislikeColor}}> dislike</Text>
+                    <Text style = {{fontSize:15,color: dislikeColor}}> dislike</Text>
                 </CardItem>
             </CardItem>
         </Card>
