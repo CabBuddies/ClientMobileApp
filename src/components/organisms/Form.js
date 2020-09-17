@@ -5,8 +5,8 @@ import { InputField }  from '../atoms'
 import { Form, Item, Input, Icon, Label, Text } from 'native-base';
 import { Grid, Col, Row} from 'react-native-easy-grid';
 
-export default function CustomForm(props) {
-    const exp = (props.type === "login")?
+export default function CustomForm({type}) {
+    const exp = (type === "login")?
         (
             <Form style = {{flex:1}}>
               <Item floatingLabel>

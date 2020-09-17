@@ -6,7 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ProfileDrawerNavigator from './ProfileNavigator';
-import AppTabsNavigator from './AuthNavigator';
+import AuthNavigator from './AuthNavigator';
 
 const RootNavigator = new createStackNavigator();
 
@@ -22,7 +22,7 @@ export default function RootStackNavigator({ isLoggedIn }) {
                 ) : (
                     <RootNavigator.Screen 
                         name="Auth"
-                        component={AppTabsNavigator}
+                        component={AuthNavigator}
                     />
                 ) }
             </RootNavigator.Navigator>
