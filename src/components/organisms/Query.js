@@ -2,6 +2,7 @@ import React,{ useState } from 'react'
 import { View } from 'react-native'
 import { Card, CardItem, Text, Left, Body, Thumbnail } from 'native-base';
 import placeholder from '../../../assets/avatar_placeholder.png';
+import { QueryStats } from '../../components/molecules';
 
 export default function Query({ username = "user", time = new Date().toISOString(), 
                                 body = {question: "question??", desc: "Lots of content and lts description containing many words that they wont fit in a line"}, 
@@ -21,21 +22,13 @@ export default function Query({ username = "user", time = new Date().toISOString
                 </Left>
             </CardItem>
             <CardItem cardBody>
-                <Body>
-                    <Text style = {{fontSize:25}}> {body.question} </Text>
-                    <Text note style = {{fontSize:20}}> {body.desc} </Text> 
-                </Body>
+            <Body>
+                <Text> {body.question} </Text>
+                <Text note> {body.desc} </Text> 
+            </Body>
             </CardItem>
             <CardItem footer bordered>
-                <CardItem button onPress={()=>setLike('blue')}>
-                    <Text style = {{fontSize:15,color: likeColor}}> like</Text>
-                </CardItem>
-                <CardItem button >
-                    <Text > comments</Text>
-                </CardItem>
-                <CardItem button onPress={()=>setDislike('red')}>
-                    <Text style = {{fontSize:15,color: dislikeColor}}> dislike</Text>
-                </CardItem>
+                <QueryStats />
             </CardItem>
         </Card>
     )

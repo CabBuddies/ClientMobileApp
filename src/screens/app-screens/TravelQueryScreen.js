@@ -21,11 +21,11 @@ export default function TravelQueryScreen() {
 
              <Query/>
                 <Button
-                    rounded warning
+                    rounded 
+                    warning
                     title = "New Query"
                 />
             </Content>
         </Container>
     )
 }
-
