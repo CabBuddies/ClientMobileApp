@@ -1,39 +1,34 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Text, View } from 'native-base'
 import { CButton as Button } from './'
-import { Row, Col } from 'react-native-easy-grid';
+import { Grid, Col } from 'react-native-easy-grid';
 
 export default function VotesAtom() {
 
-    const votes = 0;
+    const [votes,setVotes] = useState(0);
 
     return (
-        <View>
-            <Col>
+        <>
                 <Button
                     transparent
                     hasIcon
-                    iconOnly
+                    title = {votes}
                     icon="md-arrow-up"
                     onPress={() => {
-                        alert(`(: Up voted :)`);
+                        setVotes(prevCount => prevCount+1);
                     }}
                 />
-            </Col>
-            <Col>
-                <Text>{votes}</Text>
-            </Col>
-            <Col>
+            
+
                 <Button
                     transparent 
                     hasIcon
                     iconOnly
                     icon="md-arrow-down"
                     onPress={() => {
-                        alert(`): down voted :(`);
+                        setVotes(prevCount => prevCount-1)
                     }}
                 />
-            </Col>
-        </View>
+        </>
     )
 }

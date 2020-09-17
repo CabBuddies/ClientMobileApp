@@ -55,7 +55,7 @@ export default function CButton({container = containerStyle, title = "Button", s
                     )
                 ):
                 (
-                    hasIcon?
+                    (hasIcon)?
                     (<Icon name={icon} type={iconType} style={iconStyle} />)
                     :
                     (<Text style={textStyle}>{title}</Text>)

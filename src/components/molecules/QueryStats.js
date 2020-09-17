@@ -3,6 +3,7 @@ import {VotesAtom} from '../atoms';
 import {CommentsAtom} from '../atoms';
 import {ViewsAtom} from '../atoms';
 import { Grid, Col } from 'react-native-easy-grid'
+import {Container, Content} from 'native-base'
 
 export default function QueryStats() {
     return (
