@@ -2,14 +2,16 @@ import React,{ useState } from 'react'
 import { View } from 'react-native'
 import { Card, CardItem, Text, Left, Body, Thumbnail } from 'native-base';
 import placeholder from '../../../assets/avatar_placeholder.png';
-import QueryStats from '../molecules/QueryStats';
+import { QueryStats } from '../../components/molecules';
 
-export default function Query({ username = "user", time = new Date().toISOString(), body = {question: "question??", desc: "description"}, style = null }) {
+export default function Query({ username = "user", time = new Date().toISOString(), 
+                                body = {question: "question??", desc: "Lots of content and lts description containing many words that they wont fit in a line"}, 
+                                style = null }) {
     const [likeColor, setLike] = useState('black');
     const [dislikeColor,setDislike] = useState('black');
     time = time.split('T')[0];
     return (
-        <Card style = {{flex:0}}>
+        <Card style = {style}>
             <CardItem header>
                 <Left>
                     <Thumbnail source = {placeholder}/>

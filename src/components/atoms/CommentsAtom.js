@@ -6,21 +6,19 @@ import { Row, Col } from 'react-native-easy-grid';
 export default function CommentsAtom() {
     const comments = 10;
     return (
-        <View>
+        <>
             <Col>
                 <Button
                     transparent 
                     hasIcon={true}
-                    iconOnly={true}
+                    title = {comments}
                     icon="md-text"
+                    iconLeft
                     onPress={() => {
                         alert(`happy commenting`);
                     }}
                 />
             </Col>
-            <Col>
-                <Text>{comments}</Text>
-            </Col>
-        </View>
+        </>
     )
 }
