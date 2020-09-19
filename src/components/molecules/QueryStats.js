@@ -6,7 +6,6 @@ import { Grid, Col, Row } from 'react-native-easy-grid'
 import {Container, Content} from 'native-base'
 
 export default function QueryStats({stats}) {
-    console.log(`stats: votes: ${stats.votes}\t comments: ${stats.comments} \t views: ${stats.views}`)
     return (
         <Grid >
             <Row style = {{alignItems: 'center'}}>
