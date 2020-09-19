@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { Text } from 'native-base'
-import { CButton } from '../atoms'
+import  CButton  from '../atoms/Button'
 import { Grid, Col, Row } from 'react-native-easy-grid';
 
 export default function VotesAtom({voteCount = 0}) {
