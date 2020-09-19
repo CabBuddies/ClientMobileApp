@@ -2,21 +2,22 @@ import React from 'react'
 import {VotesAtom} from '../atoms';
 import {CommentsAtom} from '../atoms';
 import {ViewsAtom} from '../atoms';
-import { Grid, Col } from 'react-native-easy-grid'
+import { Grid, Col, Row } from 'react-native-easy-grid'
 import {Container, Content} from 'native-base'
 
-export default function QueryStats() {
+export default function QueryStats({stats}) {
+    console.log(`stats: votes: ${stats.votes}\t comments: ${stats.comments} \t views: ${stats.views}`)
     return (
         <Grid >
-            <Col>
-                <VotesAtom />
-            </Col>
-            <Col>
-                <CommentsAtom />
-            </Col>
-            <Col>
-                <ViewsAtom />
-            </Col>
+            <Row style = {{alignItems: 'center'}}>
+            
+                <VotesAtom voteCount = {stats.votes}/>
+            
+                <CommentsAtom commentCount = {stats.comments}/>
+            
+                <ViewsAtom views = {stats.views}/>
+            
+            </Row>
         </Grid>
     )
 }
