@@ -6,6 +6,7 @@ import { QueryStats } from '../../components/molecules';
 
 export default function Query({ username = "user", time = new Date().toISOString(), 
                                 body = {question: "question??", desc: "Lots of content and lts description containing many words that they wont fit in a line"}, 
+                                stats = {votes:0, comments:0, views:0 },
                                 style = null }) {
     const [likeColor, setLike] = useState('black');
     const [dislikeColor,setDislike] = useState('black');
@@ -27,8 +28,8 @@ export default function Query({ username = "user", time = new Date().toISOString
                 <Text note> {body.desc} </Text> 
             </Body>
             </CardItem>
-            <CardItem footer bordered>
-                <QueryStats />
+            <CardItem footer bordered style = {{alignItems:'center',height:50}}>
+                <QueryStats stats = {stats}/>
             </CardItem>
         </Card>
     )

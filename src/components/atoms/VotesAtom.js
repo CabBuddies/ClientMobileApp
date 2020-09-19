@@ -1,34 +1,34 @@
 import React, {useState} from 'react'
-import { Text, View } from 'native-base'
-import { CButton as Button } from './'
-import { Grid, Col } from 'react-native-easy-grid';
+import { Text } from 'native-base'
+import { CButton } from '../atoms'
+import { Grid, Col, Row } from 'react-native-easy-grid';
 
-export default function VotesAtom() {
-
-    const [votes,setVotes] = useState(0);
-
+export default function VotesAtom({voteCount = 0}) {
+    console.log(`VotesAtom => voteCount: ${voteCount}`)
+    // const votesCount = voteCount;
+    const [votes,setVotes] = useState(voteCount);
     return (
-        <>
-                <Button
-                    transparent
-                    hasIcon
-                    title = {votes}
-                    icon="md-arrow-up"
-                    onPress={() => {
-                        setVotes(prevCount => prevCount+1);
-                    }}
-                />
+        <Grid>
+            <Row style ={{alignItems: 'center'}}>
+            <CButton
+                transparent
+                hasIcon iconOnly
+                container = {{flex:0}}
+                icon = "md-arrow-up"
+                onPress={()=>setVotes(prevVotes => prevVotes+1)}
+                />      
+                   
+                <Text> {votes} </Text> 
+           
+                <CButton
+                transparent
+                hasIcon iconOnly
+                container = {{flex:0}}
+                icon = "md-arrow-down"
+                onPress={()=>setVotes(prevVotes => prevVotes-1)}
+                />  
             
-
-                <Button
-                    transparent 
-                    hasIcon
-                    iconOnly
-                    icon="md-arrow-down"
-                    onPress={() => {
-                        setVotes(prevCount => prevCount-1)
-                    }}
-                />
-        </>
+            </Row>
+        </Grid>
     )
 }

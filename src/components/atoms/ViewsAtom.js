@@ -1,11 +1,11 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { Text } from 'native-base'
 
-export default function ViewsAtom() {
-    const views = 0;
+export default function ViewsAtom({views = 0}) {
+    const viewsCount = views;
     return (
-        <View>
-            <Text>{views} views</Text>
-        </View>
+        <>
+            <Text>{viewsCount} views</Text>
+        </>
     )
 }
