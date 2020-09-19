@@ -1,5 +1,5 @@
 import React from 'react'
-import { CButton as Button } from '../atoms'
+import  CButton  from '../atoms/Button'
 import { Text, View } from 'native-base'
 import { Row, Col } from 'react-native-easy-grid';
 
@@ -8,7 +8,7 @@ export default function CommentsAtom({commentCount= 0}) {
     return (
         <>
             <Col>
-                <Button
+                <CButton
                     transparent 
                     hasIcon={true}
                     title = {`${comments}`}
