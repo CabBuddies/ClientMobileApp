@@ -1,1 +1,1 @@
-export {default as QueryStats} from './QueryStats'
+export {default as QueryStats} from './QueryStats';

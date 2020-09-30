@@ -1,0 +1,19 @@
+[
+  {
+    "label": "E-mail",
+    "type": "iconInput",
+    "itemProps": { "floatingLabel": true },
+    "icon": "ios-mail"
+  },
+  {
+    "label": "Password",
+    "type": "iconInput",
+    "itemProps": { "floatingLabel": true },
+    "inputProps": { "secureTextEntry": true },
+    "icon": "ios-lock"
+  },
+  {
+    "type": "button",
+    "buttonProps": {"style": { "marginTop": 20 }, "title": "Sign In" }
+  }
+]

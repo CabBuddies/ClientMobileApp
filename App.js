@@ -9,7 +9,7 @@ import { useFonts } from "expo-font";
 export default function App() {
 
   // placeholder variable
-  const isSignedIn = true;
+  const isSignedIn = false;
 
   let [fontsLoaded] = useFonts(
     {
