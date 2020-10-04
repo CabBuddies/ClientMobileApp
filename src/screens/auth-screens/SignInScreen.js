@@ -3,34 +3,39 @@ import { View, StyleSheet } from "react-native";
 import { CButton as Button } from "../../components/atoms";
 import { CForm, FieldTypes, SocialLogin } from "../../components/organisms";
 import { FormBuilder } from "../../components/organisms"
-import { Container, Content, Thumbnail, Footer } from "native-base";
+import { Container, Content, Thumbnail, Footer, Toast } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import phi from "../../../assets/placeholderIcon.png";
+import { Formik } from "formik";
+import { storeItem, retrieveItem } from '../../local-storage';
 
 const signInSchema = [
   {
+    name: "email",
     label: "E-mail",
     type: FieldTypes.ICON_INPUT,
     itemProps:{
-      floatingLabel: true
+      floatingLabel: true,
+      
     },
     icon: "ios-mail",
   },
   {
+    name:"password",
     label: "Password",
     type: FieldTypes.ICON_INPUT,
     itemProps:{
       floatingLabel: true
     },
     inputProps:{
-      secureTextEntry: true
+      secureTextEntry: true,
     },
     icon: "ios-lock",
   },
   {
     type:FieldTypes.BUTTON,
     buttonProps:{
-      onPress: () =>alert('Sign in Pressed'),
+      rounded: true,
       style: {marginTop:20},
       title: "Sign In"
     }
@@ -38,12 +43,33 @@ const signInSchema = [
 
 ]
 
+
+
 export default function SignInScreen({ navigation }) {
-  const nav = (nav) => {
+  
+  const nav = () => {
     console.log("[Info] navigating to SignUp screen\n");
+    item = retrieveItem('@user');
+    Toast.show({
+      text: {item},
+      buttonText: 'Okay'
+    })
     navigation.navigate("SignUp");
   };
-  console.log(`Form Schema:\n ${JSON.stringify(signInSchema)}`);
+
+  const showToast = (value) => {
+    Toast.show({
+      text: JSON.stringify(value),
+      position: "bottom",
+      duration: 3000
+    })
+  }
+
+  const initialValues = {
+    email: '',
+    password: ''
+  }
+
   return (
     <Container>
       <Content>
@@ -56,7 +82,19 @@ export default function SignInScreen({ navigation }) {
           </Row>
 
           <Row>
-            <FormBuilder schema = {signInSchema} style={{flex:1}}/>
+          <Formik 
+          initialValues = {initialValues}
+          onSubmit = {(values,actions) =>{ 
+            console.log(values);
+            actions.resetForm();
+            showToast(values);
+          }}
+          >
+          {(props) => (
+            <FormBuilder schema = {signInSchema} formik = {props}/>
+          )
+          }
+          </Formik>
           </Row>
 
           <Row>
@@ -83,10 +121,13 @@ export default function SignInScreen({ navigation }) {
           container={{ flex: 1, justifyContent: "center" }}
           textStyle={{ fontWeight: "bold", color: "#6975a6" }}
         />
+        
       </Footer>
     </Container>
   );
 }
+
+
 const styles = StyleSheet.create({
   btnContainer: {
     marginTop: 20,

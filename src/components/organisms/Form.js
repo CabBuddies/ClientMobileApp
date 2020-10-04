@@ -1,73 +1,133 @@
 import React from 'react'
 import { StyleSheet,View, Alert } from 'react-native'
-import { CButton as Button } from '../atoms'
+import { CButton as Button, FormField } from '../atoms'
 import { InputField }  from '../atoms'
-import { Form, Item, Input, Icon, Label, Text } from 'native-base';
+import { Form } from 'native-base';
 import { Grid, Col, Row} from 'react-native-easy-grid';
+import { Formik } from 'formik';
 
-export default function CustomForm({type}) {
+export default function CustomForm({type,formik}) {
+
+    const initialValuesLogin = {
+      email: '',
+      password:'',
+      username:''
+    }
+
+    const initialValuesRegister = {
+      firstname: '',
+      lastname: '',
+      email: '',
+      password: '',
+      confirmPassword:''
+    }
     const exp = (type === "login")?
         (
+        //   <Formik
+        //  initialValues = {initialValuesLogin}
+        //  onSubmit = {values => console.log(values)}
+        //   >
+        //   {(formik) => (
             <Form style = {{flex:1}}>
-              <Item floatingLabel>
-                <Icon name = "ios-mail"  />
-                <Label>Email</Label>
-                <Input />
-              </Item>
-            
-              <Item floatingLabel>
-                <Icon name = "key"/>
-                <Label>Password</Label>
-                <Input secureTextEntry/>
-              </Item>
-              
+              <FormField
+              hasIcon label="Email"
+              itemProps = {{floatingLabel:true}}
+              icon = "ios-mail" iconStyle = {{color:"purple"}}
+              changeHandler = {formik.handleChange('email')}
+              blurHandler = {formik.handleBlur('email')}
+              value = {formik.values.email}
+              />
+          
+            <FormField
+              hasIcon label="Password"
+              itemProps = {{floatingLabel:true}}
+              inputProps = {{secureTextEntry:true}}
+              icon = "ios-lock" iconStyle = {{color:"purple"}}
+              changeHandler = {formik.handleChange('password')}
+              blurHandler = {formik.handleBlur('password')}
+              value = {formik.values.password}
+              />
+
               <Button rounded primary hasText
-              onPress= {() => Alert.alert('Sign in Pressed')}
+              onPress= {formik.handleSubmit}
               style = {styles.btn}
               title = "Sign In"
               />
             </Form>
+          // )
+            
+          // }
+            
+          // </Formik>
         )
     :
        ( 
-        <Form style ={{flex:1}}>
-        
-          <Item floatingLabel>
-          <Icon name="ios-text"/>
-            <Label>First Name</Label>
-            <Input />
-          </Item>
+        // <Formik
+        // initialValues = {initialValuesRegister}
+        // onSubmit = {values => console.log(values)}
+        // >
+        // {(formik) =>(
 
-          <Item floatingLabel>
-            <Icon name="ios-text"/>
-            <Label>Last Name</Label>
-            <Input />
-          </Item>
+         
+          <Form style = {{flex:1}}>
+            <FormField
+              hasIcon label="First Name"
+              itemProps = {{floatingLabel:true}}
+              icon = "md-person" iconStyle = {{color:"purple"}}
+              changeHandler = {formik.handleChange('firstname')}
+              blurHandler = {formik.handleBlur('firstname')}
+              value = {formik.values.firstname}
+              />
+
+            <FormField
+              hasIcon label="Last Name"
+              itemProps = {{floatingLabel:true}}
+              icon = "md-person" iconStyle = {{color:"purple"}}
+              changeHandler = {formik.handleChange('lastname')}
+              blurHandler = {formik.handleBlur('lastname')}
+              value = {formik.values.lastname}
+            />
           
-          <Item floatingLabel>
-            <Icon name="ios-mail"/>
-            <Label>Email</Label>
-            <Input />
-          </Item>
+            <FormField
+              hasIcon label="Email"
+              itemProps = {{floatingLabel:true}}
+              icon = "ios-mail" iconStyle = {{color:"purple"}}
+              changeHandler = {formik.handleChange('email')}
+              blurHandler = {formik.handleBlur('email')}
+              value = {formik.values.email}
+            />
           
-          <Item floatingLabel>
-            <Icon name="key"/>
-            <Label>Password</Label>
-            <Input secureTextEntry/>
-          </Item>
+          <FormField
+              hasIcon label="Password"
+              itemProps = {{floatingLabel:true}}
+              inputProps = {{secureTextEntry:true}}
+              icon = "ios-lock" iconStyle = {{color:"purple"}}
+              changeHandler = {formik.handleChange('password')}
+              blurHandler = {formik.handleBlur('password')}
+              value = {formik.values.password}
+              />
           
-          <Item floatingLabel last>
-            <Icon name="key"/>
-            <Label>Confirm Password</Label>
-            <Input secureTextEntry/>
-          </Item>
+            <FormField
+              hasIcon label="Confirm Password"
+              itemProps = {{floatingLabel:true}}
+              inputProps = {{secureTextEntry:true}}
+              icon = "ios-lock" iconStyle = {{color:"purple"}}
+              changeHandler = {formik.handleChange('confirmPassword')}
+              blurHandler = {formik.handleBlur('confirmPassword')}
+              value = {formik.values.confirmPassword}
+            />
 
           <Button rounded hasText primary
-          onPress= {() => Alert.alert('Signup Pressed')}
+          onPress= {formik.handleSubmit}
           style = {styles.btn}
           title = "Sign Up"
           />
-      </Form>
+        </Form>
+
+      //   )
+      //   }
+        
+      // </Formik>
         )
             
         return exp
