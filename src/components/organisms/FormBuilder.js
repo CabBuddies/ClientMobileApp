@@ -23,10 +23,10 @@ export default function FormBuilder({schema, style = {flex:1},formik=null}) {
         setFields(fields);
     },[]);
 
-    useEffect((name)=>{
-        fields[name].value = formData[name]
-    }
-    ,[formData]);
+    // useEffect((name)=>{
+    //     fields.value = formik.values[name]
+    // }
+    // ,[formData]);
 
 
     const changeHandler = (name,value) => {
@@ -58,10 +58,10 @@ export default function FormBuilder({schema, style = {flex:1},formik=null}) {
                     break;
 
                 case FieldTypes.ICON_INPUT:
-                    fields[i] = <FormField key ={`${i}`}  name = {fields[i].name} hasIcon icon = {fields[i].icon} iconType = {fields[i].iconType}
-                                    iconStyle = {fields[i].iconStyle}    label = {fields[i]["label"]} 
-                                    itemProps = {fields[i].itemProps} inputProps = {fields[i].inputProps} 
-                                    changeHandler = {(value) => changeHandler(fieldName,value)}
+                    fields[i] = <FormField key ={`${i}`}  name = {fields[i].name} hasIcon icon = {fields[i].icon} 
+                                    iconType = {fields[i].iconType} iconStyle = {fields[i].iconStyle}  
+                                    label = {fields[i]["label"]} itemProps = {fields[i].itemProps} 
+                                    inputProps = {fields[i].inputProps} changeHandler = {(value) => changeHandler(fieldName,value)}
                                     blurHandler = {formik.handleBlur(fieldName)}
                                     value = {formData[fieldName]}
                                     />;
