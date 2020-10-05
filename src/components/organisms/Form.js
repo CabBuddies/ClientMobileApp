@@ -4,30 +4,11 @@ import { CButton as Button, FormField } from '../atoms'
 import { InputField }  from '../atoms'
 import { Form } from 'native-base';
 import { Grid, Col, Row} from 'react-native-easy-grid';
-import { Formik } from 'formik';
 
 export default function CustomForm({type,formik}) {
-
-    const initialValuesLogin = {
-      email: '',
-      password:'',
-      username:''
-    }
-
-    const initialValuesRegister = {
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: '',
-      confirmPassword:''
-    }
+ 
     const exp = (type === "login")?
         (
-        //   <Formik
-        //  initialValues = {initialValuesLogin}
-        //  onSubmit = {values => console.log(values)}
-        //   >
-        //   {(formik) => (
             <Form style = {{flex:1}}>
               <FormField
               hasIcon label="Email"
@@ -54,20 +35,9 @@ export default function CustomForm({type,formik}) {
               title = "Sign In"
               />
             </Form>
-          // )
-            
-          // }
-            
-          // </Formik>
         )
     :
        ( 
-        // <Formik
-        // initialValues = {initialValuesRegister}
-        // onSubmit = {values => console.log(values)}
-        // >
-        // {(formik) =>(
-
          
           <Form style = {{flex:1}}>
             <FormField
@@ -123,11 +93,6 @@ export default function CustomForm({type,formik}) {
           title = "Sign Up"
           />
         </Form>
-
-      //   )
-      //   }
-        
-      // </Formik>
         )
             
         return exp

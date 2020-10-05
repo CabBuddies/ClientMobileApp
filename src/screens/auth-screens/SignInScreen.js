@@ -49,11 +49,6 @@ export default function SignInScreen({ navigation }) {
   
   const nav = () => {
     console.log("[Info] navigating to SignUp screen\n");
-    item = retrieveItem('@user');
-    Toast.show({
-      text: {item},
-      buttonText: 'Okay'
-    })
     navigation.navigate("SignUp");
   };
 
@@ -91,7 +86,7 @@ export default function SignInScreen({ navigation }) {
           }}
           >
           {(props) => (
-            <FormBuilder schema = {signInSchema} formik = {props}/>
+            <CForm type="login" formik={props}/>
           )
           }
           </Formik>
