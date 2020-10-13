@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text } from 'react-native';
 import { CForm }   from '../../components/organisms';
 import {Container, Content, Toast } from 'native-base';
 import { Formik } from 'formik';
+import { AuthContext } from "../../navigations/RootNavigator"
 export default function SignUpScreen() {
     
     const initialValues = {
@@ -12,6 +13,8 @@ export default function SignUpScreen() {
         password: '',
         confirmPassword:''
       }
+
+    const { signUp } = useContext(AuthContext);
 
     const showToast = (value) => {
     Toast.show({
@@ -29,6 +32,7 @@ export default function SignUpScreen() {
                     onSubmit = {(values,actions) =>{ 
                         showToast(values);
                         actions.resetForm();
+                        signUp(values);
                     }}
                 >
                 {(props) => (

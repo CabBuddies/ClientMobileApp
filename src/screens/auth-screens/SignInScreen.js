@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet } from "react-native";
 import { CButton as Button } from "../../components/atoms";
 import { CForm, FieldTypes, SocialLogin } from "../../components/organisms";
@@ -7,6 +7,8 @@ import { Container, Content, Thumbnail, Footer, Toast } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import phi from "../../../assets/placeholderIcon.png";
 import { Formik } from "formik";
+import { AuthContext } from "../../navigations/RootNavigator"
+import { CommonActions } from '@react-navigation/native';
 import { storeItem, retrieveItem } from '../../local-storage';
 
 const signInSchema = [
@@ -47,6 +49,19 @@ const signInSchema = [
 
 export default function SignInScreen({ navigation }) {
   
+  const { signIn, anonymous } = useContext(AuthContext); 
+
+
+  const navToAppScreen = () => {
+    console.log("Navigating to App Screens\n");
+    anonymous();
+  }
+  const signInRoutine = (values,actions) => {
+          console.log(values);
+          actions.resetForm();
+          signIn(values);
+          showToast(values);
+  }
   const nav = () => {
     console.log("[Info] navigating to SignUp screen\n");
     navigation.navigate("SignUp");
@@ -79,11 +94,7 @@ export default function SignInScreen({ navigation }) {
           <Row>
           <Formik 
           initialValues = {initialValues}
-          onSubmit = {(values,actions) =>{ 
-            console.log(values);
-            actions.resetForm();
-            showToast(values);
-          }}
+          onSubmit = {signInRoutine}
           >
           {(props) => (
             <CForm type="login" formik={props}/>
@@ -106,7 +117,7 @@ export default function SignInScreen({ navigation }) {
       <Footer style={{ backgroundColor: "#fff" }}>
         <Button
           transparent
-          onPress={nav}
+          onPress={navToAppScreen}
           icon="ios-arrow-forward"
           iconStyle={{ color: "#6975a6" }}
           hasIcon
