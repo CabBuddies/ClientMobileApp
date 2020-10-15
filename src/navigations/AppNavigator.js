@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ChatNavigator from './ChatNavigator';
 import PackageDeliveryScreen from '../screens/app-screens/PackageDeliveryScreen';
 import RideScreen from '../screens/app-screens/RideScreen';
-import TravelQueryScreen from '../screens/app-screens/TravelQueryScreen';
+import TravelQueryScreen from '../screens/app-screens/query-screens/TravelQueryScreen';
 
 const AppNavigator = createBottomTabNavigator();
 

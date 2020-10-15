@@ -4,6 +4,7 @@
 import React, { useState, useMemo } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { storeItem, retrieveItem } from "../local-storage/StorageHelpers";
 
 import ProfileDrawerNavigator from "./ProfileNavigator";
 import AuthNavigator from "./AuthNavigator";
@@ -17,23 +18,24 @@ export default function RootStackNavigator() {
   const authContext = useMemo(
     () => ({
 
-      signIn: data => {
+      signIn: async (data) => {
         console.log(`user signed in`);
         console.log(data);
+        await storeItem("@user",data,true);
         dispatch(true)
       },
-      signOut: () => {
+      signOut: async () => {
         console.log(`signed out`);
         dispatch(false)
       },
 
-      signUp: (data) => {
+      signUp: async (data) => {
         console.log(`sign up successful`);
         console.log(data);
         dispatch(true);
       },
 
-      anonymous: ()=> {
+      anonymous: async ()=> {
         console.log(`user sign in anonymous`);
         dispatch(true);
       }

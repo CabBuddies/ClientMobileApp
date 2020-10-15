@@ -1,15 +1,14 @@
 import React, { useContext } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { CButton as Button } from "../../components/atoms";
 import { CForm, FieldTypes, SocialLogin } from "../../components/organisms";
-import { FormBuilder } from "../../components/organisms"
+// import { FormBuilder } from "../../components/organisms"
 import { Container, Content, Thumbnail, Footer, Toast } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import phi from "../../../assets/placeholderIcon.png";
 import { Formik } from "formik";
 import { AuthContext } from "../../navigations/RootNavigator"
 import { CommonActions } from '@react-navigation/native';
-import { storeItem, retrieveItem } from '../../local-storage';
 import { connect } from 'react-redux';
 import * as authActions from '../../redux/actions/authAction';
 import { bindActionCreators } from 'redux';
@@ -56,7 +55,6 @@ export default function SignInScreen({ navigation }) {
     anonymous();
   }
   const signInRoutine = (values,actions) => {
-          console.log(values);
           actions.resetForm();
           signIn(values);
           showToast(values);

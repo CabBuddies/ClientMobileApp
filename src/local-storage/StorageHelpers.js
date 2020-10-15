@@ -20,8 +20,8 @@ export const storeItem = async (key,value,isObject=false) => {
         {
             value = JSON.stringify(value);
         }
-        const jsonItem = await AsyncStorage.setItem(key,value);
-        return jsonItem;
+        await AsyncStorage.setItem(key,value);
+        console.log(`Data persisted locally`);
     }
     catch(err)
     {

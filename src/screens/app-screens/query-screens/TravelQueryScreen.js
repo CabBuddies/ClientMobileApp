@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, FlatList } from 'react-native'
 import {Container, Content, Item, List, Text, Button} from 'native-base';
-import { CButton } from '../../components/atoms'
-import { Query } from '../../components/organisms'
+import { CButton } from '../../../components/atoms'
+import { Query } from '../../../components/organisms'
 export default function TravelQueryScreen() {
     const cards = [
         {key:"1", username: "Ed", body: {question: "How to get to San Salvador?", desc: "I need to get there ASAP"}, stats:{votes:10, comments:32, views:45}},

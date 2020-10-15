@@ -7,7 +7,12 @@ import { AppLoading } from "expo";
 import { useFonts } from "expo-font";
 import { Provider as ReduxProvider } from "react-redux";
 import configureStore from "./src/redux/configureStore";
+if(__DEV__) {
+  import('./dev/ReactotronConfig').then(() => console.log('Reactotron Configured'))
+}
+import Reactotron from 'reactotron-react-native'
 
+Reactotron.log("Hello there!")
 
 export default function App() {
   const store = configureStore();
