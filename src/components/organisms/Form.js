@@ -22,7 +22,9 @@ export default function CustomForm({type}) {
               </Item>
               
               <Button rounded primary hasText
-              onPress= {() => Alert.alert('Sign in Pressed')}
+              onPress= {() => {
+                this.props.loginAction();
+              }}
               style = {styles.btn}
               title = "Sign In"
               />
@@ -63,7 +65,9 @@ export default function CustomForm({type}) {
           </Item>
 
           <Button rounded hasText primary
-          onPress= {() => Alert.alert('Signup Pressed')}
+          onPress= {() => {
+            Alert.alert(`Key Press`, `Sign Up`);
+          }}
           style = {styles.btn}
           title = "Sign Up"
           />
