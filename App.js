@@ -1,42 +1,46 @@
 import "react-native-gesture-handler";
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import RootStackNavigator from "./src/navigations/RootNavigator";
 import { Root } from "native-base";
 import { AppLoading } from "expo";
 import { useFonts } from "expo-font";
+import { Provider as ReduxProvider } from "react-redux";
+import configureStore from "./src/redux/configureStore";
+
 
 export default function App() {
+  const store = configureStore();
 
   // placeholder variable
-  const isSignedIn = true;
+  const isSignedIn = store.isSignedIn;
 
-  let [fontsLoaded] = useFonts(
-    {
-      Roboto: require('native-base/Fonts/Roboto.ttf'),
-      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-    }
-  )
+  let [fontsLoaded] = useFonts({
+    Roboto: require("native-base/Fonts/Roboto.ttf"),
+    Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+  });
   
   return (
-    (!fontsLoaded)?
-    (
+  
+      (!fontsLoaded)?
+      (
       <Root>
-      <AppLoading/>
-    </Root>
-    )
-    :
-    (
-    
-    <Root>
-      <View style={styles.container}>
-        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-        <RootStackNavigator isLoggedIn={isSignedIn} />
-      </View>
-    </Root>
-    )
-
+        <AppLoading/>
+      </Root>
+      )
+      :
+      (
+      <Root>
+        <ReduxProvider store={store}>
+          <View style={styles.container}>
+            {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+            <RootStackNavigator isLoggedIn={isSignedIn} />
+          </View>
+        </ReduxProvider>
+      </Root>
+      )
   );
+
 }
 
 const styles = StyleSheet.create({

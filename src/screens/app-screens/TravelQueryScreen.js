@@ -12,7 +12,7 @@ export default function TravelQueryScreen() {
     ]
 
     const renderItem = ({item}) => {
-        return <Query username = {item.username} body = {item.body} stats = {item.stats} />
+        return <Query username = {item.username} body = {item.body} stats = {item.stats}/>
     }
     return (
         <Container>

@@ -13,7 +13,7 @@ export default function Query({ username = "user", time = new Date().toISOString
     time = time.split('T')[0];
     return (
         <Card style = {style}>
-            <CardItem header>
+            <CardItem header button onPress= {() => alert(`header pressed`)}>
                 <Left>
                     <Thumbnail source = {placeholder}/>
                     <Body>
@@ -22,7 +22,7 @@ export default function Query({ username = "user", time = new Date().toISOString
                     </Body>
                 </Left>
             </CardItem>
-            <CardItem cardBody>
+            <CardItem cardBody button onPress = {() => alert(`item clicked`)}>
             <Body>
                 <Text> {body.question} </Text>
                 <Text note> {body.desc} </Text> 
