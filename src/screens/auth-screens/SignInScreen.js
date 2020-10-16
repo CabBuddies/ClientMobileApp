@@ -7,48 +7,23 @@ import { Container, Content, Thumbnail, Footer, Toast } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import phi from "../../../assets/placeholderIcon.png";
 import { Formik } from "formik";
-import { AuthContext } from "../../navigations/RootNavigator"
+import { AuthContext } from "../../navigations/RootNavigator";
+import * as yup from "yup";
 import { CommonActions } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import * as authActions from '../../redux/actions/authAction';
 import { bindActionCreators } from 'redux';
 
-const signInSchema = [
-  {
-    name: "email",
-    label: "E-mail",
-    type: FieldTypes.ICON_INPUT,
-    itemProps:{
-      floatingLabel: true,
-    },
-    icon: "ios-mail",
-  },
-  {
-    name:"password",
-    label: "Password",
-    type: FieldTypes.ICON_INPUT,
-    itemProps:{
-      floatingLabel: true
-    },
-    inputProps:{
-      secureTextEntry: true,
-    },
-    icon: "ios-lock",
-  },
-  {
-    type:FieldTypes.BUTTON,
-    buttonProps:{
-      rounded: true,
-      style: {marginTop:20},
-      title: "Sign In"
-    }
-  }
-]
+
 
 export default function SignInScreen({ navigation }) {
   
   const { signIn, anonymous } = useContext(AuthContext); 
 
+  const signInValSchema = yup.object({
+    email: yup.string().email("Invalid Email!").required("Required"),
+    password: yup.string().required("Required")
+  })
 
   const navToAppScreen = () => {
     console.log("Navigating to App Screens\n");
@@ -91,6 +66,7 @@ export default function SignInScreen({ navigation }) {
           <Row>
           <Formik 
           initialValues = {initialValues}
+          validationSchema = {signInValSchema}
           onSubmit = {signInRoutine}
           >
           {(props) => (

@@ -11,6 +11,7 @@ export default function FormField({itemProps,name,changeHandler= null,blurHandle
             {(hasIcon)?<Icon name={icon} type={iconType} style = {iconStyle}/>: null}
             <Label>{label}</Label>
             <Input {...inputProps} onChangeText = {changeHandler} onBlur = {blurHandler} value = {value}/>
+            {(itemProps.error)?<Icon name="close-circle"/>:<></>}
         </Item>
     )
 }

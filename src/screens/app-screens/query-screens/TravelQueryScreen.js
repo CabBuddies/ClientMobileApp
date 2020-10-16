@@ -3,7 +3,7 @@ import { View, FlatList } from 'react-native'
 import {Container, Content, Item, List, Text, Button} from 'native-base';
 import { CButton } from '../../../components/atoms'
 import { Query } from '../../../components/organisms'
-export default function TravelQueryScreen() {
+export default function TravelQueryScreen({navigation}) {
     const cards = [
         {key:"1", username: "Ed", body: {question: "How to get to San Salvador?", desc: "I need to get there ASAP"}, stats:{votes:10, comments:32, views:45}},
         {key:"2", username: "Al", body: {question: "How to get to Edford?", desc: "I need to get there ASAP"}, stats:{votes:15, comments:15, views:50}},
@@ -11,8 +11,12 @@ export default function TravelQueryScreen() {
         {key:"4", username: "Lola", body: {question: "How to get to Briggs?", desc: "I need to get there ASAP"}, stats:{votes:-4, comments:0, views:45}},
     ]
 
+    const nav = (item) =>{
+        console.log("item:",item);
+        navigation.navigate("QueryView",item);
+    }
     const renderItem = ({item}) => {
-        return <Query username = {item.username} body = {item.body} stats = {item.stats}/>
+        return <Query username = {item.username} body = {item.body} stats = {item.stats} itemNav ={() => nav(item)}/>
     }
     return (
         <Container>
