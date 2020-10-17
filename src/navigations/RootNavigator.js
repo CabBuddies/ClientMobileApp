@@ -46,9 +46,9 @@ export default function RootStackNavigator() {
   return (
     <AuthContext.Provider value = {authContext}>
     <NavigationContainer>
-      <RootNavigator.Navigator headermode="none">
+      <RootNavigator.Navigator headerMode="none">
         {isSignedIn ? (
-          <RootNavigator.Screen name="AppRoot" component={ProfileDrawerNavigator} headerMode="none"/>
+          <RootNavigator.Screen name="AppRoot" component={ProfileDrawerNavigator} />
         ) : (
           <RootNavigator.Screen name="Auth" component={AuthNavigator} />
         )}
