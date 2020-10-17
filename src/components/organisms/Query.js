@@ -7,13 +7,13 @@ import { QueryStats } from '../../components/molecules';
 export default function Query({ username = "user", time = new Date().toISOString(), 
                                 body = {question: "question??", desc: "Lots of content and lts description containing many words that they wont fit in a line"}, 
                                 stats = {votes:0, comments:0, views:0 },
-                                style = null }) {
+                                style = null, headerNav = () => {alert(`header clicked`)}, itemNav = () => {alert(`item clicked`)} }) {
     const [likeColor, setLike] = useState('black');
     const [dislikeColor,setDislike] = useState('black');
     time = time.split('T')[0];
     return (
         <Card style = {style}>
-            <CardItem header button onPress= {() => alert(`header pressed`)}>
+            <CardItem header button onPress= {() => {headerNav}}>
                 <Left>
                     <Thumbnail source = {placeholder}/>
                     <Body>
@@ -22,7 +22,7 @@ export default function Query({ username = "user", time = new Date().toISOString
                     </Body>
                 </Left>
             </CardItem>
-            <CardItem cardBody button onPress = {() => alert(`item clicked`)}>
+            <CardItem cardBody button onPress = {itemNav}>
             <Body>
                 <Text> {body.question} </Text>
                 <Text note> {body.desc} </Text> 
