@@ -3,7 +3,8 @@ import { View, Text } from 'react-native';
 import { CForm }   from '../../components/organisms';
 import {Container, Content, Toast } from 'native-base';
 import { Formik } from 'formik';
-import { AuthContext } from "../../navigations/RootNavigator"
+import { AuthContext } from "../../navigations/AuthContext";
+import * as yup from 'yup';
 export default function SignUpScreen() {
     
     const initialValues = {
@@ -15,6 +16,15 @@ export default function SignUpScreen() {
       }
 
     const { signUp } = useContext(AuthContext);
+    
+    const signUpValidationSchema =  yup.object({
+        firstname: yup.string().required("Firstname is required"),
+        lastname: yup.string().required("Lastname is required"),
+        email: yup.string().email("Invalid Email").required("Email is required"),
+        password: yup.string().required("Password is required"),
+        confirmPassword: yup.string().required("Confirm password please")
+                        .oneOf([yup.ref('password'),null],"Passwords must match")
+    })
 
     const showToast = (value) => {
     Toast.show({
@@ -29,6 +39,7 @@ export default function SignUpScreen() {
                 <Content>
                 <Formik 
                     initialValues = {initialValues}
+                    validationSchema = {signUpValidationSchema}
                     onSubmit = {(values,actions) =>{ 
                         showToast(values);
                         actions.resetForm();

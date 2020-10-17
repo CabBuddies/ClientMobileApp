@@ -8,7 +8,7 @@ import { useFonts } from "expo-font";
 import { Provider as ReduxProvider } from "react-redux";
 import configureStore from "./src/redux/configureStore";
 if(__DEV__) {
-  import('./dev/ReactotronConfig').then(() => console.log('Reactotron Configured'))
+  import('./dev/ReactotronConfig')
 }
 import Reactotron from 'reactotron-react-native'
 

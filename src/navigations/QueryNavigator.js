@@ -9,7 +9,7 @@ export default function QueryNavigatorScreen(props) {
     return(
         <QueryNavigator.Navigator initialRouteName="GuideMe" >
             <QueryNavigator.Screen name="GuideMe" component={TravelQueryScreen} />
-            <QueryNavigator.Screen name="QueryView" component={QueryViewScreen} />
+            <QueryNavigator.Screen name="QueryView" component={QueryViewScreen} options={({ route }) => ({ title: route.params.name })}/>
         </QueryNavigator.Navigator>
     )
 }

@@ -5,11 +5,11 @@ import React, { useState, useMemo } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { storeItem, retrieveItem } from "../local-storage/StorageHelpers";
-
+import { AuthContext } from "./AuthContext";
 import ProfileDrawerNavigator from "./ProfileNavigator";
 import AuthNavigator from "./AuthNavigator";
 
-export const AuthContext = React.createContext();
+
 const RootNavigator = new createStackNavigator();
 
 export default function RootStackNavigator() {
@@ -32,6 +32,7 @@ export default function RootStackNavigator() {
       signUp: async (data) => {
         console.log(`sign up successful`);
         console.log(data);
+        await storeItem("@user",data,true);
         dispatch(true);
       },
 
@@ -47,7 +48,7 @@ export default function RootStackNavigator() {
     <NavigationContainer>
       <RootNavigator.Navigator headermode="none">
         {isSignedIn ? (
-          <RootNavigator.Screen name="AppRoot" component={ProfileDrawerNavigator} />
+          <RootNavigator.Screen name="AppRoot" component={ProfileDrawerNavigator} headerMode="none"/>
         ) : (
           <RootNavigator.Screen name="Auth" component={AuthNavigator} />
         )}
