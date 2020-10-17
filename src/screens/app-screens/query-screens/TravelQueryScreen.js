@@ -12,7 +12,6 @@ export default function TravelQueryScreen({navigation}) {
     ]
 
     const nav = (item) =>{
-        console.log("item:",item);
         navigation.navigate("QueryView",item);
     }
     const renderItem = ({item}) => {

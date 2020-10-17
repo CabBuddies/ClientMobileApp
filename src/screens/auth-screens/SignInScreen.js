@@ -9,6 +9,7 @@ import phi from "../../../assets/placeholderIcon.png";
 import { Formik } from "formik";
 import { AuthContext } from "../../navigations/AuthContext";
 import * as yup from "yup";
+import Reactotron from 'reactotron-react-native'
 import { connect } from "react-redux";
 import * as authActions from "../../redux/actions/authAction";
 import { bindActionCreators } from "redux";
@@ -22,7 +23,7 @@ export default function SignInScreen({ navigation }) {
 	});
 
 	const navToAppScreen = () => {
-		console.log("Navigating to App Screens\n");
+		Reactotron.log("*Navigating to App Screens*");
 		anonymous();
 	};
 	const signInRoutine = (values, actions) => {
@@ -31,7 +32,7 @@ export default function SignInScreen({ navigation }) {
 		showToast(values);
 	};
 	const nav = () => {
-		console.log("[Info] navigating to SignUp screen\n");
+		Reactotron.log("navigating to SignUp screen");
 		navigation.navigate("SignUp");
 	};
 
