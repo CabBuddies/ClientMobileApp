@@ -1,10 +1,54 @@
-import React, {useState} from 'react'
+import React, { useState, useReducer } from 'react'
 import { Text } from 'native-base'
 import  CButton  from '../atoms/Button'
 import { Grid, Col, Row } from 'react-native-easy-grid';
 
+const ActionType = {
+    LIKE: "like",
+    DISLIKE: "dislike"
+}
 export default function VotesAtom({voteCount = 0}) {
-    const [votes,setVotes] = useState(voteCount);
+
+    const initialState = {
+        votes: voteCount,
+        likeColor: "black",
+        dislikeColor:"black",
+    }
+    const reducer = (state,action) => {
+        switch(action.type){
+            case ActionType.LIKE:
+                if(state.likeColor === "black"){
+                    return {
+                        votes: state.votes+1,
+                        likeColor:"deepskyblue",
+                        dislikeColor:"black"
+                       }
+                }   
+                else{
+                    return {
+                        votes: state.votes-1,
+                        likeColor:"black",
+                        dislikeColor:"black"
+                    }
+                } 
+            case ActionType.DISLIKE:
+                if(state.dislikeColor === "black"){
+                    return {
+                        votes: state.votes-1,
+                        likeColor:"black",
+                        dislikeColor:"crimson"
+                    }
+                }
+                else{
+                    return {
+                        votes: state.votes+1,
+                        likeColor: "black",
+                        dislikeColor:"black"
+                    }
+                }
+        }
+    };
+    const [votesState,dispatch] = useReducer(reducer,initialState);
     return (
         <Grid>
             <Row style ={{alignItems: 'center'}}>
@@ -13,17 +57,21 @@ export default function VotesAtom({voteCount = 0}) {
                 hasIcon iconOnly
                 container = {{flex:0}}
                 icon = "md-arrow-up"
-                onPress={()=>setVotes(prevVotes => prevVotes+1)}
+                iconStyle = {{color:votesState.likeColor}}
+                onPress={()=>{
+                    dispatch({type: ActionType.LIKE})
+                }}
                 />      
                    
-                <Text> {votes} </Text> 
+                <Text> {votesState.votes} </Text> 
            
                 <CButton
                 transparent
                 hasIcon iconOnly
                 container = {{flex:0}}
                 icon = "md-arrow-down"
-                onPress={()=>setVotes(prevVotes => prevVotes-1)}
+                onPress={()=>dispatch({type:ActionType.DISLIKE})}
+                iconStyle = {{color:votesState.dislikeColor}}
                 />  
             
             </Row>

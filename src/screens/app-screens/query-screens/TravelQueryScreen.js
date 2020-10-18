@@ -2,7 +2,7 @@ import React from 'react'
 import { View, FlatList } from 'react-native'
 import {Container, Content, Item, List, Text, Button} from 'native-base';
 import { CButton } from '../../../components/atoms'
-import { Query } from '../../../components/organisms'
+import { QueryPreview } from '../../../components/organisms'
 export default function TravelQueryScreen({navigation}) {
     const cards = [
         {key:"1", username: "Ed", body: {question: "How to get to San Salvador?", desc: "I need to get there ASAP"}, stats:{votes:10, comments:32, views:45}},
@@ -15,7 +15,7 @@ export default function TravelQueryScreen({navigation}) {
         navigation.navigate("QueryView",item);
     }
     const renderItem = ({item}) => {
-        return <Query username = {item.username} body = {item.body} stats = {item.stats} itemNav ={() => nav(item)}/>
+        return <QueryPreview username = {item.username} body = {item.body} stats = {item.stats} itemNav ={() => nav(item)}/>
     }
     return (
         <Container>
