@@ -4,7 +4,7 @@ import { Card, CardItem, Text, Left, Body, Thumbnail } from 'native-base';
 import placeholder from '../../../assets/avatar_placeholder.png';
 import { QueryStats } from '../../components/molecules';
 
-export default function Query({ username = "user", time = new Date().toISOString(), 
+export default function QueryPreview({ username = "user", time = new Date().toISOString(), 
                                 body = {question: "question??", desc: "Lots of content and lts description containing many words that they wont fit in a line"}, 
                                 stats = {votes:0, comments:0, views:0 },
                                 style = null, headerNav = () => {alert(`header clicked`)}, itemNav = () => {alert(`item clicked`)} }) {

@@ -1,7 +1,7 @@
 import React from 'react'
 // import { View, Text } from 'react-native';
 import { Text, Container, Content, Body } from "native-base";
-import { Query } from '../../../components/organisms'
+import { QueryPreview } from '../../../components/organisms'
 
 const queryDefault = {
     query:"Ask a question. here any question about travels can be asked",
@@ -20,7 +20,7 @@ export default function QueryView({ route, navigation }) {
     return (
         <Container>
             <Content>
-                <Query username = {username} body ={body} stats={stats} />
+                <QueryPreview username = {username} body ={body} stats={stats} />
             </Content>
         </Container>
     )
