@@ -8,7 +8,8 @@ import { storeItem, retrieveItem } from "../local-storage/StorageHelpers";
 import { AuthContext } from "./AuthContext";
 import ProfileDrawerNavigator from "./ProfileNavigator";
 import AuthNavigator from "./AuthNavigator";
-import Reactotron from 'reactotron-react-native'
+import Reactotron from 'reactotron-react-native';
+import { signInApp, registerApp } from '../api/Auth';
 
 
 const RootNavigator = new createStackNavigator();
@@ -22,7 +23,9 @@ export default function RootStackNavigator() {
       signIn: async (data) => {
         Reactotron.log(`user signed in`);
         Reactotron.log(data);
-        await storeItem("@user",data,true);
+        const response = await signInApp(data);
+        console.log("response in signIn", response);
+        await storeItem("@JWT",response.data,true);
         dispatch(true)
       },
       signOut: async () => {

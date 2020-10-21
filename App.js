@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import RootStackNavigator from "./src/navigations/RootNavigator";
 import { Root } from "native-base";
@@ -10,13 +10,19 @@ import configureStore from "./src/redux/configureStore";
 if(__DEV__) {
   import('./dev/ReactotronConfig')
 }
-import Reactotron from 'reactotron-react-native'
+import Reactotron from 'reactotron-react-native';
+import { applyLocalDefinitions } from "./src/api/Definitions";
 
 Reactotron.log("Hello there!")
 
 export default function App() {
   const store = configureStore();
 
+  // reset api definitions on component mount
+  useEffect(() =>{
+    applyLocalDefinitions();
+  },[])
+  
   // placeholder variable
   const isSignedIn = store.isSignedIn;
 
@@ -24,7 +30,7 @@ export default function App() {
     Roboto: require("native-base/Fonts/Roboto.ttf"),
     Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
   });
-  
+
   return (
   
       (!fontsLoaded)?
