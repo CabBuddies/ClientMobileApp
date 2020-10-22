@@ -16,7 +16,7 @@ const ProfileDrawer = createDrawerNavigator();
 export default function ProfileDrawerNavigator() {
     const { signOut } = useContext(AuthContext)
     return(
-        <ProfileDrawer.Navigator initialRouteName="App" drawerContent = {
+        <ProfileDrawer.Navigator initialRouteName="My Profile" drawerContent = {
             (props) => {return (
             <DrawerContentScrollView {...props}>
                 <DrawerItemList {...props}/>

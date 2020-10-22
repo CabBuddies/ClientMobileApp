@@ -33,6 +33,16 @@ export default function SignUpScreen() {
         duration: 3000
     })
     }
+    const signupRoutine = (values,actions) =>{
+        showToast(values);
+        actions.resetForm();
+        signUp(values).then( val => {
+            console.log("login successful",val);
+        }).catch(err => {
+            console.log("signup failed with",err.message);
+            actions.setFieldError("server",err.message);
+        });
+    }
 
     return(
             <Container>
@@ -40,11 +50,7 @@ export default function SignUpScreen() {
                 <Formik 
                     initialValues = {initialValues}
                     validationSchema = {signUpValidationSchema}
-                    onSubmit = {(values,actions) =>{ 
-                        showToast(values);
-                        actions.resetForm();
-                        signUp(values);
-                    }}
+                    onSubmit = {signupRoutine}
                 >
                 {(props) => (
                     <CForm formik = {props}/>

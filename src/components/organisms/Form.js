@@ -33,11 +33,15 @@ export default function CustomForm({type,formik}) {
               {
                 formik.errors.password && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.password}</Text>
               }
+              {
+                formik.errors.server && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.server}</Text>
+              }
               <Button rounded primary hasText
               onPress= {formik.handleSubmit}
               style = {styles.btn}
               title = "Sign In"
               />
+              
             </Form>
         )
     :
@@ -105,6 +109,9 @@ export default function CustomForm({type,formik}) {
           />
             {
                 formik.errors.confirmPassword && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.confirmPassword}</Text>
+            }
+            {
+                formik.errors.server && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.server}</Text>
             }
           <Button rounded hasText primary
           onPress= {formik.handleSubmit}

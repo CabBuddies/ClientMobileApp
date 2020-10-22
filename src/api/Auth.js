@@ -7,21 +7,24 @@ import axios from "axios";
 
 
 export async function signInApp(request){
-    try{
+   
 
     const {email, password} = request;
     console.log("request",request)
-    const response = await Auth.login(email, password);
+    let response = null;
+    await Auth.login(email, password).then((resp) => {
+      console.log("response",resp);
+      response = resp;
+    })
+    .catch((err) => {
+      console.log("error ra mundakor",err,err.name,err.message);
+      throw err;
+    });
 
-    console.log("response",response);
     // console.log("Headers",Headers.getAccessToken());
     // 
     return response;
 
-    }
-    catch(err){
-        console.log("Error getting",err);
-    }
 }
 
 export async function signUpApp(request)
@@ -30,13 +33,10 @@ export async function signUpApp(request)
       const { email, password, firstname, lastname } = request;
       console.log("request", request);
       const response = await Auth.register(email, password, firstname, lastname, "inapp");
-
-      console.log("response", response);
-      // console.log("Headers",Headers.getAccessToken());
-      //
       return response;
     } catch (err) {
       console.log("Error getting", err);
+      throw err;
     }
 }
 
