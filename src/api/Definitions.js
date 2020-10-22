@@ -8,6 +8,10 @@ const APIDefinitions = {
     CHATS_LOCAL : `http://${LOCAL_IP}:4003`
 }
 
+export const AppColors = {
+    PRIMARY: "#3F51B5",
+}
+
 export const applyLocalDefinitions = () =>{
     
     DOMAIN.USER_MANAGEMENT = APIDefinitions.USER_MANAGEMENT_LOCAL,
@@ -17,3 +21,4 @@ export const applyLocalDefinitions = () =>{
 
     console.log("Definitions RESET", DOMAIN);
 }
+
