@@ -20,13 +20,12 @@ export default function ProfileDrawerNavigator() {
             (props) => {return (
             <DrawerContentScrollView {...props}>
                 <DrawerItemList {...props}/>
-                <DrawerItem label = "Sign Out" style = {{backgroundColor:"tomato"}} labelStyle = {{color:"#fffeee",fontSize:20}} onPress = {signOut}/>
+                <DrawerItem label = "Sign Out" style = {{backgroundColor:"#111111"}} labelStyle = {{color:"#fffeee",fontSize:20}} onPress = {signOut}/>
             </DrawerContentScrollView>
             ) }          
         }
         drawerContentOptions = {
             {
-                activeTintColor:"#e95021",
                 labelStyle: {fontSize:20}
             }
         }

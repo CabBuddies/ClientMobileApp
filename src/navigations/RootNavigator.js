@@ -54,7 +54,7 @@ export default function RootStackNavigator() {
         try{
             const response = await signUpApp(data);
             console.log("signup response",response);
-            await storeItem("@user",data,true);
+            await storeItem("@JWT",response.data,true);
             dispatch(true);
             return "Success";
         }
