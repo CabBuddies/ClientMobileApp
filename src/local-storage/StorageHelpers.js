@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import { filterPassword } from '../utils';
 
 
 // export const persistItem = (key,value,dependency) => {
@@ -18,14 +19,14 @@ export const storeItem = async (key,value,isObject=false) => {
     try{
         if(isObject)
         {
-            value = JSON.stringify(value);
+            value = JSON.stringify(value,filterPassword);
         }
         await AsyncStorage.setItem(key,value);
         console.log(`Data persisted locally`);
     }
     catch(err)
     {
-        console.log(`failed to store ${key}:${item}, error: ${err.message}`);
+        console.error(`failed to store ${key}:${item}, error: ${err.message}`);
     }
 }
 
@@ -33,22 +34,26 @@ export const retrieveItem = async (key) => {
 
     try{
         const value= await AsyncStorage.getItem(key);
-        return value;
+        if(value !== null || value!== undefined){
+            return value;
+        }
+        return "NOT FOUND";
     }
     catch(err)
     {
-        console.log(`failed to retrieve value for ${key}, error: ${err.message}`);
+        console.error(`failed to retrieve value for ${key}, error: ${err.message}`);
     }
 }
 
 export const deleteItem = async (key) => {
     try{
         const value =  await AsyncStorage.removeItem(key);
+        console.log(`item with key: ${key}, removed successfully`);
         return value;
     }
     catch(err)
     {
-        console.log(`failed to remove value for ${key}, error: ${err.message}`);
+        console.error(`failed to remove value for ${key}, error: ${err.message}`);
     }
 }
 

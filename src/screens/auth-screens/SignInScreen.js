@@ -10,6 +10,7 @@ import { Formik } from "formik";
 import { AuthContext } from "../../navigations/AuthContext";
 import * as yup from "yup";
 import Reactotron from 'reactotron-react-native'
+import { filterPassword } from "../../utils";
 import { connect } from "react-redux";
 import * as authActions from "../../redux/actions/authAction";
 import { bindActionCreators } from "redux";
@@ -28,7 +29,11 @@ export default function SignInScreen({ navigation }) {
 	};
 	const signInRoutine = (values, actions) => {
 		actions.resetForm();
-		signIn(values);
+		signIn(values).then(val => {
+			console.log(val);
+		}).catch(err => {
+			actions.setFieldError("server",err.message);
+		})
 		showToast(values);
 	};
 	const nav = () => {
@@ -38,15 +43,15 @@ export default function SignInScreen({ navigation }) {
 
 	const showToast = (value) => {
 		Toast.show({
-			text: JSON.stringify(value),
+			text: JSON.stringify(value,filterPassword),
 			position: "bottom",
 			duration: 3000,
 		});
 	};
 
 	const initialValues = {
-		email: "",
-		password: "",
+		email: "karthik.munipalle21@cabbuddies.com",
+		password: "edokati",
 	};
 
 	return (
