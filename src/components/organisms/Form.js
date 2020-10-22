@@ -12,7 +12,7 @@ export default function CustomForm({type,formik}) {
               <FormField
               hasIcon label="Email"
               itemProps = {{floatingLabel:true, error:(formik.errors.email)?true:false}}
-              icon = "ios-mail" iconStyle = {{color:"purple"}}
+              icon = "ios-mail" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('email')}
               blurHandler = {formik.handleBlur('email')}
               value = {formik.values.email}
@@ -25,7 +25,7 @@ export default function CustomForm({type,formik}) {
               hasIcon label="Password"
               itemProps = {{floatingLabel:true,error:(formik.errors.password)?true:false}}
               inputProps = {{secureTextEntry:true}}
-              icon = "ios-lock" iconStyle = {{color:"purple"}}
+              icon = "ios-lock" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('password')}
               blurHandler = {formik.handleBlur('password')}
               value = {formik.values.password}
@@ -51,7 +51,7 @@ export default function CustomForm({type,formik}) {
             <FormField
               hasIcon label="First Name"
               itemProps = {{floatingLabel:true, error:(formik.errors.firstname)?true:false}}
-              icon = "md-person" iconStyle = {{color:"purple"}}
+              icon = "md-person" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('firstname')}
               blurHandler = {formik.handleBlur('firstname')}
               value = {formik.values.firstname}
@@ -63,7 +63,7 @@ export default function CustomForm({type,formik}) {
             <FormField
               hasIcon label="Last Name"
               itemProps = {{floatingLabel:true, error:(formik.errors.lastname)?true:false}}
-              icon = "md-person" iconStyle = {{color:"purple"}}
+              icon = "md-person" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('lastname')}
               blurHandler = {formik.handleBlur('lastname')}
               value = {formik.values.lastname}
@@ -75,7 +75,7 @@ export default function CustomForm({type,formik}) {
             <FormField
               hasIcon label="Email"
               itemProps = {{floatingLabel:true, error:(formik.errors.email)?true:false}}
-              icon = "ios-mail" iconStyle = {{color:"purple"}}
+              icon = "ios-mail" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('email')}
               blurHandler = {formik.handleBlur('email')}
               value = {formik.values.email}
@@ -88,7 +88,7 @@ export default function CustomForm({type,formik}) {
               hasIcon label="Password"
               itemProps = {{floatingLabel:true, error:(formik.errors.password)?true:false}}
               inputProps = {{secureTextEntry:true}}
-              icon = "ios-lock" iconStyle = {{color:"purple"}}
+              icon = "ios-lock" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('password')}
               blurHandler = {formik.handleBlur('password')}
               value = {formik.values.password}
@@ -102,7 +102,7 @@ export default function CustomForm({type,formik}) {
               hasIcon label="Confirm Password"
               itemProps = {{floatingLabel:true,error:(formik.errors.confirmPassword)?true:false}}
               inputProps = {{secureTextEntry:true}}
-              icon = "ios-lock" iconStyle = {{color:"purple"}}
+              icon = "ios-lock" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('confirmPassword')}
               blurHandler = {formik.handleBlur('confirmPassword')}
               value = {formik.values.confirmPassword}

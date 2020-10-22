@@ -34,7 +34,7 @@ export default function SignUpScreen() {
     })
     }
     const signupRoutine = (values,actions) =>{
-        showToast(values);
+        // showToast(values);
         actions.resetForm();
         signUp(values).then( val => {
             console.log("login successful",val);
