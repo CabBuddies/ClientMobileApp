@@ -59,12 +59,14 @@ export default function RootStackNavigator() {
             return "Success";
         }
         catch(err){
+            dispatch(false);
             if(!isNaN(parseInt(err.name)))
               console.log("Error signing in",err.message);
-            else
-              console.error("Oops!",err.message);
-            dispatch(false);
-            throw err;
+              else{
+                console.error("Oops!",err.message);
+                throw {message:"Something went wrong!, check your connection"};
+              }
+              throw err;
         }
       },
 
