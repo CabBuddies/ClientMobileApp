@@ -5,11 +5,11 @@ import QueryViewScreen from '../screens/app-screens/query-screens/QueryViewScree
 
 const QueryNavigator = createStackNavigator();
 
-export default function QueryNavigatorScreen(props) {
+export default function QueryNavigatorScreen(props:any) {
     return(
         <QueryNavigator.Navigator initialRouteName="GuideMe" >
             <QueryNavigator.Screen name="GuideMe" component={TravelQueryScreen} />
-            <QueryNavigator.Screen name="QueryView" component={QueryViewScreen} options={({ route }) => ({ title: route.params.name,headerStyle:{backgroundColor:"#3F51B5"}, titleStyle:{color:"#fff"} })}/>
+            <QueryNavigator.Screen name="QueryView" component={QueryViewScreen} options={({ route }:{route:any}) => ({ title: route.params!.name,headerStyle:{backgroundColor:"#3F51B5"}, titleStyle:{color:"#fff"} })}/>
         </QueryNavigator.Navigator>
     )
 }

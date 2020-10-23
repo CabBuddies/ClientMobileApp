@@ -23,22 +23,22 @@ export default function SignUpScreen() {
         email: yup.string().email("Invalid Email").required("Email is required"),
         password: yup.string().required("Password is required"),
         confirmPassword: yup.string().required("Confirm password please")
-                        .oneOf([yup.ref('password'),null],"Passwords must match")
+                        .oneOf([yup.ref('password'),""],"Passwords must match")
     })
 
-    const showToast = (value) => {
+    const showToast = (value:any) => {
     Toast.show({
         text: JSON.stringify(value),
         position: "bottom",
         duration: 3000
     })
     }
-    const signupRoutine = (values,actions) =>{
+    const signupRoutine = (values:any,actions:any) =>{
         // showToast(values);
         actions.resetForm();
-        signUp(values).then( val => {
+        signUp(values).then( (val:any) => {
             console.log("login successful",val);
-        }).catch(err => {
+        }).catch((err:any) => {
             console.log("signup failed with",err.message);
             actions.setFieldError("server",err.message);
         });

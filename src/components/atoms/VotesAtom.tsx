@@ -1,17 +1,25 @@
 import React, { useState, useReducer } from 'react'
 import { StyleSheet } from "react-native";
 import { Text } from 'native-base'
-import  CButton  from '../atoms/Button'
+import  CButton  from './Button'
 import { Grid, Col, Row } from 'react-native-easy-grid';
 
-const Colors = {
-    LIKE: "mediumblue",
-    DISLIKE: "crimson",
-    DEFAULT: "black"
+enum Colors {
+    LIKE = "mediumblue",
+    DISLIKE ="crimson",
+    DEFAULT = "black"
 }
-const ActionType = {
-    LIKE: "like",
-    DISLIKE: "dislike"
+enum ActionType{
+    LIKE = "like",
+    DISLIKE = "dislike"
+}
+export interface Votes{
+    votes: number;
+    likeColor: Colors;
+    dislikeColor: Colors
+}
+interface Actions{
+    type: ActionType;
 }
 export default function VotesAtom({voteCount = 0}) {
 
@@ -20,7 +28,7 @@ export default function VotesAtom({voteCount = 0}) {
         likeColor: Colors.DEFAULT,
         dislikeColor:Colors.DEFAULT,
     }
-    const reducer = (state,action) => {
+    const reducer = (state: Votes,action:Actions) => {
         switch(action.type){
             case ActionType.LIKE:
                 if(state.likeColor === "black"){

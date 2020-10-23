@@ -3,19 +3,28 @@ import { StyleSheet } from "react-native";
 import { CButton as Button } from "../../components/atoms";
 import { CForm, FieldTypes, SocialLogin } from "../../components/organisms";
 // import { FormBuilder } from "../../components/organisms"
+import { StackNavigationProp } from "@react-navigation/stack";
 import { Container, Content, Thumbnail, Footer, Toast } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
-import phi from "../../../assets/placeholderIcon.png";
+const phi = require("../../../assets/placeholderIcon.png");
 import { Formik } from "formik";
 import { AuthContext } from "../../navigations/AuthContext";
 import * as yup from "yup";
 import Reactotron from 'reactotron-react-native'
 import { filterPassword } from "../../utils";
+import {RootStackParamList} from "../../navigations/RootNavigator";
 import { connect } from "react-redux";
 import * as authActions from "../../redux/actions/authAction";
 import { bindActionCreators } from "redux";
 
-export default function SignInScreen({ navigation }) {
+type AuthNavigation = StackNavigationProp<RootStackParamList>;
+
+interface SignInValues{
+	email:string;
+	password:string;
+}
+
+export default function SignInScreen({ navigation }:{navigation:AuthNavigation}) {
 	const { signIn, anonymous } = useContext(AuthContext);
 
 	const signInValSchema = yup.object({
@@ -24,24 +33,24 @@ export default function SignInScreen({ navigation }) {
 	});
 
 	const navToAppScreen = () => {
-		Reactotron.log("*Navigating to App Screens*");
+		Reactotron.log!("*Navigating to App Screens*");
 		anonymous();
 	};
-	const signInRoutine = (values, actions) => {
+	const signInRoutine = (values:any, actions:any) => {
 		actions.resetForm();
-		signIn(values).then(val => {
+		signIn(values).then((val:any) => {
 			console.log(val);
-		}).catch(err => {
+		}).catch((err:Error) => {
 			actions.setFieldError("server",err.message);
 		})
 		// showToast(values);
 	};
 	const nav = () => {
-		Reactotron.log("navigating to SignUp screen");
+		Reactotron.log!("navigating to SignUp screen");
 		navigation.navigate("SignUp");
 	};
 
-	const showToast = (value) => {
+	const showToast = (value:any) => {
 		Toast.show({
 			text: JSON.stringify(value,filterPassword),
 			position: "bottom",
@@ -57,7 +66,7 @@ export default function SignInScreen({ navigation }) {
 	return (
 		<Container>
 			<Content>
-				<Grid style={styles.container}>
+				<Grid>
 					<Row style={{ justifyContent: "center" }}>
 						<Thumbnail source={phi} style={{ marginTop: 20 }} />
 					</Row>

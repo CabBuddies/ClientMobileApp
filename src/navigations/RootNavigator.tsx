@@ -11,8 +11,11 @@ import AuthNavigator from "./AuthNavigator";
 import Reactotron from 'reactotron-react-native';
 import { signInApp, signUpApp } from '../api/Auth';
 
+export type RootStackParamList = {
+  [val:string]:any
+}
+const RootNavigator = createStackNavigator<RootStackParamList>();
 
-const RootNavigator = new createStackNavigator();
 
 export default function RootStackNavigator() {
 
@@ -20,14 +23,14 @@ export default function RootStackNavigator() {
   const authContext = useMemo(
     () => ({
 
-      signIn: async (data) => {
-        Reactotron.log(`user signed in`);
-        Reactotron.log(data);
+      signIn: async (data:any) => {
+        Reactotron.log!(`user signed in`);
+        Reactotron.log!(data);
         
         try{
-          const response = await signInApp(data);
+          const response:any = await signInApp(data);
           console.log("response in signIn", response);
-          await storeItem("@JWT",response.data,true);
+          await storeItem("@JWT",response!.data,true);
           dispatch(true);
           return "Success";
         }
@@ -44,17 +47,17 @@ export default function RootStackNavigator() {
         
       },
       signOut: async () => {
-        Reactotron.log(`signed out`);
+        Reactotron.log!(`signed out`);
         dispatch(false)
       },
 
-      signUp: async (data) => {
-        Reactotron.log(`sign up successful`);
-        Reactotron.log(data);
+      signUp: async (data:any) => {
+        Reactotron.log!(`sign up successful`);
+        Reactotron.log!(data);
         try{
-            const response = await signUpApp(data);
+            const response:any = await signUpApp(data);
             console.log("signup response",response);
-            await storeItem("@JWT",response.data,true);
+            await storeItem("@JWT",response!.data,true);
             dispatch(true);
             return "Success";
         }
@@ -71,11 +74,11 @@ export default function RootStackNavigator() {
       },
 
       anonymous: async ()=> {
-        Reactotron.log(`user sign in anonymous`);
+        Reactotron.log!(`user sign in anonymous`);
         dispatch(true);
       }
 
-    })
+    }),[]
   )
   return (
     <AuthContext.Provider value = {authContext}>

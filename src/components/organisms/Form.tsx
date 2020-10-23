@@ -3,9 +3,17 @@ import { StyleSheet,View, Alert } from 'react-native'
 import { CButton as Button, FormField } from '../atoms'
 import { InputField }  from '../atoms'
 import { Form, Text } from 'native-base';
+import {FormikProps} from "formik";
 import { Grid, Col, Row} from 'react-native-easy-grid';
 
-export default function CustomForm({type,formik}) {
+interface Values{
+  [val:string]:string;
+}
+export interface AuthFormProps{
+  type?: "login" | undefined;
+  formik: any
+}
+export default function CustomForm({type,formik}: AuthFormProps) {
     const exp = (type === "login")?
         (
             <Form style = {{flex:1}}>

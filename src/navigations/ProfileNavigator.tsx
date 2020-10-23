@@ -6,15 +6,16 @@ import { createDrawerNavigator, DrawerItem, DrawerItemList, DrawerContentScrollV
 
 import MyProfileScreen from '../screens/user-screens/MyProfileScreen';
 import SettingsScreen from '../screens/user-screens/SettingsScreen';
-import AppTabsNavigator from '../navigations/AppNavigator';
+import AppTabsNavigator from './AppNavigator';
 import { AuthContext } from "./AuthContext";
 
 // import { CButton } from "../components/atoms"
 
 const ProfileDrawer = createDrawerNavigator();
+type SignOut = () => void
 
 export default function ProfileDrawerNavigator() {
-    const { signOut } = useContext(AuthContext)
+    const { signOut } = useContext(AuthContext);
     return(
         <ProfileDrawer.Navigator initialRouteName="My Profile" drawerContent = {
             (props) => {return (

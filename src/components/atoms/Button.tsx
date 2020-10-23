@@ -1,8 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ViewStyle, TextStyle, TouchableNativeFeedbackBase } from 'react-native';
 import { Button, Text, Icon } from 'native-base';
+import { NativeBase } from "native-base";
 import { Grid , Col, Row } from 'react-native-easy-grid';
-import { PropTypes } from 'prop-types';
 
 const containerStyle = {
     flex:1,
@@ -11,6 +11,22 @@ const containerStyle = {
     alignContent: "center",
     justifyContent:"center"
 
+}
+type IconType = "AntDesign" | "Entypo" | "EvilIcons" | "Feather" | "FontAwesome" | "FontAwesome5" | "Foundation" | "Ionicons" | "MaterialCommunityIcons" | "MaterialIcons" | "Octicons" | "SimpleLineIcons" | "Zocial" | undefined;
+export interface ButtonProps{
+    container?: any;
+    title?: string;
+    style?: ViewStyle;
+    icon?: string | undefined;
+    iconType?: IconType;
+    hasIcon?: boolean;
+    iconOnly?:boolean;
+    iconStyle?: TextStyle | null;
+    textStyle?: TextStyle | null;
+    icRight?: boolean;
+    rest?: any;
+    [val:string]: any;
+    
 }
 
 /** 
@@ -28,9 +44,9 @@ const containerStyle = {
  * @param textStyle use this prop to provide custom styling to the button text
 */
 
-export default function CButton({container = containerStyle, title = "Button", style,icon = null,
-                                iconType = null,hasIcon = false, iconOnly=false,iconStyle=null, 
-                                textStyle=null, icRight= false,...rest}) 
+export default function CButton({container = containerStyle, title = "Button", style,icon = undefined,
+                                iconType = undefined,hasIcon = false, iconOnly=false,iconStyle=null, 
+                                textStyle=null, icRight= false,...rest}: ButtonProps) 
 {
     
     return(
@@ -66,7 +82,3 @@ export default function CButton({container = containerStyle, title = "Button", s
     )
 }
 
-CButton.propTypes = {
-    title: PropTypes.string,
-    container: PropTypes.object
-}

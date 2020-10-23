@@ -5,8 +5,11 @@ import { CButton as Button } from "../../components/atoms";
 import { JSONPrint } from "../../utils";
 import { User } from "node-rest-objects/src/data/user-management/user";
 
-export default function MyProfileScreen({ navigation }) {
-    const [details, setDetails] = useState({});
+interface UserDetails{
+    [val:string]:any
+}
+export default function MyProfileScreen({ navigation }:{navigation:any}) {
+    const [details, setDetails]= useState<any>({});
     const [name,setName] = useState('username');
 
     const getUser = () => {

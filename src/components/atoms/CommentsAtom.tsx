@@ -1,7 +1,8 @@
 import React from 'react'
-import  CButton  from '../atoms/Button'
+import  CButton  from './Button'
 import { Text, View } from 'native-base'
 import { Row, Col } from 'react-native-easy-grid';
+import { Alert } from "react-native"
 
 export default function CommentsAtom({commentCount= 0}) {
     const comments =commentCount;
@@ -16,7 +17,7 @@ export default function CommentsAtom({commentCount= 0}) {
                     iconLeft
                     container = {{flex:0}}
                     onPress={() => {
-                        alert(`happy commenting`);
+                        Alert.alert(`happy commenting`);
                     }}
                 />
             </Col>

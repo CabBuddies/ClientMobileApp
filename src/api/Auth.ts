@@ -6,7 +6,7 @@ import { DOMAIN } from "node-rest-objects/src/rest/api";
 import axios from "axios";
 
 
-export async function signInApp(request){
+export async function signInApp(request:any){
    
 
     const {email, password} = request;
@@ -27,7 +27,7 @@ export async function signInApp(request){
 
 }
 
-export async function signUpApp(request)
+export async function signUpApp(request:any)
 {
     try {
       const { email, password, firstname, lastname } = request;

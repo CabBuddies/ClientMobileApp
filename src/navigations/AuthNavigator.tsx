@@ -9,7 +9,7 @@ import SignUpScreen from '../screens/auth-screens/SignUpScreen';
 
 const AuthNavigator = createStackNavigator();
 
-export default function AuthStackNavigator(props) {
+export default function AuthStackNavigator(props:any) {
     return(
         <AuthNavigator.Navigator initialRouteName="SignIn" >
             <AuthNavigator.Screen name="SignIn" component={SignInScreen} />
