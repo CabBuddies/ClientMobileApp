@@ -34,7 +34,7 @@ export default function SignInScreen({ navigation }) {
 		}).catch(err => {
 			actions.setFieldError("server",err.message);
 		})
-		showToast(values);
+		// showToast(values);
 	};
 	const nav = () => {
 		Reactotron.log("navigating to SignUp screen");

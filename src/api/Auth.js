@@ -40,6 +40,14 @@ export async function signUpApp(request)
     }
 }
 
+// export async function signOut(request){
+//     try{
+//     }
+//     catch(err){
+
+//     }
+// }
+
 // export async function getUserDetails(token)
 // {
 //     try{
