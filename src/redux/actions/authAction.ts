@@ -1,13 +1,14 @@
-import * as types from './actionTypes';
+import { AuthActions, IAuthAction }  from './actionTypes';
 
-export function login(userCredentials) {
+
+export function login(userCredentials):IAuthAction {
     if(userCredentials.userName === "admin" && userCredentials.password === "admin") {
-        return { type: types.LOGIN_SUCCESS, isSignedIn: true };   
+        return { type: AuthActions.LOGIN, isSignedIn: true };   
     } else {
-        return { type: types.LOGIN_ERROR, isSignedIn: false };
+        return { type: AuthActions.LOGIN_ERROR, isSignedIn: false };
     }
 }
 
-export function guestUser() {
-    return { type: types.GUEST_USER, isSignedIn: true };
+export function guestUser():IAuthAction {
+    return { type: AuthActions.ANONYMOUS, isSignedIn: true };
 }

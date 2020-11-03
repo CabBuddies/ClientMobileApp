@@ -1,12 +1,12 @@
-import * as types from '../actions/actionTypes'
+import { QueryActions } from '../actions/actionTypes'
 import initialState from './initialState';
 
 export default function voteReducer(state = initialState.votes, action) {
 
     switch(action.type) {
-        case types.UP_VOTE:
+        case QueryActions.UP_VOTE:
             return state = state + 1;
-        case types.DOWN_VOTE:
+        case QueryActions.DOWN_VOTE:
             return state = state - 1;
         default:
             return state;

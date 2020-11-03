@@ -25,7 +25,8 @@ export interface ButtonProps{
     textStyle?: TextStyle | null;
     icRight?: boolean;
     rest?: any;
-    [val:string]: any;
+    [val:string]:any;
+    
     
 }
 
@@ -48,7 +49,6 @@ export default function CButton({container = containerStyle, title = "Button", s
                                 iconType = undefined,hasIcon = false, iconOnly=false,iconStyle=null, 
                                 textStyle=null, icRight= false,...rest}: ButtonProps) 
 {
-    
     return(
         <Grid style = {container}>
             <Button style = {style} {...rest}>

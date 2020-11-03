@@ -1,16 +1,16 @@
-import * as types from "../actions/actionTypes";
+import { AuthActions, IAuthAction } from "../actions/actionTypes";
 import initialState from "./initialState";
 
-export default function authReducer(state = initialState.isSignedIn, action) {
+export default function authReducer(state = initialState, action:IAuthAction) {
     
-    if(typeof state === 'undefined') return;
+    if(!state) return;
 
     switch (action.type) {
-        case types.LOGIN_SUCCESS:
-        return { ...state, isSignedIn: action.isSignedIn };
-        case types.LOGIN_ERROR:
+        case AuthActions.LOGIN:
+            return { ...state, isSignedIn: action.isSignedIn};
+        case AuthActions.LOGIN_ERROR:
             return { ...state, isSignedIn: action.isSignedIn };
-        case types.GUEST_USER:
+        case AuthActions.ANONYMOUS:
             return { ...state, isSignedIn: action.isSignedIn };
         default:
         return state;
