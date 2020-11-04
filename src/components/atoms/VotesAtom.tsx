@@ -16,7 +16,7 @@ enum ActionType{
 export interface Votes{
     votes: number;
     likeColor: Colors;
-    dislikeColor: Colors
+    dislikeColor: Colors;
 }
 interface Actions{
     type: ActionType;

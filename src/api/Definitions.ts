@@ -8,8 +8,8 @@ const APIDefinitions = {
     CHATS_LOCAL : `http://${LOCAL_IP}:4003`
 }
 
-export const AppColors = {
-    PRIMARY: "#3F51B5",
+export enum AppColors {
+    PRIMARY = "#3F51B5",
 }
 
 export const applyLocalDefinitions = () =>{

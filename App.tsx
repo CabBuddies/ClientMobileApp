@@ -13,7 +13,7 @@ if(__DEV__) {
 import Reactotron from 'reactotron-react-native';
 import { applyLocalDefinitions } from "./src/api/Definitions";
 
-Reactotron.log("Hello there!")
+Reactotron.log!("Hello there!")
 
 export default function App() {
   const store = configureStore();
@@ -24,7 +24,7 @@ export default function App() {
   },[])
   
   // placeholder variable
-  const isSignedIn = store.isSignedIn;
+  // const isSignedIn = store.authReducer;
 
   let [fontsLoaded] = useFonts({
     Roboto: require("native-base/Fonts/Roboto.ttf"),
@@ -45,7 +45,7 @@ export default function App() {
         <ReduxProvider store={store}>
           <View style={styles.container}>
             {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-            <RootStackNavigator isLoggedIn={isSignedIn} />
+            <RootStackNavigator />
           </View>
         </ReduxProvider>
       </Root>

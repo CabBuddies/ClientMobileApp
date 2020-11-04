@@ -1,9 +1,9 @@
 import { Auth } from "node-rest-objects/src/data/user-management";
-import { Query } from "node-rest-objects/src/data/queries"
-import Headers from "node-rest-objects/src/rest/headers";
-import {getOp, postOp} from "node-rest-objects/src/rest/rest.operations";
-import { DOMAIN } from "node-rest-objects/src/rest/api";
-import axios from "axios";
+// import { Query } from "node-rest-objects/src/data/queries"
+// import Headers from "node-rest-objects/src/rest/headers";
+// import {getOp, postOp} from "node-rest-objects/src/rest/rest.operations";
+// import { DOMAIN } from "node-rest-objects/src/rest/api";
+// import axios from "axios";
 
 
 export async function signInApp(request:any){
@@ -11,7 +11,7 @@ export async function signInApp(request:any){
 
     const {email, password} = request;
     console.log("request",request)
-    let response = null;
+    let response:any = null;
     await Auth.login(email, password).then((resp) => {
       console.log("response",resp);
       response = resp;

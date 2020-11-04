@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { filterPassword } from '../utils';
+import { StorageKeys } from "./StorageDefinitions"
 
 
 // export const persistItem = (key,value,dependency) => {
@@ -15,7 +16,7 @@ import { filterPassword } from '../utils';
 //     },[dependency])
 // }
 
-export const storeItem = async (key,value,isObject=false) => {
+export const storeItem = async (key:StorageKeys,value,isObject=false) => {
     try{
         if(isObject)
         {
@@ -26,7 +27,7 @@ export const storeItem = async (key,value,isObject=false) => {
     }
     catch(err)
     {
-        console.error(`failed to store ${key}:${item}, error: ${err.message}`);
+        console.error(`failed to store ${key}:${value}, error: ${err.message}`);
     }
 }
 

@@ -4,7 +4,7 @@
 import React, { useState, useMemo } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { storeItem, retrieveItem } from "../local-storage/StorageHelpers";
+import { storeItem, retrieveItem, StorageKeys } from "../local-storage";
 import { AuthContext } from "./AuthContext";
 import ProfileDrawerNavigator from "./ProfileNavigator";
 import AuthNavigator from "./AuthNavigator";
@@ -30,7 +30,7 @@ export default function RootStackNavigator() {
         try{
           const response:any = await signInApp(data);
           console.log("response in signIn", response);
-          await storeItem("@JWT",response!.data,true);
+          await storeItem(StorageKeys.JWT,response!.data,true);
           dispatch(true);
           return "Success";
         }
@@ -57,7 +57,7 @@ export default function RootStackNavigator() {
         try{
             const response:any = await signUpApp(data);
             console.log("signup response",response);
-            await storeItem("@JWT",response!.data,true);
+            await storeItem(StorageKeys.JWT,response!.data,true);
             dispatch(true);
             return "Success";
         }
