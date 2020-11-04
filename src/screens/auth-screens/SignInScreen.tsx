@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { StyleSheet } from "react-native";
 import { CButton as Button } from "../../components/atoms";
-import { CForm, FieldTypes, SocialLogin } from "../../components/organisms";
+import { CForm, SocialLogin } from "../../components/organisms";
 // import { FormBuilder } from "../../components/organisms"
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Container, Content, Thumbnail, Footer, Toast } from "native-base";

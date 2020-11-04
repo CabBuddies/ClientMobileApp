@@ -1,7 +1,7 @@
 import { AuthActions, IAuthAction } from "../actions/actionTypes";
-import initialState from "./initialState";
+import {initialState, IAppState } from "./initialState";
 
-export default function authReducer(state = initialState, action:IAuthAction) {
+export default function authReducer(state:IAppState = initialState, action:IAuthAction) {
     
     if(!state) return;
 

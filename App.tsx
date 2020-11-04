@@ -24,7 +24,7 @@ export default function App() {
   },[])
   
   // placeholder variable
-  // const isSignedIn = store.authReducer;
+  const isSignedIn = store.getState().authReducer?.isSignedIn;
 
   let [fontsLoaded] = useFonts({
     Roboto: require("native-base/Fonts/Roboto.ttf"),

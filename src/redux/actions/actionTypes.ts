@@ -8,8 +8,9 @@
 // export const UP_VOTE = "UP_VOTE";
 // export const DOWN_VOTE = "DOWN_VOTE";
 export interface IAuthAction{
+    type: AuthActions;
     isSignedIn: boolean;
-    data: any
+    data?: any
 } 
 // export interface IQueryAction{
 //     isSignedIn: boolean;
