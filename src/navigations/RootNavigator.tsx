@@ -29,7 +29,7 @@ export default function RootStackNavigator() {
         
         try{
           const response:any = await signInApp(data);
-          console.log("response in signIn", response);
+          // console.log("response in signIn", response);
           await storeItem(StorageKeys.JWT,response!.data,true);
           dispatch(true);
           return "Success";

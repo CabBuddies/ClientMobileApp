@@ -16,11 +16,11 @@ const queryDefault = {
 
 }
 export default function QueryView({ route, navigation }) {
-    const {key,username,body,stats} = route.params;
+    const {key,author,draft,stats} = route.params;
     return (
         <Container>
             <Content>
-                <QueryPreview username = {username} body ={body} stats={stats} />
+                <QueryPreview username = {author} query ={draft} stats={stats} />
             </Content>
         </Container>
     )

@@ -14,7 +14,7 @@ export async function signInApp(request:any){
     console.log("request",request)
     let response:any;
     await Auth.login(email, password).then((resp) => {
-      console.log("response",resp);
+      // console.log("response",resp);
       response = resp;
     })
     .catch((err) => {
@@ -22,14 +22,19 @@ export async function signInApp(request:any){
       throw err;
     });
 
-    // const query = new Query();
-    // query.setDraft({
-    //     title:"random title",
-    //     tags: ["random","randomer","randomest"],
-    //     body: "anything random that's quite random"
-    // })
-    // await query.create();
-    // console.log("query: ",query);
+  //   const query = new Query();
+  //   query.setPublished({
+  //       title:"random title",
+  //       tags: ["random","randomer","randomest"],
+  //       body: "anything random that's quite random"
+  //   });
+  //   query.setPublished({
+  //     title:"random title",
+  //     tags: ["random","randomer","randomest"],
+  //     body: "anything random that's quite random"
+  // });
+  //   await query.create();
+  //   console.log("query: ",query);
     return response;
 
 }
