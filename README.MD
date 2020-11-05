@@ -10,7 +10,7 @@
 
 ## scripts
 
-```shell
+```json
 yarn run start: "expo start", starts the project normally
 yarn run android: "expo start --android", starts on an android device/emulator
 yarn run ios: "expo start --ios", starts on an iOS device/emulator.
