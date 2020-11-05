@@ -11,7 +11,7 @@ if(__DEV__) {
   import('./dev/ReactotronConfig')
 }
 import Reactotron from 'reactotron-react-native';
-import { applyLocalDefinitions } from "./src/api/Definitions";
+import { applyLocalDefinitions } from "./src/api/api-definitions";
 
 Reactotron.log!("Hello there!")
 
@@ -24,7 +24,7 @@ export default function App() {
   },[])
   
   // placeholder variable
-  const isSignedIn = store.getState().authReducer?.isSignedIn;
+  const isSignedIn = store;
 
   let [fontsLoaded] = useFonts({
     Roboto: require("native-base/Fonts/Roboto.ttf"),

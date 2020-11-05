@@ -1,4 +1,5 @@
-import { Auth } from "node-rest-objects/src/data/user-management";
+import { Query } from "node-rest-objects/dist/data/queries/query";
+import { Auth, IUser } from "node-rest-objects/dist/data/user-management";
 // import { Query } from "node-rest-objects/src/data/queries"
 // import Headers from "node-rest-objects/src/rest/headers";
 // import {getOp, postOp} from "node-rest-objects/src/rest/rest.operations";
@@ -11,18 +12,24 @@ export async function signInApp(request:any){
 
     const {email, password} = request;
     console.log("request",request)
-    let response:any = null;
+    let response:any;
     await Auth.login(email, password).then((resp) => {
       console.log("response",resp);
       response = resp;
     })
     .catch((err) => {
-      console.log("error ra mundakor",err,err.name,err.message);
+      console.log("error in Auth",err,err.name,err.message);
       throw err;
     });
 
-    // console.log("Headers",Headers.getAccessToken());
-    // 
+    // const query = new Query();
+    // query.setDraft({
+    //     title:"random title",
+    //     tags: ["random","randomer","randomest"],
+    //     body: "anything random that's quite random"
+    // })
+    // await query.create();
+    // console.log("query: ",query);
     return response;
 
 }
@@ -58,11 +65,3 @@ export async function signUpApp(request:any)
 //     }
 // }
 // Query creation example
-// const query = new Query();
-    // query.setDraft({
-    //     title:"random title",
-    //     tags: ["random","randomer","randomest"],
-    //     body: "anything random that's quite random"
-    // })
-    // await query.create();
-    // console.log("query: ",query);

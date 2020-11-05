@@ -2,7 +2,7 @@ import React from 'react';
 import { WebView } from "react-native-webview"; 
  
 function jsonArray(data){
-    let elements = [];
+    let elements:Array<string> = [];
     for (let index = 0; index < data.length; index++) {
         const temp = jsonPrint(data[index]);
         elements.push(`<li>${temp}</li>`)
@@ -12,7 +12,7 @@ function jsonArray(data){
 }
 
 function jsonObject(data){
-    let elements = [];
+    let elements:Array<string> = [];
     let keys = Object.keys(data);
     for (let index = 0; index < keys.length; index++) {
         const key = keys[index];
@@ -35,7 +35,8 @@ function jsonPrint(data){
 }
 
 export default function JSONPrint({data}){
-    console.log("In json print",data);
+    // console.log("In json print",data);
+    // console.log("json-print-html:",jsonPrint(data));
     return <WebView style = {{ marginTop:60,flex:1 }} 
     scalesPageToFit={false} 
     source={{html:jsonPrint(data)}}

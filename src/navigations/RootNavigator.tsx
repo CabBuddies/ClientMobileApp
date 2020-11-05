@@ -9,7 +9,7 @@ import { AuthContext } from "./AuthContext";
 import ProfileDrawerNavigator from "./ProfileNavigator";
 import AuthNavigator from "./AuthNavigator";
 import Reactotron from 'reactotron-react-native';
-import { signInApp, signUpApp } from '../api/Auth';
+import { signInApp, signUpApp } from '../api/auth-api';
 
 export type RootStackParamList = {
   [val:string]:any

@@ -16,7 +16,7 @@ const queryDefault = {
 
 }
 export default function QueryView({ route, navigation }) {
-    const {key,username,body,stats} = route.params
+    const {key,username,body,stats} = route.params;
     return (
         <Container>
             <Content>

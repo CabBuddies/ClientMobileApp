@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Header , Container, Content, Left, Body, Text, Segment, Title} from "native-base";
 import { CButton as Button } from "../../components/atoms";
 import { JSONPrint } from "../../utils";
-import { User } from "node-rest-objects/src/data/user-management/user";
+import { User } from "node-rest-objects/dist/data/user-management";
 
 interface UserDetails{
     [val:string]:any
