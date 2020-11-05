@@ -12,9 +12,9 @@
 
 ```shell
 yarn run start: "expo start", starts the project normally
-yarn run android: "expo start --android", starts in android device
-yarn run ios: "expo start --ios", starts in android device
-yarn run web: "expo start --web", starts in android device
+yarn run android: "expo start --android", starts on an android device/emulator
+yarn run ios: "expo start --ios", starts on an iOS device/emulator.
+yarn run web: "expo start --web", starts on browser.
 yarn run refresh-nro: "yarn remove node-rest-objects && yarn add CabBuddies/Node-REST-Objects#master && yarn start",
 yarn run eject: "expo eject"
 ```
