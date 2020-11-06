@@ -1,4 +1,5 @@
-import { IQueryStats } from "../../components/molecules";
+import { IQueryStats } from "../../definitions/query-definitions";
+
 
 export interface IAppState{
     authState:IAuthState;

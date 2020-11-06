@@ -3,9 +3,10 @@ import { View, FlatList, Alert } from 'react-native'
 import {Container, Content, Item, List, Text, Button} from 'native-base';
 import { CButton } from '../../../components/atoms'
 import { QueryPreview } from '../../../components/organisms'
-import { createQuery } from "../../../api/query-api";
+import { createQuery, getAllQueries } from "../../../api/query-api";
 import { JSONPrint } from "../../../utils";
 import { IQuery, Query } from 'node-rest-objects/dist/data/queries';
+import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 
 
 
@@ -18,12 +19,18 @@ export default function TravelQueryScreen({navigation}) {
     // ]
     const [queryData,setData] = useState<IQuery | undefined >();
     const [queries,setQueries] = useState<Query|null>(null);
-
+    const [queryArr,setQueryArr] = useState<RESTObject<IQuery>[] | undefined>();
     const draftTemplateRequest = {
         title:"What can I do about the BART being unavailable to San Jose",
         tags: ["BART","Bay Area","San Jose","Public Transport"],
         body: "It has been a while since the San Jose BART lines have been built,\
 but the stations are still not open, what can I do about this? ",
+    }
+
+    const defaultSearchRequest = {
+        sort:{
+            "createdAt":-1
+        }
     }
 
     const writeQuery = async (request) => {
@@ -33,11 +40,18 @@ but the stations are still not open, what can I do about this? ",
         setQueries(response);
         // setData(queries?.getData());
     }
+
+    const searchQuery = async (request) =>{
+        console.log("in search query");
+        const response = await getAllQueries(request);
+        console.log("in search query|response",response);
+        setQueryArr(response?.result);
+    }
     
 	useEffect( () => {
         console.log("running use-effect");
-        writeQuery(draftTemplateRequest);
-        console.log("queries-data:",queries?.getData());
+        searchQuery(defaultSearchRequest);
+        console.log("queries-data:",queryArr);
         
     },[])
     
@@ -50,14 +64,15 @@ but the stations are still not open, what can I do about this? ",
     }
 
     const renderItem = ({item}) => {
-        console.log("item",item);
-        return <QueryPreview username = {item?.author} query= {item?.draft} stats = {item?.stats} itemNav ={() => nav(item)}/>
+        const data = item.data;
+        const {author,draft,stats,createdAt} = data;
+        return <QueryPreview time ={createdAt} username = {author} query= {draft} stats = {stats} itemNav ={() => nav(data)}/>
     }
     
     return (
         <Container>
-            {queryData && 
-            <FlatList data = {[queryData]} renderItem = {renderItem} keyExtractor = {item => (item)?item._id:`${Date.now()}`} ListFooterComponent = {
+            {queryArr && 
+            <FlatList data = {queryArr} renderItem = {renderItem} keyExtractor = {item => (item)?item.data._id:`${Date.now()}`} ListFooterComponent = {
                 <>
                     <CButton
                         rounded 
@@ -65,9 +80,9 @@ but the stations are still not open, what can I do about this? ",
                         title = "New Query"
                         onPress = {() => Alert.alert(`insert a Query`)}
                     />
-                    
                 </>
             }/>
+            // <JSONPrint data={queryArr}/>
             }     
         </Container>
     )
