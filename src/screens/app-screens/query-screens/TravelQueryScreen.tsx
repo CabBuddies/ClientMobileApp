@@ -7,6 +7,8 @@ import { createQuery, getAllQueries } from "../../../api/query-api";
 import { JSONPrint } from "../../../utils";
 import { IQuery, Query } from 'node-rest-objects/dist/data/queries';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
+import { Placeholder, PlaceholderMedia, PlaceholderLine, Shine,Loader } from "rn-placeholder";
+import Reactotron from "../../../../dev/ReactotronConfig";
 
 
 
@@ -19,7 +21,7 @@ export default function TravelQueryScreen({navigation}) {
     // ]
     const [queryData,setData] = useState<IQuery | undefined >();
     const [queries,setQueries] = useState<Query|null>(null);
-    const [queryArr,setQueryArr] = useState<RESTObject<IQuery>[] | undefined>();
+    const [cards,setCards] = useState<RESTObject<IQuery>[] | undefined>();
     const draftTemplateRequest = {
         title:"What can I do about the BART being unavailable to San Jose",
         tags: ["BART","Bay Area","San Jose","Public Transport"],
@@ -34,24 +36,25 @@ but the stations are still not open, what can I do about this? ",
     }
 
     const writeQuery = async (request) => {
-        console.log("in write query");
+        Reactotron.log!("in write query");
         const response = await createQuery(request);
-        console.log("in write query- response",response);
+        Reactotron.log!("in write query- response",response);
         setQueries(response);
         // setData(queries?.getData());
     }
 
     const searchQuery = async (request) =>{
-        console.log("in search query");
+        Reactotron.log!("in search query");
         const response = await getAllQueries(request);
-        console.log("in search query|response",response);
-        setQueryArr(response?.result);
+        Reactotron.log!("in search query|response",response);
+        setCards(response?.result);
     }
     
 	useEffect( () => {
-        console.log("running use-effect");
+        Reactotron.log!("running use-effect");
+        writeQuery(draftTemplateRequest);
         searchQuery(defaultSearchRequest);
-        console.log("queries-data:",queryArr);
+        Reactotron.log!("queries-data:",cards);
         
     },[])
     
@@ -62,6 +65,25 @@ but the stations are still not open, what can I do about this? ",
     const nav = (item) =>{
         navigation.navigate("QueryView",item);
     }
+    const placeholder = () => {
+        const x = new Array(10).fill({});
+        const components = x.map((e,i) => {
+            return  (
+                    <Placeholder
+                        Left={PlaceholderMedia}
+                        Animation={(props) => <Shine {...props} duration={2} reverse={false}/>}
+                        key = {""+i}
+                    >
+                        <PlaceholderLine width={80} />
+                        <PlaceholderLine />
+                        <PlaceholderLine width={30} />
+                        
+                    </Placeholder>
+            )
+        })
+        return (<>{components}</>);        
+    }
+    
 
     const renderItem = ({item}) => {
         const data = item.data;
@@ -71,8 +93,8 @@ but the stations are still not open, what can I do about this? ",
     
     return (
         <Container>
-            {queryArr && 
-            <FlatList data = {queryArr} renderItem = {renderItem} keyExtractor = {item => (item)?item.data._id:`${Date.now()}`} ListFooterComponent = {
+            
+            <FlatList data = {cards} renderItem = {renderItem} keyExtractor = {item => (item)?item.data._id:`${Date.now()}`} ListFooterComponent = {
                 <>
                     <CButton
                         rounded 
@@ -81,9 +103,11 @@ but the stations are still not open, what can I do about this? ",
                         onPress = {() => Alert.alert(`insert a Query`)}
                     />
                 </>
-            }/>
-            // <JSONPrint data={queryArr}/>
-            }     
+                
+            } 
+            ListEmptyComponent = {placeholder}
+            />
+              
         </Container>
     )
 }

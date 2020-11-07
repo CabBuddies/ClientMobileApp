@@ -8,7 +8,7 @@ import { useFonts } from "expo-font";
 import { Provider as ReduxProvider } from "react-redux";
 import configureStore from "./src/redux/configureStore";
 if(__DEV__) {
-  import('./dev/ReactotronConfig')
+  import ('./dev/ReactotronConfig')
 }
 import Reactotron from 'reactotron-react-native';
 import { applyLocalDefinitions } from "./src/api/api-definitions";
@@ -17,7 +17,7 @@ Reactotron.log!("Hello there!")
 
 export default function App() {
   const store = configureStore();
-
+  Reactotron.log!("store",store.getState());
   // reset api definitions on component mount
   useEffect(() =>{
     applyLocalDefinitions();

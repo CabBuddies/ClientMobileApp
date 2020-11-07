@@ -8,35 +8,35 @@ export interface IAppState{
 
 }
 
-interface IAuthState{
+export interface IAuthState{
     isSignedIn: boolean;
     anonymous?:boolean;
     authToken?:string;
     refreshToken?:string;
 }
 
-interface IUserState{
+export interface IUserState{
     profileState:IProfileState;
     currentScreen:string;
 }
 
-interface IProfileState{
+export interface IProfileState{
     name: string;
     id:string;
     email:string;
     profileImageUrl?:string;
 }
 
-interface IQueryState{
+export interface IQueryState{
     queryStats:IQueryStats;
     
 }
 
-// interface IRideState{
+// export interface IRideState{
     
 // }
 
-// interface IPackageState{
+// export interface IPackageState{
     
 // }
 const authState:IAuthState = {
@@ -45,6 +45,9 @@ const authState:IAuthState = {
     authToken:"",
     refreshToken:""
 }
+// const queryState:IQueryState={
+
+// }
 export const initialState:IAppState = {
     authState:authState
 }
