@@ -7,7 +7,9 @@ import { createDrawerNavigator, DrawerItem, DrawerItemList, DrawerContentScrollV
 import MyProfileScreen from '../screens/user-screens/MyProfileScreen';
 import SettingsScreen from '../screens/user-screens/SettingsScreen';
 import AppTabsNavigator from './AppNavigator';
-import { AuthContext } from "./AuthContext";
+import { connect } from 'react-redux';
+import {signOut} from '../redux/actions/authAction';
+import { bindActionCreators } from 'redux';
 
 // import { CButton } from "../components/atoms"
 
@@ -17,8 +19,7 @@ type SignOut = () => void
 /**
  * parent of all the post-auth application screens
  */
-export default function ProfileDrawerNavigator() {
-    const { signOut } = useContext(AuthContext);
+function ProfileDrawerNavigator({signOut}:any) {
     return(
         <ProfileDrawer.Navigator initialRouteName="My Profile" drawerContent = {
             (props) => {return (
@@ -40,3 +41,17 @@ export default function ProfileDrawerNavigator() {
         </ProfileDrawer.Navigator>
     )
 }
+// function mapStateToProps(state) {
+//     const { authState } = state;
+//     return {
+//           isSignedIn: authState.isSignedIn
+//       };
+//   }
+
+function mapDispatchToProps(dispatch){
+    return{
+        signOut: bindActionCreators(signOut,dispatch)
+    }
+}
+
+export default connect(null,mapDispatchToProps)(ProfileDrawerNavigator);

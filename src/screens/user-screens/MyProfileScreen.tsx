@@ -4,6 +4,7 @@ import { Header , Container, Content, Left, Body, Text, Segment, Title} from "na
 import { CButton as Button } from "../../components/atoms";
 import { JSONPrint } from "../../utils";
 import { User } from "node-rest-objects/dist/data/user-management";
+import Reactotron from "../../../dev/ReactotronConfig";
 
 interface UserDetails{
     [val:string]:any
@@ -16,9 +17,9 @@ export default function MyProfileScreen({ navigation }:{navigation:any}) {
         const user = new User();
         user.getMe().then(() => {
             setDetails(user.data);
-            console.log("user:",user);
+            Reactotron.log!("user:",user);
         }).catch((err) => {
-            console.log("error getting user details",err);
+            Reactotron.log!("error getting user details",err);
         });
         
     }

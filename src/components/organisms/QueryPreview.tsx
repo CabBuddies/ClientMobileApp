@@ -52,7 +52,6 @@ export default function QueryPreview({
 	},
 }: QueryPreviewProps) {
 	time = time.split("T")[0];
-	console.log("username",username);
 	return (
 		<Card style={style}>
 			<CardItem

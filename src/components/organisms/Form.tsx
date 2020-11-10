@@ -83,6 +83,7 @@ export default function CustomForm({type,formik}: AuthFormProps) {
             <FormField
               hasIcon label="Email"
               itemProps = {{floatingLabel:true, error:(formik.errors.email)?true:false}}
+              inputProps = {{autoCapitalize:"none"}}
               icon = "ios-mail" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('email')}
               blurHandler = {formik.handleBlur('email')}

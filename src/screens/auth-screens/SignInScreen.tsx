@@ -8,7 +8,7 @@ import { Container, Content, Thumbnail, Footer, Toast } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 const phi = require("../../../assets/placeholderIcon.png");
 import { Formik } from "formik";
-import { AuthContext } from "../../navigations/AuthContext";
+// import { AuthContext } from "../../navigations/AuthContext";
 import * as yup from "yup";
 import Reactotron from 'reactotron-react-native'
 import { filterPassword } from "../../utils";
@@ -24,8 +24,8 @@ interface SignInValues {
 	password: string;
 }
 
-function SignInScreen({ navigation, guestLogin, userLogin }: any) {
-	const { signIn, anonymous } = useContext(AuthContext);
+function SignInScreen({ navigation, guestLogin, userLogin,error }: any) {
+	// const { signIn, anonymous } = useContext(AuthContext);
 
 	const signInValSchema = yup.object({
 		email: yup.string().email("Invalid Email!").required("Required"),
@@ -38,11 +38,11 @@ function SignInScreen({ navigation, guestLogin, userLogin }: any) {
 	};
 	const signInRoutine = (values: any, actions: any) => {
 		actions.resetForm();
-		signIn(values).then((val: any) => {
-			console.log(val);
-		}).catch((err: Error) => {
-			actions.setFieldError("server", err.message);
-		})
+		userLogin(values);
+		if(error){
+			Reactotron.error!(error,null);
+			actions.setFieldError("server",error);
+		}
 		// showToast(values);
 	};
 	const nav = () => {
@@ -113,7 +113,13 @@ function SignInScreen({ navigation, guestLogin, userLogin }: any) {
 	);
 }
 
-
+function mapStateToProps(state){
+	const {authState} = state;
+	return{
+		isSignedIn:authState.isSignedIn,
+		error: authState.error
+	}
+}
 
 function matchDispatchToProps(dispatch) {
 	return {
@@ -122,7 +128,7 @@ function matchDispatchToProps(dispatch) {
 	}
 }
 
-export default connect(null,matchDispatchToProps)(SignInScreen);
+export default connect(mapStateToProps,matchDispatchToProps)(SignInScreen);
 
 const styles = StyleSheet.create({
 	btnContainer: {

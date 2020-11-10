@@ -1,6 +1,7 @@
 import { IQuery, Query } from "node-rest-objects/dist/data/queries";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import SearchRESTObject from "node-rest-objects/dist/rest/search.rest.object";
+import Reactotron from "../../dev/ReactotronConfig";
 // const draftTemplateRequest = {
 //     title:"What can I do about the BART being unavailable to San Jose",
 //     tags: ["BART","Bay Area","San Jose","Public Transport"],
@@ -18,22 +19,22 @@ export async function getAllQueries(request = defaultSearchRequest){
         const querySro= new SearchRESTObject(query);
         querySro.setRequest(request);
         await querySro.search();
-        console.log("query-search-response",querySro.response);
+        Reactotron.log!("query-search-response",querySro.response);
         return querySro.response;
     }
     catch(error){
-        console.log("Error in query-search",error);
+        Reactotron.log!("Error in query-search",error);
     }
 }
 export async function createQuery(request,token?:string){
     try {
         const query:Query = new Query();
-        query.setDraft(request);
+        query.setPublished(request);
         await query.create();
-        // console.log("query: ",query);
+        // Reactotron.log!("query: ",query);
         return query;    
     } catch (error) {
-        console.error(`error creating the query`,error);
+        Reactotron.error!(`error creating the query`,error);
         throw error;
     }
     

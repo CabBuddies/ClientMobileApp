@@ -17,7 +17,6 @@ Reactotron.log!("Hello there!")
 
 export default function App() {
   const store = configureStore();
-  Reactotron.log!("store",store.getState());
   // reset api definitions on component mount
   useEffect(() =>{
     applyLocalDefinitions();

@@ -15,4 +15,5 @@ web-build/
 # macOS
 .DS_Store
 *.log
-dev/
+api/api-definitions.ts
+dev/ReactotronConfig.js

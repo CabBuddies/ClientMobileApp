@@ -22,9 +22,11 @@ export enum FetchActions{
 }
 export enum AuthActions{
     LOGIN = "login",
-    AUTH_ERROR = "login-error",
+    AUTH_ERROR = "auth-error",
     SIGN_UP = "sign-up",
-    ANONYMOUS = "anonymous"
+    ANONYMOUS = "anonymous",
+    REFRESH = "refresh-token",
+    LOGOUT = "logout"
 
 }
 

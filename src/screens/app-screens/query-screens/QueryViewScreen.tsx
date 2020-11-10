@@ -13,7 +13,6 @@ import { QueryPreview } from '../../../components/organisms'
 //             response: "You have asked the right questions Arjuna!", 
 //         }
 //     ],
-
 // }
 export default function QueryView({ route, navigation }) {
     const {key,author,draft,stats} = route.params;

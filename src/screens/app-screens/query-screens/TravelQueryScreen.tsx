@@ -13,12 +13,6 @@ import Reactotron from "../../../../dev/ReactotronConfig";
 
 
 export default function TravelQueryScreen({navigation}) {
-    // const cards = [
-    //     {key:"1", username: "Ed", body: {question: "How to get to San Salvador?", desc: "I need to get there ASAP"}, stats:{votes:10, comments:32, views:45}},
-    //     {key:"2", username: "Al", body: {question: "How to get to Edford?", desc: "I need to get there ASAP"}, stats:{votes:15, comments:15, views:50}},
-    //     {key:"3", username: "Winry", body: {question: "How to get to Edford?", desc: "I need to get there ASAP"}, stats:{votes:-4, comments:1, views:100}},
-    //     {key:"4", username: "Lola", body: {question: "How to get to Briggs?", desc: "I need to get there ASAP"}, stats:{votes:-4, comments:0, views:45}},
-    // ]
     const [queryData,setData] = useState<IQuery | undefined >();
     const [queries,setQueries] = useState<Query|null>(null);
     const [cards,setCards] = useState<RESTObject<IQuery>[] | undefined>();
@@ -38,7 +32,7 @@ but the stations are still not open, what can I do about this? ",
     const writeQuery = async (request) => {
         Reactotron.log!("in write query");
         const response = await createQuery(request);
-        Reactotron.log!("in write query- response",response);
+        // Reactotron.log!("in write query- response",response);
         setQueries(response);
         // setData(queries?.getData());
     }
@@ -46,13 +40,13 @@ but the stations are still not open, what can I do about this? ",
     const searchQuery = async (request) =>{
         Reactotron.log!("in search query");
         const response = await getAllQueries(request);
-        Reactotron.log!("in search query|response",response);
+        // Reactotron.log!("in search query|response",response);
         setCards(response?.result);
     }
     
 	useEffect( () => {
-        Reactotron.log!("running use-effect");
-        writeQuery(draftTemplateRequest);
+        // Reactotron.log!("running use-effect");
+        // writeQuery(draftTemplateRequest);
         searchQuery(defaultSearchRequest);
         Reactotron.log!("queries-data:",cards);
         
@@ -87,8 +81,9 @@ but the stations are still not open, what can I do about this? ",
 
     const renderItem = ({item}) => {
         const data = item.data;
-        const {author,draft,stats,createdAt} = data;
-        return <QueryPreview time ={createdAt} username = {author} query= {draft} stats = {stats} itemNav ={() => nav(data)}/>
+        const {author,published,stats,createdAt} = data;
+        // Reactotron.log!(published);
+        return <QueryPreview time ={createdAt} username = {author} query= {published} stats = {stats} itemNav ={() => nav(data)}/>
     }
     
     return (
