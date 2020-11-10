@@ -12,19 +12,19 @@ import { AuthContext } from "../../navigations/AuthContext";
 import * as yup from "yup";
 import Reactotron from 'reactotron-react-native'
 import { filterPassword } from "../../utils";
-import {RootStackParamList} from "../../navigations/RootNavigator";
+import { RootStackParamList } from "../../navigations/RootNavigator";
 import { connect } from "react-redux";
-import * as authActions from "../../redux/actions/authAction";
+import { guestUser, login } from "../../redux/actions/authAction";
 import { bindActionCreators } from "redux";
 
 type AuthNavigation = StackNavigationProp<RootStackParamList>;
 
-interface SignInValues{
-	email:string;
-	password:string;
+interface SignInValues {
+	email: string;
+	password: string;
 }
 
-export default function SignInScreen({ navigation }:{navigation:AuthNavigation}) {
+function SignInScreen({ navigation, guestLogin, userLogin }: any) {
 	const { signIn, anonymous } = useContext(AuthContext);
 
 	const signInValSchema = yup.object({
@@ -34,14 +34,14 @@ export default function SignInScreen({ navigation }:{navigation:AuthNavigation})
 
 	const navToAppScreen = () => {
 		Reactotron.log!("*Navigating to App Screens*");
-		anonymous();
+		guestLogin();
 	};
-	const signInRoutine = (values:any, actions:any) => {
+	const signInRoutine = (values: any, actions: any) => {
 		actions.resetForm();
-		signIn(values).then((val:any) => {
+		signIn(values).then((val: any) => {
 			console.log(val);
-		}).catch((err:Error) => {
-			actions.setFieldError("server",err.message);
+		}).catch((err: Error) => {
+			actions.setFieldError("server", err.message);
 		})
 		// showToast(values);
 	};
@@ -50,9 +50,9 @@ export default function SignInScreen({ navigation }:{navigation:AuthNavigation})
 		navigation.navigate("SignUp");
 	};
 
-	const showToast = (value:any) => {
+	const showToast = (value: any) => {
 		Toast.show({
-			text: JSON.stringify(value,filterPassword),
+			text: JSON.stringify(value, filterPassword),
 			position: "bottom",
 			duration: 3000,
 		});
@@ -113,22 +113,16 @@ export default function SignInScreen({ navigation }:{navigation:AuthNavigation})
 	);
 }
 
-// function mapStateToProps(state) {
-//     return {
-//         isSignedIn: state.isSignedIn
-//     };
-// }
 
-// function matchDispatchToProps(dispatch) {
-//   return {
-//     actions: {
-//       guestLogin: bindActionCreators(authActions.guestUser, dispatch),
-//       userLogin: bindActionCreators(authActions.login, dispatch)
-//     }
-//   }
-// }
 
-// export default connect(mapStateToProps, matchDispatchToProps)(SignInScreen);
+function matchDispatchToProps(dispatch) {
+	return {
+		guestLogin: bindActionCreators(guestUser, dispatch),
+		userLogin: bindActionCreators(login, dispatch)
+	}
+}
+
+export default connect(null,matchDispatchToProps)(SignInScreen);
 
 const styles = StyleSheet.create({
 	btnContainer: {

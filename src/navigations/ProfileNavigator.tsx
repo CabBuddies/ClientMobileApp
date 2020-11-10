@@ -14,6 +14,9 @@ import { AuthContext } from "./AuthContext";
 const ProfileDrawer = createDrawerNavigator();
 type SignOut = () => void
 
+/**
+ * parent of all the post-auth application screens
+ */
 export default function ProfileDrawerNavigator() {
     const { signOut } = useContext(AuthContext);
     return(

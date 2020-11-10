@@ -7,9 +7,9 @@ export default function authReducer(state:IAuthState = initialState.authState, a
 
     switch (action.type) {
         case AuthActions.LOGIN:
-            return { ...state, isSignedIn: action.isSignedIn};
-        case AuthActions.LOGIN_ERROR:
-            return { ...state, isSignedIn: action.isSignedIn };
+            return { ...state, isSignedIn: action.isSignedIn,tokens:action.payload!};
+        case AuthActions.AUTH_ERROR:
+            return { ...state, isSignedIn: action.isSignedIn,error:action.error! };
         case AuthActions.ANONYMOUS:
             return { ...state, isSignedIn: action.isSignedIn, anonymous:true };
         default:

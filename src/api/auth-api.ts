@@ -9,7 +9,6 @@ import { Auth, IUser } from "node-rest-objects/dist/data/user-management";
 
 export async function signInApp(request:any){
    
-
     const {email, password} = request;
     console.log("request",request)
     let response:any;
@@ -21,20 +20,6 @@ export async function signInApp(request:any){
       console.log("error in Auth",err,err.name,err.message);
       throw err;
     });
-
-  //   const query = new Query();
-  //   query.setPublished({
-  //       title:"random title",
-  //       tags: ["random","randomer","randomest"],
-  //       body: "anything random that's quite random"
-  //   });
-  //   query.setPublished({
-  //     title:"random title",
-  //     tags: ["random","randomer","randomest"],
-  //     body: "anything random that's quite random"
-  // });
-  //   await query.create();
-  //   console.log("query: ",query);
     return response;
 
 }

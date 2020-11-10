@@ -1,5 +1,9 @@
 import { IQueryStats } from "../../definitions/query-definitions";
 
+interface CommonStates{
+    loading?:boolean;
+    error?:string;
+}
 
 export interface IAppState{
     authState:IAuthState;
@@ -8,26 +12,26 @@ export interface IAppState{
 
 }
 
-export interface IAuthState{
+
+export interface IAuthState extends CommonStates{
     isSignedIn: boolean;
     anonymous?:boolean;
-    authToken?:string;
-    refreshToken?:string;
+    tokens?:any;
 }
 
-export interface IUserState{
+export interface IUserState extends CommonStates{
     profileState:IProfileState;
     currentScreen:string;
 }
 
-export interface IProfileState{
+export interface IProfileState extends CommonStates{
     name: string;
     id:string;
     email:string;
     profileImageUrl?:string;
 }
 
-export interface IQueryState{
+export interface IQueryState extends CommonStates{
     queryStats:IQueryStats;
     
 }
@@ -42,8 +46,7 @@ export interface IQueryState{
 const authState:IAuthState = {
     isSignedIn:false,
     anonymous:false,
-    authToken:"",
-    refreshToken:""
+    loading:false
 }
 // const queryState:IQueryState={
 

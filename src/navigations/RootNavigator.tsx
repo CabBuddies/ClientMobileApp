@@ -10,6 +10,7 @@ import ProfileDrawerNavigator from "./ProfileNavigator";
 import AuthNavigator from "./AuthNavigator";
 import Reactotron from 'reactotron-react-native';
 import { signInApp, signUpApp } from '../api/auth-api';
+import { connect } from "react-redux";
 
 export type RootStackParamList = {
   [val:string]:any
@@ -17,9 +18,13 @@ export type RootStackParamList = {
 const RootNavigator = createStackNavigator<RootStackParamList>();
 
 
-export default function RootStackNavigator() {
-
-  const [isSignedIn,dispatch] = useState(false);
+/**
+ * root for the entire application tree.
+ */
+function RootStackNavigator({isSignedIn}) {
+  Reactotron.log!("sign-in-redux-state",isSignedIn);
+  
+  const [isLoggedIn,dispatch] = useState(isSignedIn);
   const authContext = useMemo(
     () => ({
 
@@ -84,7 +89,7 @@ export default function RootStackNavigator() {
     <AuthContext.Provider value = {authContext}>
     <NavigationContainer>
       <RootNavigator.Navigator headerMode="none">
-        {isSignedIn ? (
+        {isLoggedIn ? (
           <RootNavigator.Screen name="AppRoot" component={ProfileDrawerNavigator} />
         ) : (
           <RootNavigator.Screen name="Auth" component={AuthNavigator} />
@@ -94,3 +99,11 @@ export default function RootStackNavigator() {
     </AuthContext.Provider>
   );
 }
+function mapStateToProps(state) {
+  const { authState } = state;
+  return {
+        isSignedIn: authState.isSignedIn
+    };
+}
+
+export default connect(mapStateToProps)(RootStackNavigator);
