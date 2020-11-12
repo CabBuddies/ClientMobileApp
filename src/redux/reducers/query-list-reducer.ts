@@ -1,7 +1,7 @@
-import { IQueryListState,initialState } from "./initialState";
+import { IQueryListState,initialState } from "../initialState";
 import { IQueryListAction, QueryListActions } from "../actions/actionTypes";
 
-export function queryListReducer(state = initialState.queryListState,action:IQueryListAction):IQueryListState{
+export default function queryListReducer(state = initialState.queryListState,action:IQueryListAction):IQueryListState{
     
     switch(action.type){
         case QueryListActions.FETCH_SUCCESS:

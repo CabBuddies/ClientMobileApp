@@ -1,5 +1,5 @@
 import Reactotron from "reactotron-react-native";
-import { getAllQueries } from "../../api/query-api";
+import { getAllQueries,createQuery } from "../../api/query-api";
 import { IQueryAction, IQueryListAction, QueryListActions, QueryActions } from "./actionTypes";
 import { ApiError } from "./common-types";
 
@@ -64,6 +64,33 @@ export function fetchAllQueries(requestData){
     }
 }
 
+function createQueryFailure(error:ApiError){
+    return {
+        type:QueryActions.FAILURE,
+        error:error.message,
+        loading:false,
+    }
+}
+function createQuerySuccess(data){
+    return {
+        type:QueryActions.CREATE,
+        loading:false,
+        payload:data
+    }
+}
+
+export function writeQuery(data){
+    return dispatch => {
+        createQuery(data)
+        .then(response => {
+            Reactotron.log!("query-create-response",response);
+            dispatch(createQuerySuccess(response))
+        }).catch(error => {
+            Reactotron.error!("query-creation-failure",error);
+            dispatch(createQueryFailure(error))
+        })
+    }
+}
 // export function fetchQuery(requestData){
 //     Reactotron.log!("In query-list thunk");
 //     return dispatch => {

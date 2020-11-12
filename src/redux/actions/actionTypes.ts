@@ -18,12 +18,29 @@ export interface IQueryListAction{
     error?:string;
 
 }
+
+export interface IUserAction{
+    type: UserActions;
+    loading:boolean;
+    payload?:any;
+    error?:string;
+}
+
 export interface IQueryAction{
     type:QueryActions;
     loading:boolean;
     error?:string;
     payload?:any;
-    
+}
+
+// --------------------------------------------------
+
+export enum UserActions{
+    FETCH_BEGIN = "user-fetch-begin",
+    FETCH_SUCCESS = "user-fetch-success",
+    FETCH_ERROR = "user-fetch-failure",
+    SETTINGS = "user-settings",
+    DEFAULT_SCREEN = "default-screen"
 }
 
 export enum FetchActions{
@@ -58,6 +75,7 @@ export enum QueryActions{
     RESPONSE = "response",
     VIEW = "view",
     CREATE = "create",
+    FAILURE = "query-action-failure",
     UPDATE = "update",
     DELETE = "delete",
     UP_VOTE = "up-vote",

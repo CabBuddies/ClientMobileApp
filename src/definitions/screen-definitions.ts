@@ -9,6 +9,7 @@ export enum Screens{
     APP = "App",
     GUIDE_ME = "GuideMe",
     QUERY_VIEW = "QueryView",
+    QUERY_CREATE = "New Query",
     RIDE = "Find a ride",
     CHATS = "Chats",
     CHAT_GROUP = "Group",

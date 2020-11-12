@@ -1,7 +1,7 @@
 import { IQuery } from "node-rest-objects/dist/data/queries";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
-import { IQueryStats } from "../../definitions/query-definitions";
-import { Screens } from "../../definitions/screen-definitions";
+import { IQueryStats } from "../definitions/query-definitions";
+import { Screens } from "../definitions/screen-definitions";
 
 interface CommonStates{
     loading?:boolean;
