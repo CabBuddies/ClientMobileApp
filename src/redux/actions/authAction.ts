@@ -1,12 +1,8 @@
 import { AuthActions, IAuthAction }  from './actionTypes';
 import { signInApp,signUpApp } from "../../api/auth-api";
 import Reactotron from "../../../dev/ReactotronConfig";
+import { ApiError } from "./common-types";
 
-interface ApiError{
-    message: string;
-    name?: number;
-    [key:string] : any;
-}
 
 export function loginSuccess(data):IAuthAction{
    return {
@@ -72,8 +68,6 @@ export function signUp(data) {
         })
     }
 }
-
-//TODO: logout thunk
 
 //TODO: refresh-token thunk
 

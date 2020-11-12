@@ -16,6 +16,7 @@ import { RootStackParamList } from "../../navigations/RootNavigator";
 import { connect } from "react-redux";
 import { guestUser, login } from "../../redux/actions/authAction";
 import { bindActionCreators } from "redux";
+import { Screens } from "../../definitions/screen-definitions";
 
 type AuthNavigation = StackNavigationProp<RootStackParamList>;
 
@@ -47,7 +48,7 @@ function SignInScreen({ navigation, guestLogin, userLogin,error }: any) {
 	};
 	const nav = () => {
 		Reactotron.log!("navigating to SignUp screen");
-		navigation.navigate("SignUp");
+		navigation.navigate(Screens.SIGN_UP);
 	};
 
 	const showToast = (value: any) => {

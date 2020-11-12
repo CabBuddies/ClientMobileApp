@@ -18,6 +18,7 @@ export async function getAllQueries(request = defaultSearchRequest){
         const query:Query = new Query();       
         const querySro= new SearchRESTObject(query);
         querySro.setRequest(request);
+        Reactotron.log!("query-search-request",querySro.request);
         await querySro.search();
         Reactotron.log!("query-search-response",querySro.response);
         return querySro.response;
@@ -37,6 +38,15 @@ export async function createQuery(request,token?:string){
         Reactotron.error!(`error creating the query`,error);
         throw error;
     }
-    
 }
+
+// export async function getQuery(request){
+//     try{
+//         const query:Query = new Query();
+        
+//     }
+//     catch(error){
+
+//     }
+// }
 

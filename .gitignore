@@ -16,4 +16,4 @@ web-build/
 .DS_Store
 *.log
 api/api-definitions.ts
-dev/ReactotronConfig.js
+dev/*

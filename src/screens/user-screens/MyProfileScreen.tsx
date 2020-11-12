@@ -5,6 +5,7 @@ import { CButton as Button } from "../../components/atoms";
 import { JSONPrint } from "../../utils";
 import { User } from "node-rest-objects/dist/data/user-management";
 import Reactotron from "../../../dev/ReactotronConfig";
+import { Screens } from '../../definitions/screen-definitions';
 
 interface UserDetails{
     [val:string]:any
@@ -40,8 +41,8 @@ export default function MyProfileScreen({ navigation }:{navigation:any}) {
             <Header style = {{backgroundColor:"#3F51B5"}}>
                 <Left>
                     <Button transparent
-                        title="App"
-                        onPress = {() => navigation.navigate("App",{screen:"GuideMe"})}
+                        title={Screens.APP}
+                        onPress = {() => navigation.navigate(Screens.APP,{screen:Screens.GUIDE_ME})}
                         textStyle = {{fontSize:15, color:"#fff"}}
                         container = {{flex:0, margin:0}}
                         style = {{margin:0}}

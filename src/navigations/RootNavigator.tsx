@@ -10,6 +10,7 @@ import AuthNavigator from "./AuthNavigator";
 import Reactotron from 'reactotron-react-native';
 import { signInApp, signUpApp } from '../api/auth-api';
 import { connect } from "react-redux";
+import { Screens } from "../definitions/screen-definitions";
 
 export type RootStackParamList = {
   [val:string]:any
@@ -27,9 +28,9 @@ function RootStackNavigator({isSignedIn}) {
     <NavigationContainer>
       <RootNavigator.Navigator headerMode="none">
         {isSignedIn ? (
-          <RootNavigator.Screen name="AppRoot" component={ProfileDrawerNavigator} />
+          <RootNavigator.Screen name={Screens.ROOT} component={ProfileDrawerNavigator} />
         ) : (
-          <RootNavigator.Screen name="Auth" component={AuthNavigator} />
+          <RootNavigator.Screen name={Screens.AUTH} component={AuthNavigator} />
         )}
       </RootNavigator.Navigator>
     </NavigationContainer>

@@ -9,6 +9,7 @@ import { IQuery, Query } from 'node-rest-objects/dist/data/queries';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 import { Placeholder, PlaceholderMedia, PlaceholderLine, Shine,Loader } from "rn-placeholder";
 import Reactotron from "../../../../dev/ReactotronConfig";
+import { Screens } from '../../../definitions/screen-definitions';
 
 
 
@@ -25,7 +26,7 @@ but the stations are still not open, what can I do about this? ",
 
     const defaultSearchRequest = {
         sort:{
-            "createdAt":-1
+            "createdAt":1
         }
     }
 
@@ -57,7 +58,7 @@ but the stations are still not open, what can I do about this? ",
 	},[queries])
 
     const nav = (item) =>{
-        navigation.navigate("QueryView",item);
+        navigation.navigate(Screens.QUERY_VIEW,item);
     }
     const placeholder = () => {
         const x = new Array(10).fill({});

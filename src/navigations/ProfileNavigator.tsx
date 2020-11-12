@@ -3,7 +3,7 @@
  */
 import React,{ useContext } from 'react';
 import { createDrawerNavigator, DrawerItem, DrawerItemList, DrawerContentScrollView } from '@react-navigation/drawer';
-
+import { Screens } from "../definitions/screen-definitions";
 import MyProfileScreen from '../screens/user-screens/MyProfileScreen';
 import SettingsScreen from '../screens/user-screens/SettingsScreen';
 import AppTabsNavigator from './AppNavigator';
@@ -21,7 +21,7 @@ type SignOut = () => void
  */
 function ProfileDrawerNavigator({signOut}:any) {
     return(
-        <ProfileDrawer.Navigator initialRouteName="My Profile" drawerContent = {
+        <ProfileDrawer.Navigator initialRouteName={Screens.PROFILE} drawerContent = {
             (props) => {return (
             <DrawerContentScrollView {...props}>
                 <DrawerItemList {...props}/>
@@ -35,9 +35,9 @@ function ProfileDrawerNavigator({signOut}:any) {
             }
         }
         >
-            <ProfileDrawer.Screen name="App" component={AppTabsNavigator} />
-            <ProfileDrawer.Screen name="My Profile" component={MyProfileScreen} />
-            <ProfileDrawer.Screen name="Settings" component={SettingsScreen} />
+            <ProfileDrawer.Screen name={Screens.APP} component={AppTabsNavigator} />
+            <ProfileDrawer.Screen name={Screens.PROFILE} component={MyProfileScreen} />
+            <ProfileDrawer.Screen name={Screens.SETTINGS} component={SettingsScreen} />
         </ProfileDrawer.Navigator>
     )
 }
