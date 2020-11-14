@@ -10,9 +10,10 @@ import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 import { Placeholder, PlaceholderMedia, PlaceholderLine, Shine,Loader } from "rn-placeholder";
 import Reactotron from "../../../../dev/ReactotronConfig";
 import { Screens } from '../../../definitions/screen-definitions';
-import { fetchAllQueries } from "../../../redux/actions/queryAction"
+import { fetchAllQueries } from "../../../redux/actions/query-list-action"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { fetchQuery } from '../../../redux/actions/query-actions';
 
 const defaultSearchRequest = {
     sort:{
@@ -21,14 +22,17 @@ const defaultSearchRequest = {
 }
 
 
-function TravelQueryScreen({navigation,cards,loading,error,getQueries}) {
+function TravelQueryScreen({navigation,cards,loading,error,getQueries,getQuery}) {
    
     useEffect(() => {
         getQueries(defaultSearchRequest);
     },[])
     
     const nav = (item) =>{
-        navigation.navigate(Screens.QUERY_VIEW,item);
+        getQuery(item).then( () => {
+            navigation.navigate(Screens.QUERY_VIEW,{name:"Query View"});
+        });
+        
     }
     const newQueryNav = () =>{
         navigation.navigate(Screens.QUERY_CREATE);
@@ -39,7 +43,7 @@ function TravelQueryScreen({navigation,cards,loading,error,getQueries}) {
             return  (
                     <Placeholder
                         Left={PlaceholderMedia}
-                        Animation={(props) => <Shine {...props} duration={2} reverse={false}/>}
+                        Animation={(props) => <Shine {...props} reverse={false}/>}
                         key = {""+i}
                     >
                         <PlaceholderLine width={80} />
@@ -54,10 +58,8 @@ function TravelQueryScreen({navigation,cards,loading,error,getQueries}) {
     
 
     const renderItem = ({item}) => {
-        const data = item.data;
-        const {author,published,stats,createdAt} = data;
         // Reactotron.log!(published);
-        return <QueryPreview time ={createdAt} username = {author} query= {published} stats = {stats} itemNav ={() => nav(data)}/>
+        return <QueryPreview query={item} itemNav ={() => nav(item)}/>
     }
     
     return (
@@ -91,7 +93,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return {
-        getQueries: bindActionCreators(fetchAllQueries,dispatch)
+        getQueries: bindActionCreators(fetchAllQueries,dispatch),
+        getQuery: bindActionCreators(fetchQuery,dispatch)
     }
 }
 

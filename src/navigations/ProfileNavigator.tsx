@@ -8,7 +8,7 @@ import MyProfileScreen from '../screens/user-screens/MyProfileScreen';
 import SettingsScreen from '../screens/user-screens/SettingsScreen';
 import AppTabsNavigator from './AppNavigator';
 import { connect } from 'react-redux';
-import {signOut} from '../redux/actions/authAction';
+import {signOut} from '../redux/actions/auth-action';
 import { bindActionCreators } from 'redux';
 
 // import { CButton } from "../components/atoms"

@@ -14,7 +14,7 @@ import Reactotron from 'reactotron-react-native'
 import { filterPassword } from "../../utils";
 import { RootStackParamList } from "../../navigations/RootNavigator";
 import { connect } from "react-redux";
-import { guestUser, login } from "../../redux/actions/authAction";
+import { guestUser, login } from "../../redux/actions/auth-action";
 import { bindActionCreators } from "redux";
 import { Screens } from "../../definitions/screen-definitions";
 

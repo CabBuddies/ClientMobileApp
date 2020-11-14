@@ -5,7 +5,7 @@ import {Container, Content, Toast } from 'native-base';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { bindActionCreators } from 'redux';
-import { signUp } from "../../redux/actions/authAction"
+import { signUp } from "../../redux/actions/auth-action"
 import { connect } from 'react-redux';
 import Reactotron from '../../../dev/ReactotronConfig';
 

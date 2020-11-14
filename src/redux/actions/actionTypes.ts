@@ -67,8 +67,8 @@ export enum QueryListActions{
 
 export enum QueryActions{
     LOADING = "loading",
-    FETCH_SUCCESS = "fetch-success",
-    FETCH_ERROR = "fetch-error",
+    FETCH_SUCCESS = "fetch-query-success",
+    FETCH_ERROR = "fetch-query-error",
     DRAFT = "draft",
     PUBLISH = "publish",
     OPINION = "opinion",

@@ -24,27 +24,29 @@ function QueryForm({formik}:any){
                 textInputProps = {{
                     placeholder: "Type your tags, comma-separated",
                 }}
-                // initialTags = {initialTags || []}
+                initialTags = {formik.values.tags}
                 inputStyle={styles.tagInput}
                 onChangeTags = {tags => formik.setFieldValue('tags',tags)}
                 containerStyle={styles.tagContainer}
                 tagTextStyle = {styles.textStyle}
                 style = {styles.tagsField}
+                
             />
             
             {
                 formik.errors.tags && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.tags}</Text>
             }
             <Textarea 
-            rowSpan={15} bordered={true} 
-            underline={false} 
-            placeholder="Enter your description here"
-            onChangeText={formik.handleChange('description')}
-            onBlur = {formik.handleBlur('description')}
-            style = {styles.textStyle}
+                rowSpan={15} bordered={true} 
+                underline={false} 
+                placeholder="Enter your description here"
+                onChangeText={formik.handleChange('body')}
+                onBlur = {formik.handleBlur('body')}
+                style = {styles.textStyle}
+                value = {formik.values.body}
             />
             {
-                formik.errors.description && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.description}</Text>
+                formik.errors.body && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.body}</Text>
             }
             {
                 formik.errors.server && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.server}</Text>

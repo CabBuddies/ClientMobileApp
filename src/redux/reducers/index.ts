@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import authReducer from './authReducer';
-import queryReducer from './queryReducer';
+import authReducer from './auth-reducer';
+import queryReducer from './query-reducer';
 import queryListReducer from './query-list-reducer';
 
 export const rootReducer = combineReducers({
