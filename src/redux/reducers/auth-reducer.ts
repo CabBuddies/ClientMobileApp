@@ -1,4 +1,4 @@
-import { AuthActions, IAuthAction } from "../actions/actionTypes";
+import { AuthActions, IAuthAction } from "../actions/action-types";
 import {initialState, IAuthState } from "../initialState";
 
 export default function authReducer(state:IAuthState = initialState.authState, action:IAuthAction):IAuthState | undefined {

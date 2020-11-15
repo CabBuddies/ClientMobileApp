@@ -1,5 +1,5 @@
 import React,{ useState, useEffect } from 'react'
-import { FlatList, Alert } from 'react-native'
+import { FlatList, Alert, RefreshControl } from 'react-native'
 import {Container, Content, Item, List, Text, Button} from 'native-base';
 import { CButton } from '../../../components/atoms'
 import { QueryPreview } from '../../../components/organisms'
@@ -15,10 +15,33 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchQuery } from '../../../redux/actions/query-actions';
 
-const defaultSearchRequest = {
+interface QueryRequest{
+    query?:any
+    pageNum?:number;
+    pageSize?:number;
+    sort?:Record<string,any>
+}
+enum ResultOrder{
+    ASCENDING = 1,
+    DESCENDING =-1
+}
+// enum EditRequest{
+//     LOAD_MORE = "load-more",
+//     SORT_CHANGE = "sort-change",
+
+// }
+// const makeRequest = (type:EditRequest,changedVal):QueryRequest{
+//     switch(type){
+//         case EditRequest.LOAD_MORE:
+//             retunr
+//     }
+
+// }
+const defaultSearchRequest:QueryRequest = {
     sort:{
-        "createdAt":-1
-    }
+        "createdAt":ResultOrder.DESCENDING
+    },
+    pageNum:1
 }
 
 
@@ -77,6 +100,7 @@ function TravelQueryScreen({navigation,cards,loading,error,getQueries,getQuery})
                 
             } 
             ListEmptyComponent = {placeholder}
+            refreshControl = {<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)}/>}
             />
               
         </Container>

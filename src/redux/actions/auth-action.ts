@@ -1,4 +1,4 @@
-import { AuthActions, IAuthAction }  from './actionTypes';
+import { AuthActions, IAuthAction }  from './action-types';
 import { signInApp,signUpApp } from "../../api/auth-api";
 import Reactotron from "../../../dev/ReactotronConfig";
 import { ApiError } from "./common-types";

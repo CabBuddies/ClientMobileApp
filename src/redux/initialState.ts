@@ -26,7 +26,7 @@ export interface IAuthState extends CommonStates{
 
 export interface IUserState extends CommonStates{
     profileState:IProfileState;
-    currentScreen:Screens;
+    currentScreen?:Screens;
 }
 
 export interface IProfileState extends CommonStates,IUser{

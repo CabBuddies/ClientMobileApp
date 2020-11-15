@@ -1,4 +1,4 @@
-import { IQueryAction, QueryActions } from '../actions/actionTypes'
+import { IQueryAction, QueryActions } from '../actions/action-types'
 import {initialState, IQueryState} from '../initialState';
 
 export default function queryReducer(state = initialState.queryState, action:IQueryAction):IQueryState {

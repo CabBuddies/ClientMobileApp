@@ -27,7 +27,6 @@ const QueryFullView = ({
 		Alert.alert(`item clicked`);
 	},
 }: QueryViewProps) => {
-	reactotron.log!("query-full-view",query);
 	const data:IQuery = query.data;
     const { createdAt,author,published,stats }:{createdAt:Date,author:IUser,published:IQueryContent,stats:IQueryStats}= data;
     return (

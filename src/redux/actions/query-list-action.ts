@@ -2,7 +2,7 @@ import { IQuery } from "node-rest-objects/dist/data/queries";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import Reactotron from "reactotron-react-native";
 import { getAllQueries,createQuery } from "../../api/query-api";
-import { IQueryAction, IQueryListAction, QueryListActions, QueryActions } from "./actionTypes";
+import { IQueryAction, IQueryListAction, QueryListActions, QueryActions } from "./action-types";
 import { ApiError } from "./common-types";
 
 

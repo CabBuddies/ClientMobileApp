@@ -30,8 +30,6 @@ export default function QueryPreview({
 		Alert.alert(`item clicked`);
 	},
 }: QueryPreviewProps) {
-	reactotron.log!("query in query-view",query);
-	const queryObj = query;
 	const { createdAt,author,published,stats }:{createdAt:Date,author:IUser,published:IQueryContent,stats:IQueryStats} = query.data;
 	return (
 		<Card style={style}>

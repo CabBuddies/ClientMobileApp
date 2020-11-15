@@ -1,4 +1,4 @@
-import { IQueryAction, QueryActions } from "./actionTypes"
+import { IQueryAction, QueryActions } from "./action-types"
 import { ApiError } from "./common-types"
 import Reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";

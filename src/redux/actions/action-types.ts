@@ -40,7 +40,21 @@ export enum UserActions{
     FETCH_SUCCESS = "user-fetch-success",
     FETCH_ERROR = "user-fetch-failure",
     SETTINGS = "user-settings",
-    DEFAULT_SCREEN = "default-screen"
+    DEFAULT_SCREEN = "default-screen",
+    PROFILE = "my-profile",
+    FOLLOWERS = "my-followers",
+    VIEW_USER = "view-user",
+    QUERY_PROFILE = "query-profile",
+    GUILD_PROFILE ="guild-profile",
+    PD_PROFILE = "package-delivery-profile",
+    RIDES_PROFILE = "rides-profile",
+    FOLLOW = "follow-user",
+    ACCEPT_REQUEST ="accept-follow-request",
+    REJECT_REQUEST = "reject-follow-request",
+    ACCEPT_INVITE = "accept-guild-invite",
+    REJECT_INVITE = "reject-guild-invite",
+    BLOCK_USER = "block-user",
+    UN_FOLLOW_USER = "un-follow-user" 
 }
 
 export enum FetchActions{
