@@ -1,11 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text } from 'react-native';
 import { CForm }   from '../../components/organisms';
 import {Container, Content, Toast } from 'native-base';
 import { Formik } from 'formik';
-import { AuthContext } from "../../navigations/AuthContext";
 import * as yup from 'yup';
-export default function SignUpScreen() {
+import { bindActionCreators } from 'redux';
+import { signUp } from "../../redux/actions/auth-action"
+import { connect } from 'react-redux';
+import Reactotron from '../../../dev/ReactotronConfig';
+
+function SignUpScreen({error,signUp}:any) {
     
     const initialValues = {
         firstname: '',
@@ -15,7 +19,6 @@ export default function SignUpScreen() {
         confirmPassword:''
       }
 
-    const { signUp } = useContext(AuthContext);
     
     const signUpValidationSchema =  yup.object({
         firstname: yup.string().required("Firstname is required"),
@@ -36,12 +39,11 @@ export default function SignUpScreen() {
     const signupRoutine = (values:any,actions:any) =>{
         // showToast(values);
         actions.resetForm();
-        signUp(values).then( (val:any) => {
-            console.log("login successful",val);
-        }).catch((err:any) => {
-            console.log("signup failed with",err.message);
-            actions.setFieldError("server",err.message);
-        });
+        signUp(values);
+        if(error){
+            Reactotron.error!(error,error);
+            actions.setFieldError("server",error);
+        }
     }
 
     return(
@@ -61,3 +63,19 @@ export default function SignUpScreen() {
             </Container>
     )
 }
+
+function mapStateToProps(state){
+	const {authState} = state;
+	return{
+		isSignedIn:authState.isSignedIn,
+		error: authState.error
+	}
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		signUp: bindActionCreators(signUp, dispatch),
+	}
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(SignUpScreen);

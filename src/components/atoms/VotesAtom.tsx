@@ -31,13 +31,20 @@ export default function VotesAtom({voteCount = 0}) {
     const reducer = (state: Votes,action:Actions) => {
         switch(action.type){
             case ActionType.LIKE:
-                if(state.likeColor === "black"){
+                if(state.likeColor === Colors.DEFAULT){
+                    let voteCount:number;
+                    if(state.dislikeColor === Colors.DISLIKE){
+                        voteCount = state.votes+2;
+                    }
+                    else{
+                        voteCount = state.votes+1;
+                    }
                     return {
-                        votes: state.votes+1,
+                        votes: voteCount,
                         likeColor:Colors.LIKE,
                         dislikeColor:Colors.DEFAULT
                        }
-                }   
+                }
                 else{
                     return {
                         votes: state.votes-1,
@@ -47,8 +54,15 @@ export default function VotesAtom({voteCount = 0}) {
                 } 
             case ActionType.DISLIKE:
                 if(state.dislikeColor === "black"){
+                    let voteCount:number;
+                    if(state.likeColor === Colors.LIKE){
+                        voteCount = state.votes-2;
+                    }
+                    else{
+                        voteCount = state.votes-1;
+                    }
                     return {
-                        votes: state.votes-1,
+                        votes: voteCount,
                         likeColor:Colors.DEFAULT,
                         dislikeColor:Colors.DISLIKE
                     }

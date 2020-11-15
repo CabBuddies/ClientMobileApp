@@ -1,74 +1,165 @@
 import React,{ useState, useEffect } from 'react'
-import { View, FlatList, Alert } from 'react-native'
+import { FlatList, Alert, RefreshControl } from 'react-native'
 import {Container, Content, Item, List, Text, Button} from 'native-base';
 import { CButton } from '../../../components/atoms'
 import { QueryPreview } from '../../../components/organisms'
-import { createQuery } from "../../../api/query-api";
+import { createQuery, getAllQueries } from "../../../api/query-api";
 import { JSONPrint } from "../../../utils";
 import { IQuery, Query } from 'node-rest-objects/dist/data/queries';
+import RESTObject from 'node-rest-objects/dist/rest/rest.object';
+import { Placeholder, PlaceholderMedia, PlaceholderLine, Shine,Loader } from "rn-placeholder";
+import Reactotron from "../../../../dev/ReactotronConfig";
+import { Screens } from '../../../definitions/screen-definitions';
+import { fetchAllQueries } from "../../../redux/actions/query-list-action"
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { fetchQuery } from '../../../redux/actions/query-actions';
+
+interface QueryRequest{
+    query?:any
+    pageNum?:number;
+    pageSize?:number;
+    sort?:Record<string,any>
+}
+enum ResultOrder{
+    ASCENDING = 1,
+    DESCENDING =-1
+}
+// enum EditRequest{
+//     LOAD_MORE = "load-more",
+//     SORT_CHANGE = "sort-change",
+
+// }
+// const makeRequest = (type:EditRequest,changedVal):QueryRequest{
+//     switch(type){
+//         case EditRequest.LOAD_MORE:
+//             retunr
+//     }
+
+// }
+const defaultSearchRequest:QueryRequest = {
+    sort:{
+        "createdAt":ResultOrder.DESCENDING
+    },
+    pageNum:1
+}
 
 
-
-export default function TravelQueryScreen({navigation}) {
-    // const cards = [
-    //     {key:"1", username: "Ed", body: {question: "How to get to San Salvador?", desc: "I need to get there ASAP"}, stats:{votes:10, comments:32, views:45}},
-    //     {key:"2", username: "Al", body: {question: "How to get to Edford?", desc: "I need to get there ASAP"}, stats:{votes:15, comments:15, views:50}},
-    //     {key:"3", username: "Winry", body: {question: "How to get to Edford?", desc: "I need to get there ASAP"}, stats:{votes:-4, comments:1, views:100}},
-    //     {key:"4", username: "Lola", body: {question: "How to get to Briggs?", desc: "I need to get there ASAP"}, stats:{votes:-4, comments:0, views:45}},
-    // ]
-    const [queryData,setData] = useState<IQuery | undefined >();
-    const [queries,setQueries] = useState<Query|null>(null);
-
-    const draftTemplateRequest = {
-        title:"What can I do about the BART being unavailable to San Jose",
-        tags: ["BART","Bay Area","San Jose","Public Transport"],
-        body: "It has been a while since the San Jose BART lines have been built,\
-but the stations are still not open, what can I do about this? ",
-    }
-
-    const writeQuery = async (request) => {
-        console.log("in write query");
-        const response = await createQuery(request);
-        console.log("in write query- response",response);
-        setQueries(response);
-        // setData(queries?.getData());
-    }
-    
-	useEffect( () => {
-        console.log("running use-effect");
-        writeQuery(draftTemplateRequest);
-        console.log("queries-data:",queries?.getData());
-        
+function TravelQueryScreen({navigation,cards,loading,error,getQueries,getQuery}) {
+   
+    useEffect(() => {
+        getQueries(defaultSearchRequest);
     },[])
     
-    useEffect( () => {
-        setData(queries?.getData());
-	},[queries])
-
     const nav = (item) =>{
-        navigation.navigate("QueryView",item);
+        getQuery(item).then( () => {
+            navigation.navigate(Screens.QUERY_VIEW,{name:"Query View"});
+        });
+        
     }
+    const newQueryNav = () =>{
+        navigation.navigate(Screens.QUERY_CREATE);
+    }
+    const placeholder = () => {
+        const x = new Array(10).fill({});
+        const components = x.map((e,i) => {
+            return  (
+                    <Placeholder
+                        Left={PlaceholderMedia}
+                        Animation={(props) => <Shine {...props} reverse={false}/>}
+                        key = {""+i}
+                    >
+                        <PlaceholderLine width={80} />
+                        <PlaceholderLine />
+                        <PlaceholderLine width={30} />
+                        
+                    </Placeholder>
+            )
+        })
+        return (<>{components}</>);        
+    }
+    
 
     const renderItem = ({item}) => {
-        console.log("item",item);
-        return <QueryPreview username = {item?.author} query= {item?.draft} stats = {item?.stats} itemNav ={() => nav(item)}/>
+        // Reactotron.log!(published);
+        return <QueryPreview query={item} itemNav ={() => nav(item)}/>
     }
     
     return (
         <Container>
-            {queryData && 
-            <FlatList data = {[queryData]} renderItem = {renderItem} keyExtractor = {item => (item)?item._id:`${Date.now()}`} ListFooterComponent = {
+            
+            <FlatList data = {cards?.result} renderItem = {renderItem} keyExtractor = {item => (item)?item.data._id:`${Date.now()}`} ListHeaderComponent = {
                 <>
                     <CButton
                         rounded 
                         warning
                         title = "New Query"
-                        onPress = {() => Alert.alert(`insert a Query`)}
+                        onPress = {newQueryNav}
                     />
-                    
                 </>
-            }/>
-            }     
+                
+            } 
+            ListEmptyComponent = {placeholder}
+            refreshControl = {<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)}/>}
+            />
+              
         </Container>
     )
 }
+function mapStateToProps(state){
+    const { queryListState } = state;
+    return {
+        cards:queryListState.queries,
+        loading: queryListState.loading,
+        error: queryListState.error
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return {
+        getQueries: bindActionCreators(fetchAllQueries,dispatch),
+        getQuery: bindActionCreators(fetchQuery,dispatch)
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(TravelQueryScreen);
+
+
+// const [queryData,setData] = useState<IQuery | undefined >();
+// const [queries,setQueries] = useState<Query|null>(null);
+// const [cards,setCards] = useState<RESTObject<IQuery>[] | undefined>();
+// const draftTemplateRequest = {
+//     title:"What can I do about the BART being unavailable to San Jose",
+//     tags: ["BART","Bay Area","San Jose","Public Transport"],
+//     body: "It has been a while since the San Jose BART lines have been built,\
+// but the stations are still not open, what can I do about this? ",
+// }
+
+
+
+// const writeQuery = async (request) => {
+//     Reactotron.log!("in write query");
+//     const response = await createQuery(request);
+//     // Reactotron.log!("in write query- response",response);
+//     setQueries(response);
+//     // setData(queries?.getData());
+// }
+
+// const searchQuery = async (request) =>{
+//     Reactotron.log!("in search query");
+//     const response = await getAllQueries(request);
+//     // Reactotron.log!("in search query|response",response);
+//     setCards(response?.result);
+// }
+
+// useEffect( () => {
+//     // Reactotron.log!("running use-effect");
+//     // writeQuery(draftTemplateRequest);
+//     searchQuery(defaultSearchRequest);
+//     Reactotron.log!("queries-data:",cards);
+    
+// },[])
+
+// useEffect( () => {
+//     setData(queries?.getData());
+// },[queries])

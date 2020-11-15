@@ -8,24 +8,25 @@ import { Container, Content, Thumbnail, Footer, Toast } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 const phi = require("../../../assets/placeholderIcon.png");
 import { Formik } from "formik";
-import { AuthContext } from "../../navigations/AuthContext";
+// import { AuthContext } from "../../navigations/AuthContext";
 import * as yup from "yup";
 import Reactotron from 'reactotron-react-native'
 import { filterPassword } from "../../utils";
-import {RootStackParamList} from "../../navigations/RootNavigator";
+import { RootStackParamList } from "../../navigations/RootNavigator";
 import { connect } from "react-redux";
-import * as authActions from "../../redux/actions/authAction";
+import { guestUser, login } from "../../redux/actions/auth-action";
 import { bindActionCreators } from "redux";
+import { Screens } from "../../definitions/screen-definitions";
 
 type AuthNavigation = StackNavigationProp<RootStackParamList>;
 
-interface SignInValues{
-	email:string;
-	password:string;
+interface SignInValues {
+	email: string;
+	password: string;
 }
 
-export default function SignInScreen({ navigation }:{navigation:AuthNavigation}) {
-	const { signIn, anonymous } = useContext(AuthContext);
+function SignInScreen({ navigation, guestLogin, userLogin,error }: any) {
+	// const { signIn, anonymous } = useContext(AuthContext);
 
 	const signInValSchema = yup.object({
 		email: yup.string().email("Invalid Email!").required("Required"),
@@ -34,25 +35,25 @@ export default function SignInScreen({ navigation }:{navigation:AuthNavigation})
 
 	const navToAppScreen = () => {
 		Reactotron.log!("*Navigating to App Screens*");
-		anonymous();
+		guestLogin();
 	};
-	const signInRoutine = (values:any, actions:any) => {
+	const signInRoutine = (values: any, actions: any) => {
 		actions.resetForm();
-		signIn(values).then((val:any) => {
-			console.log(val);
-		}).catch((err:Error) => {
-			actions.setFieldError("server",err.message);
-		})
+		userLogin(values);
+		if(error){
+			Reactotron.error!(error,null);
+			actions.setFieldError("server",error);
+		}
 		// showToast(values);
 	};
 	const nav = () => {
 		Reactotron.log!("navigating to SignUp screen");
-		navigation.navigate("SignUp");
+		navigation.navigate(Screens.SIGN_UP);
 	};
 
-	const showToast = (value:any) => {
+	const showToast = (value: any) => {
 		Toast.show({
-			text: JSON.stringify(value,filterPassword),
+			text: JSON.stringify(value, filterPassword),
 			position: "bottom",
 			duration: 3000,
 		});
@@ -113,22 +114,22 @@ export default function SignInScreen({ navigation }:{navigation:AuthNavigation})
 	);
 }
 
-// function mapStateToProps(state) {
-//     return {
-//         isSignedIn: state.isSignedIn
-//     };
-// }
+function mapStateToProps(state){
+	const {authState} = state;
+	return{
+		isSignedIn:authState.isSignedIn,
+		error: authState.error
+	}
+}
 
-// function matchDispatchToProps(dispatch) {
-//   return {
-//     actions: {
-//       guestLogin: bindActionCreators(authActions.guestUser, dispatch),
-//       userLogin: bindActionCreators(authActions.login, dispatch)
-//     }
-//   }
-// }
+function matchDispatchToProps(dispatch) {
+	return {
+		guestLogin: bindActionCreators(guestUser, dispatch),
+		userLogin: bindActionCreators(login, dispatch)
+	}
+}
 
-// export default connect(mapStateToProps, matchDispatchToProps)(SignInScreen);
+export default connect(mapStateToProps,matchDispatchToProps)(SignInScreen);
 
 const styles = StyleSheet.create({
 	btnContainer: {

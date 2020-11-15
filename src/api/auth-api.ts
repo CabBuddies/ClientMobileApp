@@ -1,5 +1,6 @@
 import { Query } from "node-rest-objects/dist/data/queries/query";
 import { Auth, IUser } from "node-rest-objects/dist/data/user-management";
+import Reactotron from "../../dev/ReactotronConfig";
 // import { Query } from "node-rest-objects/src/data/queries"
 // import Headers from "node-rest-objects/src/rest/headers";
 // import {getOp, postOp} from "node-rest-objects/src/rest/rest.operations";
@@ -9,32 +10,17 @@ import { Auth, IUser } from "node-rest-objects/dist/data/user-management";
 
 export async function signInApp(request:any){
    
-
     const {email, password} = request;
-    console.log("request",request)
+    Reactotron.log!("request",request)
     let response:any;
     await Auth.login(email, password).then((resp) => {
-      // console.log("response",resp);
+      Reactotron.log!("response",resp);
       response = resp;
     })
     .catch((err) => {
-      console.log("error in Auth",err,err.name,err.message);
+      Reactotron.log!("error in Auth",err,err.name,err.message);
       throw err;
     });
-
-  //   const query = new Query();
-  //   query.setPublished({
-  //       title:"random title",
-  //       tags: ["random","randomer","randomest"],
-  //       body: "anything random that's quite random"
-  //   });
-  //   query.setPublished({
-  //     title:"random title",
-  //     tags: ["random","randomer","randomest"],
-  //     body: "anything random that's quite random"
-  // });
-  //   await query.create();
-  //   console.log("query: ",query);
     return response;
 
 }
@@ -43,11 +29,11 @@ export async function signUpApp(request:any)
 {
     try {
       const { email, password, firstname, lastname } = request;
-      console.log("request", request);
+      Reactotron.log!("request", request);
       const response = await Auth.register(email, password, firstname, lastname, "inapp");
       return response;
     } catch (err) {
-      console.log("Error getting", err);
+      Reactotron.log!("Error getting", err);
       throw err;
     }
 }
