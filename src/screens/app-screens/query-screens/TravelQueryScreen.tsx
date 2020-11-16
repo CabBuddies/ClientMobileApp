@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from 'react'
+import React,{ useState, useEffect, useLayoutEffect } from 'react'
 import { FlatList, Alert, RefreshControl } from 'react-native'
 import {Container, Content, Item, List, Text, Button} from 'native-base';
 import { CButton } from '../../../components/atoms'
@@ -9,11 +9,15 @@ import { IQuery, Query } from 'node-rest-objects/dist/data/queries';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 import { Placeholder, PlaceholderMedia, PlaceholderLine, Shine,Loader } from "rn-placeholder";
 import Reactotron from "../../../../dev/ReactotronConfig";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { QueryStackParamList } from "../../../navigations/QueryNavigator";
 import { Screens } from '../../../definitions/screen-definitions';
 import { fetchAllQueries } from "../../../redux/actions/query-list-action"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchQuery } from '../../../redux/actions/query-actions';
+import SearchRESTObject from 'node-rest-objects/dist/rest/search.rest.object';
+import { IQueryListResponse } from '../../../definitions/query-definitions';
 
 interface QueryRequest{
     query?:any
@@ -24,6 +28,15 @@ interface QueryRequest{
 enum ResultOrder{
     ASCENDING = 1,
     DESCENDING =-1
+}
+type TQScreenNav = StackNavigationProp<QueryStackParamList>;
+interface TravelQueryScreenProps{
+    navigation: TQScreenNav;
+    cards: IQueryListResponse;
+    loading:boolean;
+    error:string;
+    getQueries:any;
+    getQuery:any;
 }
 // enum EditRequest{
 //     LOAD_MORE = "load-more",
@@ -45,11 +58,19 @@ const defaultSearchRequest:QueryRequest = {
 }
 
 
-function TravelQueryScreen({navigation,cards,loading,error,getQueries,getQuery}) {
+function TravelQueryScreen({navigation,cards,loading,error,getQueries,getQuery}:TravelQueryScreenProps) {
    
     useEffect(() => {
         getQueries(defaultSearchRequest);
     },[])
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight:() => (
+                    <CButton transparent title="Create" container={{flex:0}} onPress={newQueryNav} />
+                )
+            
+        })
+    })
     
     const nav = (item) =>{
         getQuery(item).then( () => {
@@ -88,19 +109,10 @@ function TravelQueryScreen({navigation,cards,loading,error,getQueries,getQuery})
     return (
         <Container>
             
-            <FlatList data = {cards?.result} renderItem = {renderItem} keyExtractor = {item => (item)?item.data._id:`${Date.now()}`} ListHeaderComponent = {
-                <>
-                    <CButton
-                        rounded 
-                        warning
-                        title = "New Query"
-                        onPress = {newQueryNav}
-                    />
-                </>
-                
-            } 
-            ListEmptyComponent = {placeholder}
-            refreshControl = {<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)}/>}
+            <FlatList data = {cards?.result} renderItem = {renderItem} 
+                keyExtractor = {item => (item)?item.data._id:`${Date.now()}`}
+                ListEmptyComponent = {placeholder}
+                refreshControl = {<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)}/>}
             />
               
         </Container>

@@ -2,9 +2,21 @@ import React from 'react'
 import { Alert, StyleSheet, View } from 'react-native';
 import { CButton as Button, FormField } from '../atoms';
 import {Form, Label, Text, Textarea, Badge, Item } from 'native-base'; 
+import { FormikProps,FormikErrors, FormikHandlers, FormikHelpers } from "formik";
 import Tags from 'react-native-tags';
 import Reactotron from '../../../dev/ReactotronConfig';
+
+interface QFormValues{
+    title:string;
+    tags:string[];
+    body:string;
+    server?:string;
+    [val:string]:any
+}
+// type QFormik = FormikProps<QFormValues>  & FormikHandlers & FormikHelpers<QFormValues>;
 function QueryForm({formik}:any){
+    // Reactotron.log!("formik-touched:",formik.touched);
+    Reactotron.log!(typeof formik)
     return (
         <Form style={{flex:1,paddingHorizontal:10}}>
             <FormField
@@ -16,7 +28,7 @@ function QueryForm({formik}:any){
                 value = {formik.values.title}
             />
             {
-                formik.errors.title && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.title}</Text>
+                formik.touched.title && formik.errors.title && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.title}</Text>
             }
             
             <Tags
@@ -34,7 +46,7 @@ function QueryForm({formik}:any){
             />
             
             {
-                formik.errors.tags && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.tags}</Text>
+                formik.touched.tags && formik.errors.tags && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.tags}</Text>
             }
             <Textarea 
                 rowSpan={15} bordered={true} 
@@ -46,12 +58,12 @@ function QueryForm({formik}:any){
                 value = {formik.values.body}
             />
             {
-                formik.errors.body && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.body}</Text>
+                formik.touched.body && formik.errors.body && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.body}</Text>
             }
             {
                 formik.errors.server && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.server}</Text>
             }
-            <Button
+            {/* <Button
                 rounded success bordered
                 title = "save as draft"
                 onPress= {() => Alert.alert("this will save it as draft")}
@@ -66,7 +78,7 @@ function QueryForm({formik}:any){
                     bordered danger rounded
                     container={{ flex: 1, justifyContent: "center" }}
                     title = "Discard"
-                />
+                /> */}
         </Form>
     )
 }

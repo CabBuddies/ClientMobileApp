@@ -34,7 +34,7 @@ function QueryView({ navigation, queryData,loading }: QueryViewScreenProps) {
         <Container>
             <Content>
                 {
-                    (loading)?
+                    (loading || !queryData)?
                     (<Placeholder
                         Left={PlaceholderMedia}
                         Animation={(props) => <Shine {...props} reverse={false}/>}

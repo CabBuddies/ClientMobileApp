@@ -30,7 +30,8 @@ export default function QueryPreview({
 		Alert.alert(`item clicked`);
 	},
 }: QueryPreviewProps) {
-	const { createdAt,author,published,stats }:{createdAt:Date,author:IUser,published:IQueryContent,stats:IQueryStats} = query.data;
+	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats} = query.data;
+	const date:string = createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5);
 	return (
 		<Card style={style}>
 			<CardItem
@@ -44,7 +45,7 @@ export default function QueryPreview({
 					<Thumbnail source={author?.displayPicture||placeholder} />
 					<Body>
 						<Text> {author?.firstName +' '+ author?.lastName} </Text>
-						<Text note>{createdAt}</Text>
+						<Text note>{date}</Text>
 					</Body>
 				</Left>
 			</CardItem>

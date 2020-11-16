@@ -19,19 +19,19 @@ export default function CustomForm({type,formik}: AuthFormProps) {
             <Form style = {{flex:1}}>
               <FormField
               hasIcon label="Email"
-              itemProps = {{floatingLabel:true, error:(formik.errors.email)?true:false}}
+              itemProps = {{floatingLabel:true, error:(formik.touched.email && formik.errors.email)?true:false}}
               icon = "ios-mail" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('email')}
               blurHandler = {formik.handleBlur('email')}
               value = {formik.values.email}
               />
               {
-                formik.errors.email && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.email}</Text>
+                formik.touched.email && formik.errors.email && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.email}</Text>
               }
           
             <FormField
               hasIcon label="Password"
-              itemProps = {{floatingLabel:true,error:(formik.errors.password)?true:false}}
+              itemProps = {{floatingLabel:true,error:(formik.touched.password && formik.errors.password)?true:false}}
               inputProps = {{secureTextEntry:true}}
               icon = "ios-lock" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('password')}
@@ -39,7 +39,7 @@ export default function CustomForm({type,formik}: AuthFormProps) {
               value = {formik.values.password}
               />
               {
-                formik.errors.password && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.password}</Text>
+                formik.touched.password && formik.errors.password && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.password}</Text>
               }
               {
                 formik.errors.server && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.server}</Text>
@@ -58,31 +58,31 @@ export default function CustomForm({type,formik}: AuthFormProps) {
           <Form style = {{flex:1}}>
             <FormField
               hasIcon label="First Name"
-              itemProps = {{floatingLabel:true, error:(formik.errors.firstname)?true:false}}
+              itemProps = {{floatingLabel:true, error:(formik.touched.firstname && formik.errors.firstname)?true:false}}
               icon = "md-person" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('firstname')}
               blurHandler = {formik.handleBlur('firstname')}
               value = {formik.values.firstname}
               />
               {
-                formik.errors.firstname && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.firstname}</Text>
+                formik.touched.firstname && formik.errors.firstname && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.firstname}</Text>
               }
 
             <FormField
               hasIcon label="Last Name"
-              itemProps = {{floatingLabel:true, error:(formik.errors.lastname)?true:false}}
+              itemProps = {{floatingLabel:true, error:(formik.touched.lastname && formik.errors.lastname)?true:false}}
               icon = "md-person" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('lastname')}
               blurHandler = {formik.handleBlur('lastname')}
               value = {formik.values.lastname}
             />
             {
-                formik.errors.lastname && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.lastname}</Text>
+                formik.touched.lastname && formik.errors.lastname && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.lastname}</Text>
             }
           
             <FormField
               hasIcon label="Email"
-              itemProps = {{floatingLabel:true, error:(formik.errors.email)?true:false}}
+              itemProps = {{floatingLabel:true, error:(formik.touched.email && formik.errors.email)?true:false}}
               inputProps = {{autoCapitalize:"none"}}
               icon = "ios-mail" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('email')}
@@ -90,12 +90,12 @@ export default function CustomForm({type,formik}: AuthFormProps) {
               value = {formik.values.email}
             />
             {
-                formik.errors.email && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.email}</Text>
+                formik.touched.email && formik.errors.email && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.email}</Text>
             }
           
           <FormField
               hasIcon label="Password"
-              itemProps = {{floatingLabel:true, error:(formik.errors.password)?true:false}}
+              itemProps = {{floatingLabel:true, error:(formik.touched.password && formik.errors.password)?true:false}}
               inputProps = {{secureTextEntry:true}}
               icon = "ios-lock" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('password')}
@@ -103,13 +103,13 @@ export default function CustomForm({type,formik}: AuthFormProps) {
               value = {formik.values.password}
           />
             {
-                formik.errors.password && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.password}</Text>
+                formik.touched.password && formik.errors.password && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.password}</Text>
             }
 
           
           <FormField
               hasIcon label="Confirm Password"
-              itemProps = {{floatingLabel:true,error:(formik.errors.confirmPassword)?true:false}}
+              itemProps = {{floatingLabel:true,error:(formik.touched.confirmPassword && formik.errors.confirmPassword)?true:false}}
               inputProps = {{secureTextEntry:true}}
               icon = "ios-lock" iconStyle = {{color:"#3F51B5"}}
               changeHandler = {formik.handleChange('confirmPassword')}
@@ -117,7 +117,7 @@ export default function CustomForm({type,formik}: AuthFormProps) {
               value = {formik.values.confirmPassword}
           />
             {
-                formik.errors.confirmPassword && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.confirmPassword}</Text>
+                formik.touched.confirmPassword && formik.errors.confirmPassword && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.confirmPassword}</Text>
             }
             {
                 formik.errors.server && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.server}</Text>
