@@ -1,7 +1,8 @@
 import { DOMAIN, refreshAPI } from "node-rest-objects/dist/rest/api";
 import { IUser } from "node-rest-objects/dist/data/user-management";
+import Constants from "expo-constants";
 
-const LOCAL_IP = "10.0.0.3" // change this as required
+const LOCAL_IP = Constants.manifest.extra.serverIp; // change this as required in the app.json->extra->serverIp
 const APIDefinitions = {
     USER_MANAGEMENT_LOCAL : `http://${LOCAL_IP}:4000`,
     QUERIES_LOCAL : `http://${LOCAL_IP}:4001`,
