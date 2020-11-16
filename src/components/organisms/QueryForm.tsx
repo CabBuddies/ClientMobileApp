@@ -16,7 +16,6 @@ interface QFormValues{
 // type QFormik = FormikProps<QFormValues>  & FormikHandlers & FormikHelpers<QFormValues>;
 function QueryForm({formik}:any){
     // Reactotron.log!("formik-touched:",formik.touched);
-    Reactotron.log!(typeof formik)
     return (
         <Form style={{flex:1,paddingHorizontal:10}}>
             <FormField
