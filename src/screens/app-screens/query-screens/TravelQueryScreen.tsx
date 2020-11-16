@@ -83,20 +83,30 @@ function TravelQueryScreen({navigation,cards,loading,error,getQueries,getQuery}:
     }
     const placeholder = () => {
         const x = new Array(10).fill({});
-        const components = x.map((e,i) => {
-            return  (
-                    <Placeholder
-                        Left={PlaceholderMedia}
-                        Animation={(props) => <Shine {...props} reverse={false}/>}
-                        key = {""+i}
-                    >
-                        <PlaceholderLine width={80} />
-                        <PlaceholderLine />
-                        <PlaceholderLine width={30} />
-                        
-                    </Placeholder>
-            )
-        })
+        let components;
+        if(error){
+            components = 
+                    (<Content>
+                        <Text style={{fontSize:30,color:"red"}}>Oops!Error fetching queries!</Text>
+                    </Content>)
+        }
+        else{
+            components = x.map((e,i) => {
+                return  (
+                        <Placeholder
+                            Left={PlaceholderMedia}
+                            Animation={(props) => <Shine {...props} reverse={false}/>}
+                            key = {""+i}
+                        >
+                            <PlaceholderLine width={80} />
+                            <PlaceholderLine />
+                            <PlaceholderLine width={30} />
+                            
+                        </Placeholder>
+                )
+            })
+        }
+        
         return (<>{components}</>);        
     }
     

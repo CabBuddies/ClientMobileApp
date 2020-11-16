@@ -41,7 +41,7 @@ export function fetchAllQueries(requestData){
             Reactotron.log!("all-queries-success",response);
             dispatch(successQueryList(response));
         }).catch(error => {
-            Reactotron.log!("all-queries-error",error);
+            Reactotron.log!("all-queries-error",{message:error});
             dispatch(failureQueryList(error));
         })
     }

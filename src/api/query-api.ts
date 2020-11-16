@@ -39,7 +39,8 @@ export async function getAllQueries(request = defaultSearchRequest){
         return querySro.response;
     }
     catch(error){
-        Reactotron.log!("Error in query-search",error);
+        Reactotron.log!("Error in query-search",{message:error});
+        throw error;
     }
 }
 export async function createQuery(request){

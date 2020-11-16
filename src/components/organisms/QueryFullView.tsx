@@ -35,9 +35,7 @@ const QueryFullView = ({
 			<CardItem
 				header
 				button
-				onPress={() => {
-					headerNav;
-				}}
+				onPress={headerNav}
 			>
 				<Left>
 					<Thumbnail source={author?.displayPicture||placeholder} />
@@ -53,6 +51,8 @@ const QueryFullView = ({
                     <Tags
                         initialTags = {published?.tags}
 						readonly
+						tagTextStyle={{fontSize:10,color:"white"}}
+						tagContainerStyle={{backgroundColor:"black",height:20}}
                     />
 					<Text> {published?.body} </Text>
 				</Body>
