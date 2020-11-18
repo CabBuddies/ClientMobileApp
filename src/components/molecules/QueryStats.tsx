@@ -9,16 +9,18 @@ import { IQueryStats } from '../../definitions/query-definitions';
 
 interface QueryStatsProps{
     stats: IQueryStats;
+    onComment?: () => void;
+    onOpinion?: () => void;
 }
 
-export function QueryStats({stats}: QueryStatsProps) {
+export function QueryStats({stats, onComment, onOpinion}: QueryStatsProps) {
     return (
         <Grid >
             <Row style = {{alignItems: 'center'}}>
             
                 <VotesAtom voteCount = {stats.score}/>
             
-                <CommentsAtom commentCount = {stats.commentCount}/>
+                <CommentsAtom commentCount = {stats.commentCount} onCommentPress={onComment}/>
             
                 <ViewsAtom views = {stats.viewCount}/>
             

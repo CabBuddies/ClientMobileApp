@@ -4,7 +4,7 @@ import { Text, View } from 'native-base'
 import { Row, Col } from 'react-native-easy-grid';
 import { Alert } from "react-native"
 
-export default function CommentsAtom({commentCount= 0}) {
+export default function CommentsAtom({commentCount= 0, onCommentPress = () => Alert.alert(`happy commenting`)}) {
     const comments =commentCount;
     return (
         <>
@@ -16,9 +16,7 @@ export default function CommentsAtom({commentCount= 0}) {
                     icon="md-text"
                     iconLeft
                     container = {{flex:0}}
-                    onPress={() => {
-                        Alert.alert(`happy commenting`);
-                    }}
+                    onPress={onCommentPress}
                 />
             </Col>
         </>

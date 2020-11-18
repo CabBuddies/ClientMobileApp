@@ -1,9 +1,9 @@
-import { IQueryAction, QueryActions } from "./action-types"
+import { CommentActions, IQueryAction, QueryActions } from "./action-types"
 import { ApiError } from "./common-types"
 import Reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import { IQuery } from "node-rest-objects/dist/data/queries";
-import { createQuery } from "../../api/query-api";
+import { createComment, createQuery, getAllComments } from "../../api/query-api";
 
 export function loadingQuery():IQueryAction{
     return {
@@ -64,6 +64,74 @@ export function writeQuery(data){
         }).catch(error => {
             Reactotron.error!("query-creation-failure",error);
             dispatch(createQueryFailure(error))
+        })
+    }
+}
+
+export function commentCreateFailure(error:ApiError){
+    return {
+        type:CommentActions.CREATE_FAILURE,
+        error:error.message,
+        loading:false
+    }
+}
+
+export function commentCreateSuccess(data){
+    return {
+        type:CommentActions.CREATE_SUCCESS,
+        loading:false,
+        payload:{
+            comment:data
+        }
+    }
+}
+
+export function commentLoading(){
+    return {
+        type:QueryActions.LOADING,
+        loading:true
+    }
+}
+
+export function writeComment(query,data){
+    return async dispatch => {
+        createComment(query,data)
+        .then(response => {
+            dispatch(commentCreateSuccess(response));
+        }).catch(error => {
+            dispatch(commentCreateFailure(error));
+        })
+    }
+}
+
+function loadCommentsSuccess(data){
+    return{
+        type:QueryActions.LOAD_COMMENTS,
+        loading:false,
+        payload:{
+            comment:data
+        }
+    }
+}
+
+function loadCommentFailure(error:ApiError){
+    return {
+        type:CommentActions.FETCH_FAILURE,
+        loading:false,
+        error:error.message
+    }
+}
+
+export function loadComments(query,req){
+    return async dispatch => {
+        getAllComments(query,req)
+        .then(response => {
+            Reactotron.log!("loading comments successful",response);
+            dispatch(loadCommentsSuccess(response));
+        })
+        .catch(error => {
+            Reactotron.log!("loading comments error",error);
+            dispatch(loadCommentFailure(error));
         })
     }
 }

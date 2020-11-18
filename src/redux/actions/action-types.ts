@@ -11,24 +11,21 @@ export interface IAuthAction extends Common{
     anonymous?:boolean;
     payload?:any;
 } 
-export interface IQueryListAction{
+export interface IQueryListAction extends Common{
     type:QueryListActions;
-    loading:boolean;
     payload?:any;
     error?:string;
 
 }
 
-export interface IUserAction{
+export interface IUserAction extends Common{
     type: UserActions;
-    loading:boolean;
     payload?:any;
     error?:string;
 }
 
-export interface IQueryAction{
-    type:QueryActions;
-    loading:boolean;
+export interface IQueryAction extends Common{
+    type:QueryActions | CommentActions;
     error?:string;
     payload?:any;
 }
@@ -80,13 +77,16 @@ export enum QueryListActions{
 }
 
 export enum QueryActions{
-    LOADING = "loading",
+    LOADING = "query-action-loading",
     FETCH_SUCCESS = "fetch-query-success",
     FETCH_ERROR = "fetch-query-error",
     DRAFT = "draft",
     PUBLISH = "publish",
+    LOAD_COMMENTS = "load-comments",
+    LOAD_RESPONSES = "load-responses",
+    COMMENT = "add-comment",
     OPINION = "opinion",
-    RESPONSE = "response",
+    RESPONSE = "add-response",
     VIEW = "view",
     CREATE = "create",
     FAILURE = "query-action-failure",
@@ -94,6 +94,17 @@ export enum QueryActions{
     DELETE = "delete",
     UP_VOTE = "up-vote",
     DOWN_VOTE = "down-vote"
+}
+
+export enum CommentActions{
+    CREATE_SUCCESS = "comment-create-success",
+    CREATE_FAILURE = "comment-create-failure",
+    UPDATE_SUCCESS = "comment-update-success",
+    UPDATE_FAILURE = "comment-update-failure",
+    DELETE_SUCCESS = "comment-delete-success",
+    DELETE_FAILURE = "comment-delete-failure",
+    FETCH_SUCCESS = "comment-fetch-success",
+    FETCH_FAILURE = "comment-fetch-failure"
 }
 
 export enum OpinionActions{

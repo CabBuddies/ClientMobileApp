@@ -12,7 +12,8 @@ import RESTObject from "node-rest-objects/dist/rest/rest.object";
 
 interface QueryViewProps{
     query:RESTObject<IQuery>,
-    style?: ViewStyle | Array<ViewStyle> | null;
+	style?: ViewStyle | Array<ViewStyle> | null;
+	onComment?:any,
     headerNav?: () => void,
     itemNav?: () => void
 }
@@ -20,11 +21,14 @@ interface QueryViewProps{
 const QueryFullView = ({
 	query,
 	style = null,
+	onComment = () => {
+		Alert.alert(`happy commenting`);
+	}, 
 	headerNav = () => {
 		Alert.alert(`header clicked`);
 	},
 	itemNav = () => {
-		Alert.alert(`item clicked`);
+		Alert.alert(`this will trigger an update`);
 	},
 }: QueryViewProps) => {
 	const data:IQuery = query.data;
@@ -45,7 +49,7 @@ const QueryFullView = ({
 					</Body>
 				</Left>
 			</CardItem>
-			<CardItem cardBody button onPress={itemNav}>
+			<CardItem cardBody button onLongPress={itemNav}>
 				<Body>
 					<H2> {published?.title} </H2>
                     <Tags
@@ -58,7 +62,7 @@ const QueryFullView = ({
 				</Body>
 			</CardItem>
 			<CardItem footer bordered style={{ alignItems: "center", height: 50 }}>
-				<QueryStats stats={stats} />
+				<QueryStats stats={stats} onComment = {onComment}/>
 			</CardItem>
 		</Card>
     )

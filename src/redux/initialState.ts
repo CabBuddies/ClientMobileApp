@@ -4,9 +4,16 @@ import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import { IQueryStats } from "../definitions/query-definitions";
 import { Screens } from "../definitions/screen-definitions";
 
+export enum ErrorType{
+    QUERY = "query-error",
+    COMMENT = "comment-error",
+    RESPONSE = "response-error",
+    USER = "user-error",
+}
 interface CommonStates{
     loading?:boolean;
     error?:string;
+    errorType?:ErrorType;
 }
 
 export interface IAppState{

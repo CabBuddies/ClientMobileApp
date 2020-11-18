@@ -12,24 +12,45 @@ import {QueryStackParamList} from "../../../navigations/QueryNavigator";
 import { Screens } from '../../../definitions/screen-definitions';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 import { IQuery } from 'node-rest-objects/dist/data/queries';
+import { bindActionCreators } from 'redux';
+import { loadComments, writeComment } from '../../../redux/actions/query-actions';
+import { CButton } from '../../../components/atoms';
+import { Alert } from 'react-native';
 
 type QueryViewScreenNav = StackNavigationProp<QueryStackParamList>;
 interface QueryViewScreenProps{
     navigation: QueryViewScreenNav;
     queryData:RESTObject<IQuery>;
+    newComment?:any;
+    getComments?:any;
     loading:boolean;
 }
 
-function QueryView({ navigation, queryData,loading }: QueryViewScreenProps) {
+const defaultRequest = {
+    sort:{
+        "createdAt":-1
+    }
+}
+
+
+
+function QueryView({ navigation, queryData,loading, newComment, getComments }: QueryViewScreenProps) {
     reactotron.log!("queryData in QUERY_VIEW",queryData,loading);
     const cancelNav = () => {
         navigation.navigate(Screens.GUIDE_ME);
     }
+    const getCommentFunc = () => {
+        getComments(queryData,defaultRequest);
+    }
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerLeft:() => <HeaderBackButton onPress={cancelNav}/>
+            headerLeft:() => <HeaderBackButton onPress={cancelNav}/>,
+            headerRight:() => (
+                <CButton transparent title="Respond" container={{flex:0}} onPress={() => Alert.alert(`this will trigger response`)} />
+            )
         });
     },[navigation])
+
     return (
         <Container>
             <Content>
@@ -48,7 +69,7 @@ function QueryView({ navigation, queryData,loading }: QueryViewScreenProps) {
                         <PlaceholderLine width={30} />
                         
                     </Placeholder>)
-                    : <QueryFullView query={queryData}/>
+                    : <QueryFullView query={queryData} onComment={getCommentFunc} />
 
                 }
                 
@@ -59,10 +80,15 @@ function QueryView({ navigation, queryData,loading }: QueryViewScreenProps) {
 
 function mapStateToProps(state){
     const { queryState } = state;
-    reactotron.log!("queryState",state.queryState);
     return {
         queryData : queryState.query,
         loading : queryState.loading
     }
 }
-export default connect(mapStateToProps,null)(QueryView)
+function mapDispatchToProps(dispatch){
+    return {
+        newComment: bindActionCreators(writeComment,dispatch),
+        getComments: bindActionCreators(loadComments,dispatch),
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(QueryView)

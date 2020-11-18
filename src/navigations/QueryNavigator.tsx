@@ -17,7 +17,7 @@ export default function QueryNavigatorScreen(props:any) {
             <QueryNavigator.Screen name={Screens.QUERY_VIEW} component={QueryViewScreen} 
             options={
                 ({ route }:{route:any}) => 
-                ({ title: route.params!.name,headerStyle:{backgroundColor:"#3F51B5"}, titleStyle:{color:"#fff"} })
+                ({ title: route.params!.name })
                 }
             />
         </QueryNavigator.Navigator>
