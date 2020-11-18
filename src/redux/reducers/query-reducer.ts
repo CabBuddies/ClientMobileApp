@@ -6,31 +6,33 @@ export default function queryReducer(state = initialState.queryState, action:IQu
         case QueryActions.LOADING:
             return {...state,query:undefined,loading:action.loading};
         case QueryActions.FETCH_SUCCESS:
-            return {...state, query:action.payload,loading:action.loading};
+            return {...state, query:action.payload,loading:action.loading,error:undefined};
         case QueryActions.FETCH_ERROR:
-            return {...state,error:action.error,query:undefined,loading:action.loading};
+            return { ...state, error:action.error, query:undefined, loading:action.loading, errorType:action.errorType};
         case QueryActions.CREATE:
             return {...state, query:action.payload,loading:action.loading};
         
         case CommentActions.CREATE_FAILURE:
-            return {...state,loading:action.loading,error:action.error};
+            return {...state,loading:action.loading,error:action.error,errorType:action.errorType};
         case CommentActions.CREATE_SUCCESS:
             return {...state,loading:action.loading,comment:action.payload.comment};
         case QueryActions.LOAD_COMMENTS:
             return {...state,loading:action.loading,comment:action.payload.comment};
         case CommentActions.UPDATE_SUCCESS:
-            return {...state,query:action.payload.query,loading:action.loading,comment:action.payload.comment};
+            return {...state,query:action.payload.query,loading:action.loading,
+                    comment:action.payload.comment, error:undefined, errorType:undefined};
         case CommentActions.UPDATE_FAILURE:
             return {...state,loading:action.loading,error:action.error};
         case CommentActions.DELETE_FAILURE:
             return {...state,loading:action.loading,error:action.error};
         case CommentActions.DELETE_SUCCESS:
-            return {...state,query:action.payload.query,loading:action.loading,comment:undefined};
+            return {...state,query:action.payload.query,loading:action.loading,
+                comment:undefined,error:undefined,errorType:undefined};
         case CommentActions.FETCH_FAILURE:
-            return {...state, error:action.error,loading:action.loading };
+            return {...state, error:action.error,loading:action.loading,errorType:action.errorType };
 
         case QueryActions.FAILURE:
-            return {...state,error:action.error,query:undefined,loading:action.loading};
+            return {...state,error:action.error, errorType:action.errorType,query:undefined,loading:action.loading};
         case QueryActions.DRAFT:
             return {...state, query:action.payload?.data,loading:action.loading};
         case QueryActions.UP_VOTE:

@@ -1,12 +1,13 @@
 import React from "react";
 import { Alert, ViewStyle } from "react-native";
-import { Card, CardItem, Text, Left, Body, Thumbnail, H2 } from "native-base";
+import { Card, CardItem, Text, Left, Body, Thumbnail, H2, ActionSheet } from "native-base";
 const placeholder = require("../../../assets/avatar_placeholder.png");
 import { QueryStats } from "../molecules";
 import { IQueryContent, IQueryStats } from "../../definitions/query-definitions";
 import { IUser } from "node-rest-objects/dist/data/user-management";
 import { IQuery } from "node-rest-objects/dist/data/queries";
 import Tags from "react-native-tags";
+import { Options } from "../atoms";
 import reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 
@@ -49,7 +50,7 @@ const QueryFullView = ({
 					</Body>
 				</Left>
 			</CardItem>
-			<CardItem cardBody button onLongPress={itemNav}>
+			<CardItem cardBody button onLongPress={() => Options()}>
 				<Body>
 					<H2> {published?.title} </H2>
                     <Tags

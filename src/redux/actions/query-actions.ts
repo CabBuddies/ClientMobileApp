@@ -4,6 +4,7 @@ import Reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import { IQuery } from "node-rest-objects/dist/data/queries";
 import { createComment, createQuery, getAllComments } from "../../api/query-api";
+import { ErrorType } from "../initialState";
 
 export function loadingQuery():IQueryAction{
     return {
@@ -22,7 +23,8 @@ export function failureQuery(error:ApiError):IQueryAction{
     return {
         type:QueryActions.FETCH_SUCCESS,
         loading:false,
-        error:error.message
+        error:error.message,
+        errorType:ErrorType.QUERY
     }
 }
 
@@ -45,6 +47,7 @@ function createQueryFailure(error:ApiError){
         type:QueryActions.FAILURE,
         error:error.message,
         loading:false,
+        errorType:ErrorType.QUERY
     }
 }
 function createQuerySuccess(data){
@@ -72,7 +75,8 @@ export function commentCreateFailure(error:ApiError){
     return {
         type:CommentActions.CREATE_FAILURE,
         error:error.message,
-        loading:false
+        loading:false,
+        errorType:ErrorType.COMMENT
     }
 }
 
@@ -118,7 +122,8 @@ function loadCommentFailure(error:ApiError){
     return {
         type:CommentActions.FETCH_FAILURE,
         loading:false,
-        error:error.message
+        error:error.message,
+        errorType:ErrorType.COMMENT
     }
 }
 

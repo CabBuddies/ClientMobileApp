@@ -1,3 +1,4 @@
+import { ErrorType } from "../initialState";
 
 export interface ApiError{
     message: string;
@@ -8,4 +9,5 @@ export interface ApiError{
 export interface Common{
     loading?:boolean;
     error?:string;
+    errorType?:ErrorType;
 }
