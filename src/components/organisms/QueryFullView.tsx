@@ -1,6 +1,6 @@
 import React from "react";
 import { Alert, ViewStyle } from "react-native";
-import { Card, CardItem, Text, Left, Body, Thumbnail, H2, ActionSheet } from "native-base";
+import { Card, CardItem, Text, Left, Body, Thumbnail, H2, Right } from "native-base";
 const placeholder = require("../../../assets/avatar_placeholder.png");
 import { QueryStats } from "../molecules";
 import { IQueryContent, IQueryStats } from "../../definitions/query-definitions";
@@ -11,8 +11,9 @@ import { Options } from "../atoms";
 import reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 
+type T = any
 interface QueryViewProps{
-    query:RESTObject<IQuery>,
+    query:RESTObject<T> ,
 	style?: ViewStyle | Array<ViewStyle> | null;
 	onComment?:any,
     headerNav?: () => void,
@@ -36,23 +37,15 @@ const QueryFullView = ({
 	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats}= data;
 	const date = createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5);
     return (
-        <Card style={style}>
+        <Card  transparent style={style}>
 			<CardItem
 				header
-				button
-				onPress={headerNav}
 			>
-				<Left>
-					<Thumbnail source={author?.displayPicture||placeholder} />
-					<Body>
-						<Text> {author?.firstName +' '+ author?.lastName} </Text>
-						<Text note>{date}</Text>
-					</Body>
-				</Left>
+				<H2> {published?.title} </H2>
 			</CardItem>
 			<CardItem cardBody button onLongPress={() => Options()}>
+				<Left>
 				<Body>
-					<H2> {published?.title} </H2>
                     <Tags
                         initialTags = {published?.tags}
 						readonly
@@ -61,6 +54,16 @@ const QueryFullView = ({
                     />
 					<Text> {published?.body} </Text>
 				</Body>
+				</Left>
+			</CardItem>
+			<CardItem button onPress={headerNav}>
+				<Left>
+					<Thumbnail small source={author?.displayPicture||placeholder} />
+					<Body>
+						<Text> {author?.firstName +' '+ author?.lastName} </Text>
+						<Text note>{date}</Text>
+					</Body>
+				</Left>
 			</CardItem>
 			<CardItem footer bordered style={{ alignItems: "center", height: 50 }}>
 				<QueryStats stats={stats} onComment = {onComment}/>

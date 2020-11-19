@@ -37,22 +37,18 @@ export default function QueryPreview({
 			<CardItem
 				header
 				button
-				onPress={() => {
-					headerNav;
-				}}
+				onPress={itemNav}
 			>
+				<H1> {published?.title} </H1>
+			</CardItem>
+			<CardItem cardBody button onPress={headerNav}>
 				<Left>
-					<Thumbnail source={author?.displayPicture||placeholder} />
+					<Thumbnail small source={author?.displayPicture||placeholder} />
 					<Body>
 						<Text> {author?.firstName +' '+ author?.lastName} </Text>
 						<Text note>{date}</Text>
 					</Body>
 				</Left>
-			</CardItem>
-			<CardItem cardBody button onPress={itemNav}>
-				<Body>
-					<H1> {published?.title} </H1>
-				</Body>
 			</CardItem>
 			{/* <CardItem footer bordered style={{ alignItems: "center", height: 50 }}>
 				<QueryStats stats={stats} />

@@ -21,7 +21,7 @@ export function successQuery(data):IQueryAction{
 }
 export function failureQuery(error:ApiError):IQueryAction{
     return {
-        type:QueryActions.FETCH_SUCCESS,
+        type:QueryActions.FETCH_ERROR,
         loading:false,
         error:error.message,
         errorType:ErrorType.QUERY
@@ -29,7 +29,7 @@ export function failureQuery(error:ApiError):IQueryAction{
 }
 
 export function fetchQuery(query:RESTObject<IQuery>){
-    Reactotron.log!("In query-list thunk");
+    Reactotron.log!("In query-list thunk",query);
     return async dispatch => {
         dispatch(loadingQuery());
        await query.read()

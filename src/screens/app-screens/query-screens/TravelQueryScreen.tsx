@@ -123,6 +123,7 @@ function TravelQueryScreen({navigation,cards,loading,error,getQueries,getQuery}:
                 keyExtractor = {item => (item)?item.data._id:`${Date.now()}`}
                 ListEmptyComponent = {placeholder}
                 refreshControl = {<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)}/>}
+                
             />
               
         </Container>

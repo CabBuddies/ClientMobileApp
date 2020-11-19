@@ -4,8 +4,8 @@ import { Card, CardItem, Left, Body, Thumbnail,Text } from 'native-base';
 import { ICommentData } from '../../definitions/query-definitions';
 const placeholder = require("../../../assets/avatar_placeholder.png");
 
-const Comment = ({comment}) => {
-    const {body,author,createdAt}:ICommentData = comment.data;
+const CommentView = ({comment}) => {
+    const {body,author,createdAt}:ICommentData= comment.data;
     const date = createdAt?.split('T');
     return (
         <Card>
@@ -14,7 +14,7 @@ const Comment = ({comment}) => {
                 <Thumbnail small source={author?.displayPicture||placeholder} />
 					<Body>
 						<Text> {author?.firstName +' '+ author?.lastName} </Text>
-						<Text note>{date.join(' ')}</Text>
+						<Text note>{date[0]+' '+date[1].substring(0,5)}</Text>
 					</Body>
                 </Left>
             </CardItem>
@@ -25,6 +25,6 @@ const Comment = ({comment}) => {
     )
 }
 
-export default Comment
+export default CommentView
 
 const styles = StyleSheet.create({})

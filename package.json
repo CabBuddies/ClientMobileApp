@@ -5,7 +5,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "refresh-nro": "yarn remove node-rest-objects && yarn add CabBuddies/Node-REST-Objects#master",
+    "refresh-nro": "yarn remove node-rest-objects && expo install CabBuddies/Node-REST-Objects#master",
     "eject": "expo eject"
   },
   "dependencies": {
@@ -38,6 +38,7 @@
     "react-native-web": "~0.13.7",
     "react-native-webview": "10.7.0",
     "react-redux": "^7.2.1",
+    "reanimated-bottom-sheet": "^1.0.0-alpha.22",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "rn-placeholder": "^3.0.3",
