@@ -16,3 +16,10 @@ export interface IQueryListResponse{
     resultTotalSize: number;
     result: RESTObject<IQuery>[];
 };
+
+export const defaultRequest = {
+    sort:{
+        "createdAt":-1
+    },
+    pageNum:1
+}

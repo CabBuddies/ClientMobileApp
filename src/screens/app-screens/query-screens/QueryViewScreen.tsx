@@ -1,5 +1,5 @@
 import React, {useRef, useLayoutEffect} from 'react'
-// import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { Text, Container, Content, Body } from "native-base";
 import { QueryPreview } from '../../../components/organisms'
 import { IQueryState } from '../../../redux/initialState';
@@ -15,7 +15,7 @@ import { IQuery } from 'node-rest-objects/dist/data/queries';
 import { bindActionCreators } from 'redux';
 import { loadComments, writeComment } from '../../../redux/actions/query-actions';
 import { CButton } from '../../../components/atoms';
-import { Alert } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import CommentListView from '../../../components/molecules/CommentListView';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
@@ -44,6 +44,15 @@ function QueryView({ navigation, queryData,loading, newComment, getComments }: Q
     const cancelNav = () => {
         navigation.navigate(Screens.GUIDE_ME);
     }
+    const renderSheetHeader = () => {
+        return (
+            <View style={styles.sheetHeader}>
+                <View style={styles.panelHeader}>
+                    <View style={styles.panelHandle} />
+                </View>
+            </View>
+        )
+    }
     const getCommentFunc = () => {
         getComments(queryData,defaultRequest)
         .then(() => {
@@ -65,6 +74,7 @@ function QueryView({ navigation, queryData,loading, newComment, getComments }: Q
 
     return (
         <Container>
+            <Content>
                 {
                     (loading || !queryData)?
                     (<Placeholder
@@ -82,15 +92,17 @@ function QueryView({ navigation, queryData,loading, newComment, getComments }: Q
                     </Placeholder>)
                     : <QueryFullView query={queryData} onComment={getCommentFunc} />
                 }
+                </Content>
                 <BottomSheet
                     ref={commentRef}
-                    snapPoints = {["90%","5%","0%"]}
+                    snapPoints = {["85%","70%","50%","15%","0%"]}
                     callbackNode={fall}
                     borderRadius={10}
                     enabledGestureInteraction={true}
                     renderContent={() => <CommentListView />}
-                    renderHeader = {() => <Text>Comments</Text>}
-                    initialSnap={2}
+                    renderHeader = {renderSheetHeader}
+                    initialSnap={4}
+                    enabledContentTapInteraction={false}
                     onOpenStart = {() => reactotron.log!("bottom-sheet-opened")}
                 />
                 
@@ -112,3 +124,27 @@ function mapDispatchToProps(dispatch){
     }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(QueryView)
+
+const styles = StyleSheet.create({
+    sheetHeader: {
+        backgroundColor: '#eeeeee',
+        shadowColor: '#333333',
+        shadowOffset: {width: -1, height: -3},
+        shadowRadius: 2,
+        shadowOpacity: 0.4,
+        // elevation: 5,
+        paddingTop: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+      },
+      panelHeader: {
+        alignItems: 'center',
+      },
+      panelHandle: {
+        width: 40,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#00000040',
+        marginBottom: 10,
+      },
+})
