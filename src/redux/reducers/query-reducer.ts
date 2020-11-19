@@ -15,7 +15,7 @@ export default function queryReducer(state = initialState.queryState, action:IQu
         case CommentActions.CREATE_FAILURE:
             return {...state,loading:action.loading,error:action.error,errorType:action.errorType};
         case CommentActions.CREATE_SUCCESS:
-            return {...state,loading:action.loading,comment:action.payload.comment};
+            return {...state,loading:action.loading,comment:[...state.comment,action.payload.comment]};
         case QueryActions.LOAD_COMMENTS:
             return {...state,loading:action.loading,comment:action.payload.comment};
         case CommentActions.UPDATE_SUCCESS:

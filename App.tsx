@@ -2,6 +2,7 @@ import "react-native-gesture-handler";
 import React, { useState, useMemo, useEffect } from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import RootStackNavigator from "./src/navigations/RootNavigator";
+import  { Provider as PaperProvider } from 'react-native-paper';
 import { Root } from "native-base";
 import { AppLoading } from "expo";
 import { useFonts } from "expo-font";
@@ -42,10 +43,12 @@ export default function App() {
       (
       <Root>
         <ReduxProvider store={store}>
-          <View style={styles.container}>
-            {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-            <RootStackNavigator />
-          </View>
+          <PaperProvider>
+            <View style={styles.container}>
+              {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+              <RootStackNavigator />
+            </View>
+          </PaperProvider>
         </ReduxProvider>
       </Root>
       )
