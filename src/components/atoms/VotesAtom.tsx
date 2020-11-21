@@ -21,7 +21,7 @@ export interface Votes{
 interface Actions{
     type: ActionType;
 }
-export default function VotesAtom({voteCount = 0}) {
+export default function VotesAtom({voteCount = 0,scoreOnly=false}) {
 
     const initialState = {
         votes: voteCount,
@@ -77,10 +77,13 @@ export default function VotesAtom({voteCount = 0}) {
         }
     };
     const [votesState,dispatch] = useReducer(reducer,initialState);
+    const text = (scoreOnly)?"score: ":"";
     return (
         <Grid>
             <Row style ={{alignItems: 'center'}}>
-            <CButton
+            {
+                !scoreOnly && 
+                <CButton
                 transparent
                 hasIcon iconOnly
                 container = {{flex:0}}
@@ -89,18 +92,22 @@ export default function VotesAtom({voteCount = 0}) {
                 onPress={()=>{
                     dispatch({type: ActionType.LIKE})
                 }}
-                />      
-                   
-                <Text> {votesState.votes} </Text> 
-           
-                <CButton
-                transparent
-                hasIcon iconOnly
-                container = {{flex:0}}
-                icon = "md-arrow-down"
-                onPress={()=>dispatch({type:ActionType.DISLIKE})}
-                iconStyle = {{color:votesState.dislikeColor}}
-                />  
+                />   
+            }
+                 
+                <Text> {text+votesState.votes} </Text> 
+           {
+               !scoreOnly && 
+               <CButton
+               transparent
+               hasIcon iconOnly
+               container = {{flex:0}}
+               icon = "md-arrow-down"
+               onPress={()=>dispatch({type:ActionType.DISLIKE})}
+               iconStyle = {{color:votesState.dislikeColor}}
+               />
+           }
+                  
             
             </Row>
         </Grid>

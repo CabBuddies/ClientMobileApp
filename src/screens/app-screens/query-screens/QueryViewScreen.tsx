@@ -19,6 +19,7 @@ import { Alert, StyleSheet } from 'react-native';
 import CommentListView from '../../../components/molecules/CommentListView';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
+import { TextInput as PaperInput } from 'react-native-paper';
 
 type QueryViewScreenNav = StackNavigationProp<QueryStackParamList>;
 interface QueryViewScreenProps{
@@ -103,6 +104,7 @@ function QueryView({ navigation, queryData,loading, newComment, getComments }: Q
                     renderHeader = {renderSheetHeader}
                     initialSnap={4}
                     enabledContentTapInteraction={false}
+                    enabledContentGestureInteraction={true}
                     onOpenStart = {() => reactotron.log!("bottom-sheet-opened")}
                 />
                 

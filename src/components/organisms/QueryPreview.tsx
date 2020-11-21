@@ -50,9 +50,9 @@ export default function QueryPreview({
 					</Body>
 				</Left>
 			</CardItem>
-			{/* <CardItem footer bordered style={{ alignItems: "center", height: 50 }}>
-				<QueryStats stats={stats} />
-			</CardItem> */}
+			<CardItem footer bordered style={{ alignItems: "center", height: 50 }}>
+				<QueryStats onComment={()=>Alert.alert(`please open the query to view comments`)} scoreOnly={true} stats={stats} />
+			</CardItem>
 		</Card>
 	);
 }

@@ -8,7 +8,7 @@ const CommentView = ({comment}) => {
     const {body,author,createdAt}:ICommentData= comment.data;
     const date = createdAt?.split('T');
     return (
-        <Card>
+        <Card transparent>
             <CardItem header>
                 <Left>
                 <Thumbnail small source={author?.displayPicture||placeholder} />

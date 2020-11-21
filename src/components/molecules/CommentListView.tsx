@@ -6,7 +6,7 @@ import CommentView from './CommentView';
 import reactotron from '../../../dev/ReactotronConfig';
 import { Placeholder, PlaceholderMedia, PlaceholderLine, Shine} from "rn-placeholder";
 import { connect } from 'react-redux';
-import { TextInput as PaperInput, Button as PaperButton } from "react-native-paper";
+import { TextInput as PaperInput, IconButton, Colors } from "react-native-paper";
 import { Formik } from 'formik';
 import { loadComments, writeComment } from '../../redux/actions/query-actions';
 import { bindActionCreators } from 'redux';
@@ -55,20 +55,19 @@ const CommentListView = ({query,comments,error,loading,getComments,newComment }:
                 ({values,errors,handleBlur,setFieldValue,handleSubmit,isSubmitting}) => (
                     <Grid style={{padding:20}}>
                         <Row>
-                            <Col size={3}>
+                            <Col size={6}>
                                 <PaperInput
                                     label="enter your comment"
                                     value={values.comment}
                                     onChangeText = {(text) => setFieldValue('comment',text)}
                                     mode='outlined'
+                                    underlineColor={Colors.brown50}
                                 />
                             </Col>
                             <Col size={1}>
-                                <PaperButton icon="send" mode="text" onPress={handleSubmit}
-                                    loading={isSubmitting}
-                                >
-                                
-                                </PaperButton>
+                                <IconButton icon="send" onPress={handleSubmit}
+                                    disabled={isSubmitting} color={Colors.brown600}
+                                />
                             </Col>
                         </Row>
                     </Grid>
@@ -110,7 +109,6 @@ const CommentListView = ({query,comments,error,loading,getComments,newComment }:
                 }}>
                 <FlatList data = {(comments)?comments:[]} renderItem = {renderListItem} 
                     keyExtractor = {item => (item)?item.data._id:`${Date.now()}`}
-                    showsVerticalScrollIndicator={false}
                     ListHeaderComponent = {newCommentForm}
                     ListEmptyComponent = {placeholder}
                     // refreshControl = {<RefreshControl refreshing={loading} onRefresh={() => Alert.alert('this will refresh comments')}/>}

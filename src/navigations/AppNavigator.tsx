@@ -16,7 +16,7 @@ const AppNavigator = createBottomTabNavigator();
 
 export default function AppTabsNavigator() {
     return(
-        <AppNavigator.Navigator initialRouteName={Screens.RIDE} >
+        <AppNavigator.Navigator initialRouteName={Screens.RIDE} tabBarOptions={{keyboardHidesTabBar:true}}>
             <AppNavigator.Screen name={Screens.CHATS} component={ChatNavigator} />
             <AppNavigator.Screen name={Screens.RIDE}  component={RideScreen} />
             <AppNavigator.Screen name={Screens.GUIDE_ME}  component={QueryNavigatorScreen} />
