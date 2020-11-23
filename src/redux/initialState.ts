@@ -1,19 +1,21 @@
 import { IQuery } from "node-rest-objects/dist/data/queries";
 import { IUser } from "node-rest-objects/dist/data/user-management";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
-import { IQueryStats } from "../definitions/query-definitions";
+import { defaultRequest, IQueryStats, IRequest } from "../definitions/query-definitions";
 import { Screens } from "../definitions/screen-definitions";
+import { CoreActions } from "./actions/action-types";
 
 export enum ErrorType{
     QUERY = "query-error",
     COMMENT = "comment-error",
     RESPONSE = "response-error",
     USER = "user-error",
+
 }
 interface CommonStates{
     loading?:boolean;
     error?:string;
-    errorType?:ErrorType;
+    errorType?:string;
 }
 
 export interface IAppState{
@@ -21,6 +23,7 @@ export interface IAppState{
     userState:IUserState;
     queryListState:IQueryListState;
     queryState:IQueryState;
+    requestState:IRequestState;
 
 }
 
@@ -52,6 +55,12 @@ export interface IQueryState extends CommonStates{
     currentUserOpinion?: string;
     response?:any;
     comment?:any;
+}
+export interface IRequestState extends CommonStates{
+    query?:object;
+    sort?:Record<string,any>;
+    pageSize?:number;
+    pageNum?:number;
 }
 
 // export interface IRideState{
@@ -90,5 +99,6 @@ export const initialState:IAppState = {
     authState:defaultAuthState,
     queryListState: defaultQueryListState,
     queryState:defaultQueryState,
-    userState:defaultUserState
+    userState:defaultUserState,
+    requestState:defaultRequest
 }

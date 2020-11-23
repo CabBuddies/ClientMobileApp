@@ -7,17 +7,22 @@ export interface IQueryStats extends Stats{}
 export interface IQueryContent extends Content{}
 export interface ICommentData extends IComment{}
 export interface IQueryListResponse{
-    query: object;
+    query?: object;
     sort: object;
-    attributes: object;
+    attributes?: object;
     pageSize: number;
     pageNum: number;
+    result:any;
     resultSize: number;
-    resultTotalSize: number;
-    result: RESTObject<IQuery>[];
 };
+export interface IRequest{
+    query?:object;
+    sort?:Record<string,any>;
+    pageSize?:number;
+    pageNum?:number;
+}
 
-export const defaultRequest = {
+export const defaultRequest:IRequest = {
     sort:{
         "createdAt":-1
     },

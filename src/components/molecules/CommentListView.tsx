@@ -34,7 +34,6 @@ const CommentListView = ({query,comments,error,loading,getComments,newComment }:
     // useEffect(() => {
     //     setCommentState(prevState => prevState.concat(comments))
     // },[comments])
-    reactotron.log!("type",comments,typeof comments);
     const renderListItem = ({item}) => {
         return <CommentView comment={item}/>
     }
