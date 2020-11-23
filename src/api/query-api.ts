@@ -82,6 +82,7 @@ async function commentReader(cmnt){
 
 export async function getAllComments(query:RESTObject<IQuery>,request){
     try{
+        Reactotron.log!("GETTING ALL COMMENTS.......");
         let comment:Comment = new Comment();
         comment.data.queryId = query.data._id;
         const searchComment = new SearchRESTObject(comment);

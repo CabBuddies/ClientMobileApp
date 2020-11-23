@@ -39,20 +39,42 @@ const queryFetchReducer = queryReducerGenerator(CoreActions.QUERY_FETCH);
 const queryCreateReducer = queryReducerGenerator(CoreActions.QUERY_CREATE);
 
 const commentActionHandler = guardedState => ({
-    [FetchActions.BEGIN]: (state,action:IQueryAction) => ({
-        ...state,
-        loading:action.loading,
-        error:undefined,
-        errorType:undefined
-    }),
-    [FetchActions.SUCCESS]:(state,action:IQueryAction) => {
+    [FetchActions.BEGIN]: (state,action:IQueryAction) => {
+        if(action.type.startsWith("comment-create")){
+            return {
+                ...state,
+                loading:action.loading,
+                error:undefined,
+                errorType:undefined
+            }
+        }
         return {
             ...state,
             loading:action.loading,
-            comment:state.comment?[action.payload,...state.comment]:action.payload,
+            comment:undefined,
             error:undefined,
             errorType:undefined
-        } 
+        }
+        
+    },
+    [FetchActions.SUCCESS]:(state,action:IQueryAction) => {
+        if(action.type.startsWith("comment-create")){
+            return {
+                ...state,
+                loading:action.loading,
+                comment:[action.payload,...state.comment],
+                error:undefined,
+                errorType:undefined
+            }
+        }
+        return {
+            ...state,
+            loading:action.loading,
+            comment:action.payload,
+            error:undefined,
+            errorType:undefined
+        }
+            
     },
     [FetchActions.FAILURE]:(state,action:IQueryAction) => ({
         ...state,

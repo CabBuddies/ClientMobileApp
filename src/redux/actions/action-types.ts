@@ -62,6 +62,7 @@ export enum FetchActions{
 export enum AuthActions{
     LOGIN = "login",
     SIGN_UP = "sign-up",
+    AUTH_ERROR="auth-error",
     ANONYMOUS = "anonymous",
     REFRESH = "refresh-token",
     LOGOUT = "logout"
