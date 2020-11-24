@@ -4,23 +4,38 @@
 
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import ChatNavigator from './ChatNavigator';
-import PackageDeliveryScreen from '../screens/app-screens/PackageDeliveryScreen';
-import RideScreen from '../screens/app-screens/RideScreen';
-import TravelQueryScreen from '../screens/app-screens/query-screens/TravelQueryScreen';
 import QueryNavigatorScreen from './QueryNavigator';
 import { Screens } from "../definitions/screen-definitions";
+import { Icon } from 'native-base';
+import PDStackNavigator from './PDStackNavigator';
+import RideStackNavigator from './RideStackNavigator';
 
 const AppNavigator = createBottomTabNavigator();
 
 export default function AppTabsNavigator() {
-    return(
-        <AppNavigator.Navigator initialRouteName={Screens.RIDE} >
-            <AppNavigator.Screen name={Screens.CHATS} component={ChatNavigator} />
-            <AppNavigator.Screen name={Screens.RIDE}  component={RideScreen} />
-            <AppNavigator.Screen name={Screens.GUIDE_ME}  component={QueryNavigatorScreen} />
-            <AppNavigator.Screen name={Screens.PACKAGE_DELIVERY}  component={PackageDeliveryScreen} />
+    return (
+        <AppNavigator.Navigator initialRouteName={Screens.RIDE}>
+            <AppNavigator.Screen name={Screens.CHATS} component={ChatNavigator} options={{
+                title: Screens.CHATS,
+                tabBarLabel: Screens.CHATS,
+                tabBarIcon: () => (<Icon name="ios-chatbubbles" />)
+            }} />
+            <AppNavigator.Screen name={Screens.RIDE} component={RideStackNavigator} options={{
+                title: Screens.RIDE,
+                tabBarLabel: 'Rides',
+                tabBarIcon: () => (<Icon name="ios-car" />)
+            }} />
+            <AppNavigator.Screen name={Screens.GUIDE_ME} component={QueryNavigatorScreen} options={{
+                title: Screens.GUIDE_ME,
+                tabBarLabel: 'Guide Me',
+                tabBarIcon: () => (<Icon name="map-marker-question" type="MaterialCommunityIcons" />)
+            }} />
+            <AppNavigator.Screen name={Screens.PACKAGE_DELIVERY} component={PDStackNavigator} options={{
+                title: Screens.PACKAGE_DELIVERY,
+                tabBarLabel: 'Package Delivery',
+                tabBarIcon: () => (<Icon name="box" type="Entypo" />)
+            }} />
         </AppNavigator.Navigator>
     )
 }

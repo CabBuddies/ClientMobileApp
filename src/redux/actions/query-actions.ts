@@ -23,7 +23,7 @@ export function failureQuery(error:ApiError):IQueryAction{
     return {
         type:QueryActions.FETCH_ERROR,
         loading:false,
-        error:error.message,
+        error:error?.message,
         errorType:ErrorType.QUERY
     }
 }
@@ -32,12 +32,13 @@ export function fetchQuery(query:RESTObject<IQuery>){
     Reactotron.log!("In query-list thunk",query);
     return async dispatch => {
         dispatch(loadingQuery());
-       await query.read()
+       query.read()
        .then(() => {
            Reactotron.log!("query-read-successful");
            dispatch(successQuery(query))
        }).catch(error => {
-        dispatch(failureQuery(error))
+            Reactotron.log!(`error in thunk`, error, query.data);
+            dispatch(failureQuery(error))
        })
     }
 }

@@ -1,4 +1,5 @@
 import { User } from "node-rest-objects/dist/data/user-management";
+import Reactotron from "../../../dev/ReactotronConfig";
 import { IUserAction, UserActions } from "./action-types";
 import { ApiError } from "./common-types";
 
@@ -31,10 +32,13 @@ export function getUser(){
     const user:User =  new User();
     return async dispatch => {
         dispatch(getUserLoading());
-        await user.getMe()
+        Reactotron.log!(`user(before API call) in thunk: `, user);
+        user.getMe()
         .then(() => {
+            Reactotron.log!(`user(after API call) data in thunk: `, user.data);
             dispatch(getUserSuccess(user.data));
         }).catch(error => {
+            Reactotron.log!(`user(after API call) data in thunk: `, error);
             dispatch(getUserFailure(error));
         });
     }

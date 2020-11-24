@@ -1,13 +1,13 @@
 
 export enum Screens{
-    ROOT = "AppRoot",
-    AUTH = "Auth",
+    ROOT = "App Root",
+    AUTH = "Welcome",
     SIGN_IN = "SignIn",
     SIGN_UP = "SignUp",
     PROFILE = "My Profile",
     SETTINGS = "Settings",
-    APP = "App",
-    GUIDE_ME = "GuideMe",
+    APP = "Travel Buff",
+    GUIDE_ME = "Guide Me",
     QUERY_VIEW = "QueryView",
     QUERY_CREATE = "New Query",
     RIDE = "Find a ride",
