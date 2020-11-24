@@ -94,11 +94,67 @@ export const commentReducerGenerator = (coreName,screenInitialState?:any) => {
 const commentFetchReducer = commentReducerGenerator(CoreActions.COMMENT_FETCH);
 const commentCreateReducer = commentReducerGenerator(CoreActions.COMMENT_CREATE);
 
+const responseActionHandler = guardedState => ({
+    [FetchActions.BEGIN]: (state,action:IQueryAction) => {
+        if(action.type.startsWith("response-create")){
+            return {
+                ...state,
+                loading:action.loading,
+                error:undefined,
+                errorType:undefined
+            }
+        }
+        return {
+            ...state,
+            loading:action.loading,
+            response:undefined,
+            error:undefined,
+            errorType:undefined
+        }
+    },
+    [FetchActions.SUCCESS]:(state,action:IQueryAction) => {
+        if(action.type.startsWith("response-create")){
+            return {
+                ...state,
+                loading:action.loading,
+                response:[action.payload,...state.response],
+                error:undefined,
+                errorType:undefined
+            }
+        }
+        return {
+            ...state,
+            loading:action.loading,
+            response:action.payload,
+            error:undefined,
+            errorType:undefined
+        }
+        
+    },
+    [FetchActions.FAILURE]:(state,action:IQueryAction) => ({
+        ...state,
+        loading:action.loading,
+        error:action.error,
+        errorType:action.errorType
+    }),
+})
+export const responseReducerGenerator = (coreName,screenInitialState?:any) => {
+    const guardedState = initialState.queryState || initialState;
+    return reducerGenerator(
+        coreName,
+        responseActionHandler(guardedState),
+        guardedState
+    )
+}
+const responseFetchReducer = responseReducerGenerator(CoreActions.RESPONSE_FETCH);
+const responseCreateReducer= responseReducerGenerator(CoreActions.RESPONSE_CREATE);
+
 const queriesReducer = reduceReducers(initialState.queryState,queryFetchReducer,queryCreateReducer);
 const commentsReducer = reduceReducers(initialState.queryState,commentFetchReducer,commentCreateReducer);
+const responseReducer = reduceReducers(initialState.queryState,responseFetchReducer,responseCreateReducer);
 
 
-const queryReducer = reduceReducers(initialState.queryState,queriesReducer,commentsReducer);
+const queryReducer = reduceReducers(initialState.queryState,queriesReducer,commentsReducer,responseReducer);
 
 export default queryReducer;
 

@@ -5,16 +5,17 @@ const placeholder = require("../../../assets/avatar_placeholder.png");
 import { QueryStats } from "../molecules";
 import { IQueryContent, IQueryStats } from "../../definitions/query-definitions";
 import { IUser } from "node-rest-objects/dist/data/user-management";
-import { IQuery } from "node-rest-objects/dist/data/queries";
+import { IQuery, IResponse } from "node-rest-objects/dist/data/queries";
 import Tags from "react-native-tags";
 import { Options } from "../atoms";
 import reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
-import { MenuModes } from "../../definitions/common-definitions";
+import { FullViewType, MenuModes } from "../../definitions/common-definitions";
 
 type T = any
 interface QueryViewProps{
-    query:RESTObject<T> ,
+	type:FullViewType
+    content:RESTObject<T> ,
 	style?: ViewStyle | Array<ViewStyle> | null;
 	onComment?:any,
 	commentDisabled?:any;
@@ -22,8 +23,11 @@ interface QueryViewProps{
     itemNav?: () => void
 }
 
-const QueryFullView = ({
-	query,
+
+
+const PostFullView = ({
+	type = FullViewType.QUERY,
+	content,
 	style = null,
 	onComment = () => {
 		Alert.alert(`happy commenting`);
@@ -36,9 +40,19 @@ const QueryFullView = ({
 		Alert.alert(`this will trigger an update`);
 	},
 }: QueryViewProps) => {
-	const data:IQuery = query.data;
+	const data:IQuery|IResponse = content.data;
 	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats}= data;
 	const date = createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5);
+	const generateTags = () => {
+		switch(type){
+			case FullViewType.QUERY:
+				return published?.tags;
+			case FullViewType.RESPONSE:
+				return ["RESPONSE"];
+		}
+	}
+	let tags = generateTags();
+
     return (
         <Card  transparent style={style}>
 			<CardItem
@@ -55,7 +69,7 @@ const QueryFullView = ({
 				<Left>
 				<Body>
                     <Tags
-                        initialTags = {published?.tags}
+                        initialTags = {tags}
 						readonly
 						tagTextStyle={{fontSize:20,color:"white"}}
 						tagContainerStyle={{backgroundColor:"black",height:40}}
@@ -81,4 +95,4 @@ const QueryFullView = ({
     )
 }
 
-export default QueryFullView
+export default PostFullView

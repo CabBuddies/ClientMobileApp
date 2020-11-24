@@ -1,4 +1,4 @@
-import { Comment, IQuery, Query } from "node-rest-objects/dist/data/queries";
+import { Comment, IQuery, IResponse, Query, Response } from "node-rest-objects/dist/data/queries";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import SearchRESTObject from "node-rest-objects/dist/rest/search.rest.object";
 import Reactotron from "../../dev/ReactotronConfig";
@@ -28,6 +28,7 @@ const defaultSearchRequest = {
 //         }
 //     })
 // }
+// ------------------------------- FETCH APIs ------------------------------------------------
 export async function getAllQueries(request = defaultSearchRequest){
     try{
         // getDataSendRequestTest();
@@ -40,10 +41,57 @@ export async function getAllQueries(request = defaultSearchRequest){
         return querySro.response;
     }
     catch(error){
-        Reactotron.log!("Error in query-search",{message:error});
+        Reactotron.log!("Query-API: Error in query-search",error);
         throw error;
     }
 }
+export async function getAllResponses(query:Query,request){
+    try {
+        const answer:Response =  new Response();
+        answer.setQueryId(query.data._id);
+        const searchRestObject = new SearchRESTObject(answer);
+        searchRestObject.setRequest(request);
+        await searchRestObject.search();
+        const preRead = searchRestObject.response.result;
+        const answers = await Promise.all(preRead.map(responseReader));
+        Reactotron.log!("answers",answers);
+        return answers;
+    } catch (error) {
+        Reactotron.log!(`Query-API: Error getting responses queryId:${query.data._id}`,error);
+        throw error;
+    }
+}
+async function responseReader(resp){
+    const answer = <Response>resp;
+    await answer.read();
+    return answer;
+}
+async function commentReader(cmnt){
+    const comment = <Comment>cmnt;
+    await comment.read();
+    return comment;
+}
+
+export async function getAllComments(restObj:RESTObject<IQuery | IResponse>,request){
+    try{
+        Reactotron.log!("GETTING ALL COMMENTS.......");
+        let comment:Comment = new Comment();
+        comment.data.queryId = restObj.data._id;
+        const searchComment = new SearchRESTObject(comment);
+        searchComment.setRequest(request);
+        await searchComment.search();
+        const cmnts = searchComment.response.result;
+        const comments = await Promise.all(cmnts.map(commentReader));
+        Reactotron.log!("comments",comments);
+        return comments;
+    }
+    catch(error){
+        reactotron.log!("Query-API: comment fetch api error",error);
+        throw error;
+    }  
+}
+
+// ------------------------------- CREATE APIs ------------------------------------------------
 export async function createQuery(request){
     try {
         const query:Query = new Query();
@@ -54,12 +102,12 @@ export async function createQuery(request){
         // Reactotron.log!("query: ",query);
         return query;    
     } catch (error) {
-        Reactotron.log!(`error creating the query`,error);
+        Reactotron.log!(`Query-API: error creating the query`,error);
         throw error;
     }
 }
 
-export async function createComment(query:RESTObject<IQuery>,request){
+export async function createComment(query:RESTObject<IQuery | IResponse>,request){
     try {
         let comment:Comment = new Comment();
         comment.data.body = request;
@@ -68,45 +116,24 @@ export async function createComment(query:RESTObject<IQuery>,request){
         Reactotron.log!("comment-api-response",comment.data);
         return comment;
     } catch (error) {
-        Reactotron.log!("Error creating comment",error);
+        Reactotron.log!("Query-API: Error creating comment",error);
+        throw error;
+    }   
+}
+
+export async function createResponse(query:Query,request){
+    try {
+        const response:Response = new Response();
+        response.setQueryId(query.data._id);
+        response.setPublished(request);
+        response.setStatus("published");
+        await response.create();
+        // Reactotron.log!("response: ",response);
+        return response;    
+    } catch (error) {
+        Reactotron.log!(`Query-API: error creating the response`,error);
         throw error;
     }
-    
 }
-
-async function commentReader(cmnt){
-    const comment = <Comment>cmnt;
-    await comment.read();
-    return comment;
-}
-
-export async function getAllComments(query:RESTObject<IQuery>,request){
-    try{
-        Reactotron.log!("GETTING ALL COMMENTS.......");
-        let comment:Comment = new Comment();
-        comment.data.queryId = query.data._id;
-        const searchComment = new SearchRESTObject(comment);
-        searchComment.setRequest(request);
-        await searchComment.search();
-        const cmnts = searchComment.response.result;
-        const comments = await Promise.all(cmnts.map(commentReader));
-        Reactotron.log!("comments",comments);
-        return comments;
-    }
-    catch(error){
-        reactotron.log!("comment fetch api error",error);
-        throw error;
-    }
-    
-}
-
-// export async function getQuery(request){
-//     try{
-//         const query:Query = new Query();
-        
-//     }
-//     catch(error){
-
-//     }
-// }
+// ------------------------------- UPDATE APIs ------------------------------------------------
 

@@ -1,2 +1,3 @@
 export { QueryStats } from "./QueryStats";
+export {default as ContentLoading} from "./ContentLoading"; 
 

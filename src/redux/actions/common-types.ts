@@ -22,11 +22,11 @@ export interface IFetchAction{
     errorType?:string;
 }
 
-// export interface IFetchActionCreators{
-//     getFetchLoading: () => IFetchAction;
-//     getFetchFailure: (error:ApiError) => IFetchAction;
-//     getFetchSuccess: (data:any) => IFetchAction;
-// }
+export interface IFetchActionCreators{
+    createLoadingAction: () => any;
+    createFailureAction: (error:any) => any;
+    createSuccessAction: (data:any) => any;
+}
 
 const createLoadingAction = name => ():IFetchAction => {
     return {
