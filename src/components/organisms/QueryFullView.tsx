@@ -10,6 +10,7 @@ import Tags from "react-native-tags";
 import { Options } from "../atoms";
 import reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
+import { MenuModes } from "../../definitions/common-definitions";
 
 type T = any
 interface QueryViewProps{
@@ -43,20 +44,26 @@ const QueryFullView = ({
 			<CardItem
 				header
 			>
-				<H2> {published?.title} </H2>
+				<Left>
+					<H2> {published?.title} </H2>
+				</Left>
+				<Right>
+					<Options mode={MenuModes.CRUD}/>
+				</Right>
 			</CardItem>
-			<CardItem cardBody button onLongPress={() => Options()}>
+			<CardItem cardBody>
 				<Left>
 				<Body>
                     <Tags
                         initialTags = {published?.tags}
 						readonly
-						tagTextStyle={{fontSize:10,color:"white"}}
-						tagContainerStyle={{backgroundColor:"black",height:20}}
+						tagTextStyle={{fontSize:20,color:"white"}}
+						tagContainerStyle={{backgroundColor:"black",height:40}}
                     />
 					<Text> {published?.body} </Text>
 				</Body>
 				</Left>
+				
 			</CardItem>
 			<CardItem button onPress={headerNav}>
 				<Left>
