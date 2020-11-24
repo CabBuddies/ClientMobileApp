@@ -1,4 +1,4 @@
-import React, {useRef, useLayoutEffect} from 'react'
+import React, {useRef, useLayoutEffect, useMemo} from 'react'
 import { View } from 'react-native';
 import { Text, Container, Content, Body } from "native-base";
 import { QueryPreview } from '../../../components/organisms'
@@ -17,8 +17,9 @@ import { loadComments, writeComment } from '../../../redux/actions/query-actions
 import { CButton } from '../../../components/atoms';
 import { Alert, StyleSheet } from 'react-native';
 import CommentListView from '../../../components/molecules/CommentListView';
-import BottomSheet from 'reanimated-bottom-sheet';
+import BottomSheet from '@gorhom/bottom-sheet';
 import Animated from 'react-native-reanimated';
+import { TextInput as PaperInput } from 'react-native-paper';
 
 type QueryViewScreenNav = StackNavigationProp<QueryStackParamList>;
 interface QueryViewScreenProps{
@@ -40,7 +41,7 @@ const defaultRequest = {
 function QueryView({ navigation, queryData,loading, newComment, getComments }: QueryViewScreenProps) {
     reactotron.log!("queryData in QUERY_VIEW",queryData,loading);
     const commentRef = useRef<any>();
-    const fall = new Animated.Value(1);
+    const snapPoints = useMemo(() => [0,'25%','50%','75%','90%'],[]);
     const cancelNav = () => {
         navigation.navigate(Screens.GUIDE_ME);
     }
@@ -57,6 +58,7 @@ function QueryView({ navigation, queryData,loading, newComment, getComments }: Q
         getComments(queryData,defaultRequest)
         .then(() => {
             if(commentRef.current){
+                reactotron.log!("commentRef",commentRef);
                 commentRef.current.snapTo(1);
             }
         })
@@ -76,7 +78,7 @@ function QueryView({ navigation, queryData,loading, newComment, getComments }: Q
         <Container>
             <Content>
                 {
-                    (loading || !queryData)?
+                    (loading && !queryData)?
                     (<Placeholder
                         Left={PlaceholderMedia}
                         Animation={(props) => <Shine {...props} reverse={false}/>}
@@ -90,21 +92,17 @@ function QueryView({ navigation, queryData,loading, newComment, getComments }: Q
                         <PlaceholderLine width={30} />
                         
                     </Placeholder>)
-                    : <QueryFullView query={queryData} onComment={getCommentFunc} />
+                    : <QueryFullView query={queryData} onComment={getCommentFunc} commentDisabled={loading} />
                 }
                 </Content>
                 <BottomSheet
                     ref={commentRef}
-                    snapPoints = {["85%","70%","50%","15%","0%"]}
-                    callbackNode={fall}
-                    borderRadius={10}
-                    enabledGestureInteraction={true}
-                    renderContent={() => <CommentListView />}
-                    renderHeader = {renderSheetHeader}
-                    initialSnap={4}
-                    enabledContentTapInteraction={false}
-                    onOpenStart = {() => reactotron.log!("bottom-sheet-opened")}
-                />
+                    snapPoints = {snapPoints}
+                    initialSnapIndex = {-1}
+                >
+                    <CommentListView/>
+                    
+                </BottomSheet>
                 
         </Container>
     )

@@ -16,6 +16,7 @@ interface QueryViewProps{
     query:RESTObject<T> ,
 	style?: ViewStyle | Array<ViewStyle> | null;
 	onComment?:any,
+	commentDisabled?:any;
     headerNav?: () => void,
     itemNav?: () => void
 }
@@ -25,7 +26,8 @@ const QueryFullView = ({
 	style = null,
 	onComment = () => {
 		Alert.alert(`happy commenting`);
-	}, 
+	},
+	commentDisabled=false,
 	headerNav = () => {
 		Alert.alert(`header clicked`);
 	},
@@ -66,7 +68,7 @@ const QueryFullView = ({
 				</Left>
 			</CardItem>
 			<CardItem footer bordered style={{ alignItems: "center", height: 50 }}>
-				<QueryStats stats={stats} onComment = {onComment}/>
+				<QueryStats stats={stats} onComment = {onComment} commentDisabled={commentDisabled}/>
 			</CardItem>
 		</Card>
     )

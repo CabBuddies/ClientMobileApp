@@ -2,44 +2,21 @@ import { User } from "node-rest-objects/dist/data/user-management";
 import Reactotron from "../../../dev/ReactotronConfig";
 import { IUserAction, UserActions } from "./action-types";
 import { ApiError } from "./common-types";
+import { typeGenerator } from "../generators";
+import { apiActionGenerator } from "./common-types";
+import { CoreActions } from "./action-types";
 
-
-function getUserLoading(){
-    return {
-        type:UserActions.FETCH_BEGIN,
-        loading:true,
-        payload:undefined
-    }
-}
-
-function getUserFailure(error:ApiError){
-    return {
-        type:UserActions.FETCH_ERROR,
-        loading:false,
-        payload:undefined,
-        error:error.message
-    }
-}
-function getUserSuccess(data){
-    return {
-        type:UserActions.FETCH_SUCCESS,
-        loading:false,
-        payload:data
-    }
-}
+const userFetchActions:any = apiActionGenerator(CoreActions.USER_FETCH);
 
 export function getUser(){
     const user:User =  new User();
     return async dispatch => {
-        dispatch(getUserLoading());
-        Reactotron.log!(`user(before API call) in thunk: `, user);
-        user.getMe()
+        dispatch(userFetchActions.createLoadingAction());
+        await user.getMe()
         .then(() => {
-            Reactotron.log!(`user(after API call) data in thunk: `, user.data);
-            dispatch(getUserSuccess(user.data));
+            dispatch(userFetchActions.createSuccessAction(user.data));
         }).catch(error => {
-            Reactotron.log!(`user(after API call) data in thunk: `, error);
-            dispatch(getUserFailure(error));
+            dispatch(userFetchActions.createFailureAction(error));
         });
     }
 }

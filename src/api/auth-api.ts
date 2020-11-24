@@ -33,18 +33,21 @@ export async function signUpApp(request:any)
       const response = await Auth.register(email, password, firstname, lastname, "inapp");
       return response;
     } catch (err) {
-      Reactotron.log!("Error getting", err);
+      Reactotron.log!("Error in signUp API", err);
       throw err;
     }
 }
 
-// export async function signOut(request){
-//     try{
-//     }
-//     catch(err){
-
-//     }
-// }
+export async function signOutApi(){
+    try{
+      const response = await Auth.signOut();
+      return response;
+    }
+    catch(err){
+      Reactotron.log!("Error in signOut API", err);
+      throw err;
+    }
+}
 
 // export async function getUserDetails(token)
 // {

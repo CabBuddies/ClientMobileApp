@@ -1,5 +1,5 @@
 import { AuthActions, IAuthAction }  from './action-types';
-import { signInApp,signUpApp } from "../../api/auth-api";
+import { signInApp,signUpApp, signOutApi } from "../../api/auth-api";
 import Reactotron from "../../../dev/ReactotronConfig";
 import { ApiError } from "./common-types";
 
@@ -31,12 +31,26 @@ export function authFailure(error:ApiError):IAuthAction{
     }
 }
 
-export function signOut():IAuthAction{
+export function logOut(data?:any):IAuthAction{
     return{
         type:AuthActions.LOGOUT,
         isSignedIn:false,
         anonymous:false,
     }
+}
+
+//logout thunk
+export function signOut(){
+    return dispatch => {
+        signOutApi()
+        .then((resp) => {
+            Reactotron.log!("In auth-action: signOut response",resp);
+            dispatch(logOut(resp));
+        }).catch(error => {
+            Reactotron.log!("Error signing out",error);
+        })
+    }
+    
 }
 
 // login thunk

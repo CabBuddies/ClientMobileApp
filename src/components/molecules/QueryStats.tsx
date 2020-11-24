@@ -11,16 +11,18 @@ interface QueryStatsProps{
     stats: IQueryStats;
     onComment?: () => void;
     onOpinion?: () => void;
+    scoreOnly?:boolean;
+    commentDisabled?:boolean
 }
 
-export function QueryStats({stats, onComment, onOpinion}: QueryStatsProps) {
+export function QueryStats({stats, onComment, onOpinion, scoreOnly=false,commentDisabled=false}: QueryStatsProps) {
     return (
         <Grid >
             <Row style = {{alignItems: 'center'}}>
             
-                <VotesAtom voteCount = {stats.score}/>
+                <VotesAtom scoreOnly={scoreOnly} voteCount = {stats.score}/>
             
-                <CommentsAtom commentCount = {stats.commentCount} onCommentPress={onComment}/>
+                <CommentsAtom commentCount = {stats.commentCount} onCommentPress={onComment} commentDisabled={commentDisabled}/>
             
                 <ViewsAtom views = {stats.viewCount}/>
             

@@ -5,10 +5,23 @@ import { ICommentData } from '../../definitions/query-definitions';
 const placeholder = require("../../../assets/avatar_placeholder.png");
 
 const CommentView = ({comment}) => {
-    const {body,author,createdAt}:ICommentData= comment.data;
+    if(!comment.data){
+        comment.data = {
+            body: "comment text",
+            author:{
+                displayPicture:"",
+                firstName:"user",
+                lastNAme:"name"
+            },
+            createdAt: new Date().toISOString()
+
+        }
+    }
+    const {body,author,createdAt}:ICommentData= comment?.data;
     const date = createdAt?.split('T');
     return (
-        <Card>
+        comment.data  &&
+        <Card transparent>
             <CardItem header>
                 <Left>
                 <Thumbnail small source={author?.displayPicture||placeholder} />
