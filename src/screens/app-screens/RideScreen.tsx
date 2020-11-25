@@ -8,11 +8,6 @@ export default function RideScreen({ navigation }) {
     
     return(
         <Container>
-            <Header>
-                {/* <Body> */}
-                    <Title>Find a Ride </Title>
-                {/* </Body> */}
-            </Header>
             <Content>
                 <MapView style={styles.mapStyle}/>
                 <Text ></Text>

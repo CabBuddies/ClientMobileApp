@@ -122,8 +122,7 @@ function TravelQueryScreen({navigation,cards,loading,error,getQueries,getQuery}:
             <FlatList data = {cards?.result} renderItem = {renderItem} 
                 keyExtractor = {item => (item)?item.data._id:`${Date.now()}`}
                 ListEmptyComponent = {placeholder}
-                refreshControl = {<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)}/>}
-                
+                refreshControl = {<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)}/>}  
             />
               
         </Container>
