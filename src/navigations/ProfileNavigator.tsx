@@ -2,7 +2,7 @@
  * ProfileNavigator - main navigator which holds entire app navigation.
  */
 import React from 'react';
-import { createDrawerNavigator, DrawerItem, DrawerContentScrollView } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerItem, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { Screens } from "../definitions/screen-definitions";
 import MyProfileScreen from '../screens/user-screens/MyProfileScreen';
 import SettingsScreen from '../screens/user-screens/SettingsScreen';
@@ -61,16 +61,18 @@ function ProfileDrawerNavigator({ signOut }: any) {
     const navigation = useNavigation();
     return (
         <ProfileDrawer.Navigator
+            drawerType="slide"
             initialRouteName={Screens.APP}
             drawerContent={
                 (props) => {
                     return (
                         <DrawerContentScrollView {...props}>
-                            <View>
+                            <DrawerItemList {...props} />
+                            {/* <View>
                                 <DrawerItem label="Profile" onPress={() => { navigation.navigate(Screens.PROFILE) }} />
                                 <DrawerItem label="Settings" onPress={() => { navigation.navigate(Screens.SETTINGS) }} />
-                                <DrawerItem label="Sign Out" style={{ backgroundColor: "#3F51B5" }} labelStyle={{ color: "#fffeee", fontSize: 15, fontWeight: "bold" }} onPress={signOut} />
-                            </View>
+                            </View> */}
+                            <DrawerItem label="Sign Out" style={{ backgroundColor: "#3F51B5" }} labelStyle={{ color: "#fffeee", fontSize: 15, fontWeight: "bold" }} onPress={signOut} />
                         </DrawerContentScrollView>
                     )
                 }

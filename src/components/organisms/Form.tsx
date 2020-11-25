@@ -5,6 +5,7 @@ import { InputField }  from '../atoms'
 import { Form, Text } from 'native-base';
 import {FormikProps} from "formik";
 import { Grid, Col, Row} from 'react-native-easy-grid';
+import { Colors } from 'react-native-paper';
 
 interface Values{
   [val:string]:string;
@@ -20,7 +21,7 @@ export default function CustomForm({type,formik}: AuthFormProps) {
               <FormField
               hasIcon label="Email"
               itemProps = {{floatingLabel:true, error:(formik.touched.email && formik.errors.email)?true:false}}
-              icon = "ios-mail" iconStyle = {{color:"#3F51B5"}}
+              icon = "ios-mail" iconStyle = {styles.iconStyle}
               changeHandler = {formik.handleChange('email')}
               blurHandler = {formik.handleBlur('email')}
               value = {formik.values.email}
@@ -33,7 +34,7 @@ export default function CustomForm({type,formik}: AuthFormProps) {
               hasIcon label="Password"
               itemProps = {{floatingLabel:true,error:(formik.touched.password && formik.errors.password)?true:false}}
               inputProps = {{secureTextEntry:true}}
-              icon = "ios-lock" iconStyle = {{color:"#3F51B5"}}
+              icon = "ios-lock" iconStyle = {styles.iconStyle}
               changeHandler = {formik.handleChange('password')}
               blurHandler = {formik.handleBlur('password')}
               value = {formik.values.password}
@@ -59,7 +60,7 @@ export default function CustomForm({type,formik}: AuthFormProps) {
             <FormField
               hasIcon label="First Name"
               itemProps = {{floatingLabel:true, error:(formik.touched.firstname && formik.errors.firstname)?true:false}}
-              icon = "md-person" iconStyle = {{color:"#3F51B5"}}
+              icon = "md-person" iconStyle = {styles.iconStyle}
               changeHandler = {formik.handleChange('firstname')}
               blurHandler = {formik.handleBlur('firstname')}
               value = {formik.values.firstname}
@@ -71,7 +72,7 @@ export default function CustomForm({type,formik}: AuthFormProps) {
             <FormField
               hasIcon label="Last Name"
               itemProps = {{floatingLabel:true, error:(formik.touched.lastname && formik.errors.lastname)?true:false}}
-              icon = "md-person" iconStyle = {{color:"#3F51B5"}}
+              icon = "md-person" iconStyle = {styles.iconStyle}
               changeHandler = {formik.handleChange('lastname')}
               blurHandler = {formik.handleBlur('lastname')}
               value = {formik.values.lastname}
@@ -84,7 +85,7 @@ export default function CustomForm({type,formik}: AuthFormProps) {
               hasIcon label="Email"
               itemProps = {{floatingLabel:true, error:(formik.touched.email && formik.errors.email)?true:false}}
               inputProps = {{autoCapitalize:"none"}}
-              icon = "ios-mail" iconStyle = {{color:"#3F51B5"}}
+              icon = "ios-mail" iconStyle = {styles.iconStyle}
               changeHandler = {formik.handleChange('email')}
               blurHandler = {formik.handleBlur('email')}
               value = {formik.values.email}
@@ -97,7 +98,7 @@ export default function CustomForm({type,formik}: AuthFormProps) {
               hasIcon label="Password"
               itemProps = {{floatingLabel:true, error:(formik.touched.password && formik.errors.password)?true:false}}
               inputProps = {{secureTextEntry:true}}
-              icon = "ios-lock" iconStyle = {{color:"#3F51B5"}}
+              icon = "ios-lock" iconStyle = {styles.iconStyle}
               changeHandler = {formik.handleChange('password')}
               blurHandler = {formik.handleBlur('password')}
               value = {formik.values.password}
@@ -111,7 +112,7 @@ export default function CustomForm({type,formik}: AuthFormProps) {
               hasIcon label="Confirm Password"
               itemProps = {{floatingLabel:true,error:(formik.touched.confirmPassword && formik.errors.confirmPassword)?true:false}}
               inputProps = {{secureTextEntry:true}}
-              icon = "ios-lock" iconStyle = {{color:"#3F51B5"}}
+              icon = "ios-lock" iconStyle = {styles.iconStyle}
               changeHandler = {formik.handleChange('confirmPassword')}
               blurHandler = {formik.handleBlur('confirmPassword')}
               value = {formik.values.confirmPassword}
@@ -143,6 +144,9 @@ const styles = StyleSheet.create({
       flex:1,
       paddingVertical: 10,
       paddingHorizontal:24
+    },
+    iconStyle: {
+      color: 'rgb(22,109,254)'
     }
 
 })
