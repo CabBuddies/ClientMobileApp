@@ -1,4 +1,4 @@
-import React,{useRef} from 'react'
+import React,{ useRef, useMemo } from 'react'
 import { StyleSheet, FlatList, View} from 'react-native'
 import { FullViewType, PlaceholderSize, QueryFormType } from '../../definitions/common-definitions';
 import {Colors, Text, Title, Button as PaperButton } from 'react-native-paper';
@@ -37,10 +37,11 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
         title: yup.string().required("A title is Required"),
         body: yup.string().required("description is required")
     });
-    reactotron.log!("inside response-list",responses);
     const renderResponse=({item}) => {
         return <PostFullView type={FullViewType.RESPONSE} content={item} />
     }
+
+    const memoizedRender = useMemo(() => renderResponse,[responses]);
     const submit= () => {
         if(formRef.current){
             formRef.current.handleSubmit();
@@ -88,7 +89,7 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
         }
     }
     return (
-        <FlatList data={responses} renderItem={renderResponse}
+        <FlatList data={responses} renderItem={memoizedRender}
             keyExtractor = {item => (item)?item.data._id:`${Date.now()}`}
             ListEmptyComponent={renderEmptyComponent}
             ListHeaderComponent={headerComponent}

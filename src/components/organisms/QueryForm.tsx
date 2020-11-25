@@ -54,7 +54,7 @@ function QueryForm({formik,mode}:QueryFormProps){
         <Form style={{flex:1,paddingHorizontal:10}}>
             <FormField
                 label = "Title"
-                itemProps = {{floatingLabel:true, error:(formik.errors.title)?true:false}}
+                itemProps = {{floatingLabel:true, error:(formik.errors.title)?true:false,regular:true}}
                 inputProps = {{maxLength:100,style:styles.textStyle}}
                 changeHandler = {formik.handleChange('title')}
                 blurHandler = {formik.handleBlur('title')}
@@ -63,8 +63,9 @@ function QueryForm({formik,mode}:QueryFormProps){
             {
                 formik.touched.title && formik.errors.title && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.title}</Text>
             }
-            
-            
+            {
+                showTags()
+            }
             
             {
                 formik.touched.tags && formik.errors.tags && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.tags}</Text>

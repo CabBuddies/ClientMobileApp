@@ -1,11 +1,12 @@
 import React from "react";
-import { Alert, ViewStyle } from "react-native";
-import { Card, CardItem, Text, Left, Body, Thumbnail, H2, Right } from "native-base";
+import { Alert, StyleSheet, ViewStyle } from "react-native";
+import {Text, Left, Body, Thumbnail, H2, Right } from "native-base";
 const placeholder = require("../../../assets/avatar_placeholder.png");
 import { QueryStats } from "../molecules";
 import { IQueryContent, IQueryStats } from "../../definitions/query-definitions";
 import { IUser } from "node-rest-objects/dist/data/user-management";
 import { IQuery, IResponse } from "node-rest-objects/dist/data/queries";
+import { Avatar, Card, Chip, Colors, Paragraph } from "react-native-paper"; 
 import Tags from "react-native-tags";
 import { Options } from "../atoms";
 import reactotron from "../../../dev/ReactotronConfig";
@@ -22,8 +23,6 @@ interface QueryViewProps{
     headerNav?: () => void,
     itemNav?: () => void
 }
-
-
 
 const PostFullView = ({
 	type = FullViewType.QUERY,
@@ -52,9 +51,69 @@ const PostFullView = ({
 		}
 	}
 	let tags = generateTags();
+	const renderAvatar = (props) => {
+		if(author?.displayPicture){
+			const uri = author?.displayPicture;
+			return <Avatar.Image {...props} source={{uri:uri}} />
+		}
+		else{
+			const text = author?.firstName.charAt(0)+author?.lastName.charAt(0);
+			return <Avatar.Text {...props} style={{backgroundColor:Colors.blueA700}} label={text} />
+		}
+	} 
 
     return (
-        <Card  transparent style={style}>
+        <Card>
+			<Card.Title title={published?.title} right={(props) => <Options {...props} mode={MenuModes.CRUD}/>}/>
+			<Card.Content>
+				<Tags
+					initialTags = {tags}
+					readonly
+					containerStyle={styles.tagContainer}
+					renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
+						<Chip key={`${tag}-${index}`} onPress={onPress} 
+							style={[styles.tag, (type!==FullViewType.QUERY)?styles.responseTag:styles.queryTag]} 
+							textStyle={styles.tagText}
+						>
+						  {tag}
+						</Chip>
+					  )}
+                />
+				<Paragraph>{published?.body}</Paragraph>
+			</Card.Content>
+				<Card.Title title={author?.firstName +' '+ author?.lastName} subtitle={date} left={(props) => renderAvatar(props)}/>
+			<Card.Actions>
+				<QueryStats stats={stats} onComment = {onComment} commentDisabled={commentDisabled}/>
+			</Card.Actions>
+		</Card>
+    )
+}
+
+export default PostFullView
+
+const styles = StyleSheet.create({
+	tagContainer:{
+		justifyContent:"space-evenly",
+		padding:2
+	},
+	tag:{
+		justifyContent:"center",
+	},
+	queryTag:{
+		backgroundColor:Colors.blueA700,
+	},
+	responseTag:{
+		backgroundColor:Colors.green600,
+	},
+	tagText:{
+		fontSize:12,
+		color:Colors.white
+	}
+})
+
+
+
+/* <Card  transparent style={style}>
 			<CardItem
 				header
 			>
@@ -91,8 +150,4 @@ const PostFullView = ({
 			<CardItem footer bordered style={{ alignItems: "center", height: 50 }}>
 				<QueryStats stats={stats} onComment = {onComment} commentDisabled={commentDisabled}/>
 			</CardItem>
-		</Card>
-    )
-}
-
-export default PostFullView
+		</Card> */
