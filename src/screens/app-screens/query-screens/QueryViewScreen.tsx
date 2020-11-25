@@ -19,6 +19,7 @@ import { ContentLoading } from '../../../components/molecules';
 import { FullViewType, PlaceholderSize } from '../../../definitions/common-definitions';
 import ResponseList from '../../../components/organisms/ResponseList';
 import { Colors } from 'react-native-paper';
+import { VirtualizedContent } from '../../../components/organisms';
 
 type QueryViewScreenNav = StackNavigationProp<QueryStackParamList>;
 interface QueryViewScreenProps{
@@ -81,16 +82,14 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
 
     return (
         <Container>
-                
-                {
-                    (loading && !queryData)?
-                    (<ContentLoading size={PlaceholderSize.MEDIUM}/>)
-                    : <PostFullView type={FullViewType.QUERY} content={queryData} onComment={getCommentFunc} commentDisabled={loading} />
-                }
-                
-                <View style={styles.responseContainer}>
+                <VirtualizedContent>
+                    {
+                        (loading && !queryData)?
+                        (<ContentLoading size={PlaceholderSize.MEDIUM}/>)
+                        : <PostFullView type={FullViewType.QUERY} content={queryData} onComment={getCommentFunc} commentDisabled={loading} />
+                    }
                     <ResponseList />
-                </View>
+                </VirtualizedContent>
                 <BottomSheet
                     ref={commentRef}
                     snapPoints = {snapPoints}

@@ -14,3 +14,8 @@ export enum PlaceholderSize{
     SHORT = "short",
     MEDIUM = "medium"
 }
+
+export enum QueryFormType{
+    QUERY="query",
+    RESPONSE="response"
+}
