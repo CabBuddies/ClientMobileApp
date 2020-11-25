@@ -63,7 +63,7 @@ const PostFullView = ({
 	} 
 
     return (
-        <Card>
+        <Card style={styles.card}>
 			<Card.Title title={published?.title} right={(props) => <Options {...props} mode={MenuModes.CRUD}/>}/>
 			<Card.Content>
 				<Tags
@@ -82,7 +82,7 @@ const PostFullView = ({
 				<Paragraph>{published?.body}</Paragraph>
 			</Card.Content>
 				<Card.Title title={author?.firstName +' '+ author?.lastName} subtitle={date} left={(props) => renderAvatar(props)}/>
-			<Card.Actions>
+			<Card.Actions style={styles.actions}>
 				<QueryStats stats={stats} onComment = {onComment} commentDisabled={commentDisabled}/>
 			</Card.Actions>
 		</Card>
@@ -92,6 +92,14 @@ const PostFullView = ({
 export default PostFullView
 
 const styles = StyleSheet.create({
+	card:{
+		borderTopWidth:0.5,
+		borderTopColor:Colors.black,
+	},
+	actions:{
+		borderWidth:0.5,
+		borderColor:Colors.black
+	},
 	tagContainer:{
 		justifyContent:"space-evenly",
 		padding:2

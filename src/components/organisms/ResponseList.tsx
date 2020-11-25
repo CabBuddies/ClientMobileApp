@@ -1,7 +1,7 @@
 import React,{ useRef, useMemo } from 'react'
 import { StyleSheet, FlatList, View} from 'react-native'
 import { FullViewType, PlaceholderSize, QueryFormType } from '../../definitions/common-definitions';
-import {Colors, Text, Title, Button as PaperButton } from 'react-native-paper';
+import {Colors, Text, Title, Button as PaperButton, Divider } from 'react-native-paper';
 import PostFullView from './PostFullView';
 import { ContentLoading } from '../molecules';
 import { connect } from 'react-redux';
@@ -93,6 +93,7 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
             keyExtractor = {item => (item)?item.data._id:`${Date.now()}`}
             ListEmptyComponent={renderEmptyComponent}
             ListHeaderComponent={headerComponent}
+            ItemSeparatorComponent={() => <Divider />}
         />
     )
 }
