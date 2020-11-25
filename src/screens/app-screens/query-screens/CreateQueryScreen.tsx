@@ -13,6 +13,7 @@ import { Screens } from '../../../definitions/screen-definitions';
 import { StackNavigationProp, HeaderBackButton } from "@react-navigation/stack";
 import { QueryStackParamList } from "../../../navigations/QueryNavigator";
 import reactotron from 'reactotron-react-native';
+import { QueryFormType } from '../../../definitions/common-definitions';
 
 type CreateQueryScreenNav = StackNavigationProp<QueryStackParamList>;
 
@@ -74,7 +75,7 @@ const CreateQueryScreen = ({navigation, createQuery,queryData,loading,error}:Cre
                         
                     }}
                 >
-                    {(props) => <QueryForm formik={props}/>}
+                    {(props) => <QueryForm mode={QueryFormType.QUERY} formik={props}/>}
                 </Formik>
             </Content>
         </Container>

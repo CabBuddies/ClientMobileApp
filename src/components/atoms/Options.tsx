@@ -88,7 +88,6 @@ export default Options
 
 const styles = StyleSheet.create({
     menuContainer:{
-        paddingTop:50,
         justifyContent:"center"
     },
     divider:{

@@ -1,6 +1,6 @@
 import React from "react";
-import { Alert, ViewStyle } from "react-native";
-import { Card, CardItem, Text, Left, Body, Thumbnail, H1 } from "native-base";
+import { Alert, StyleSheet, ViewStyle } from "react-native";
+import { Left, Body, Thumbnail, H1 } from "native-base";
 const placeholder = require("../../../assets/avatar_placeholder.png");
 import { QueryStats } from "../molecules";
 import { IQueryContent, IQueryStats } from "../../definitions/query-definitions";
@@ -8,6 +8,9 @@ import { IUser } from "node-rest-objects/dist/data/user-management";
 import { IQuery } from "node-rest-objects/dist/data/queries";
 import reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
+import { Avatar, Colors, Card, Paragraph } from "react-native-paper";
+import { Options } from "../atoms";
+import { MenuModes } from "../../definitions/common-definitions";
 
 
 interface QueryPreviewProps {
@@ -32,31 +35,38 @@ export default function QueryPreview({
 }: QueryPreviewProps) {
 	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats} = query.data;
 	const date:string = createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5);
+
+	const renderAvatar = (props) => {
+		if(author?.displayPicture){
+			const uri = author?.displayPicture;
+			return <Avatar.Image {...props} source={{uri:uri}} />
+		}
+		else{
+			const text = author?.firstName.charAt(0)+author?.lastName.charAt(0);
+			return <Avatar.Text {...props} style={{backgroundColor:Colors.blueA700}} label={text} />
+		}
+	} 
 	return (
-		<Card style={style}>
-			<CardItem
-				header
-				button
-				onPress={itemNav}
-			>
-				<H1> {published?.title} </H1>
-			</CardItem>
-			<CardItem cardBody button onPress={headerNav}>
-				<Left>
-					<Thumbnail small source={author?.displayPicture||placeholder} />
-					<Body>
-						<Text> {author?.firstName +' '+ author?.lastName} </Text>
-						<Text note>{date}</Text>
-					</Body>
-				</Left>
-			</CardItem>
-			<CardItem footer bordered style={{ alignItems: "center", height: 50 }}>
-				<QueryStats onComment={()=>Alert.alert(`please open the query to view comments`)} scoreOnly={true} stats={stats} />
-			</CardItem>
+		<Card onPress={itemNav} style={styles.card}>
+			<Card.Title title={published?.title} right={(props) => <Options {...props} mode={MenuModes.CRUD}/>}/>
+			<Card.Title title={author?.firstName +' '+ author?.lastName} subtitle={date} left={(props) => renderAvatar(props)}/>
+			<Card.Actions style={styles.actions}>
+				<QueryStats stats={stats} onComment = {() => Alert.alert(`open the query to comment`)} scoreOnly/>
+			</Card.Actions>
 		</Card>
 	);
 }
 
+const styles=StyleSheet.create({
+	actions:{
+		borderWidth:0.5,
+		borderColor:Colors.black
+	},
+	card:{
+		borderWidth:0.25,
+		borderColor:Colors.black
+	}
+})
 
 
 

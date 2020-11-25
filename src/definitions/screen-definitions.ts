@@ -14,5 +14,6 @@ export enum Screens{
     CHATS = "Chats",
     CHAT_GROUP = "Group",
     CHAT_DIRECT = "Direct",
-    PACKAGE_DELIVERY = "Package Delivery"
+    PACKAGE_DELIVERY = "Package Delivery",
+    GUILD = "Guilds"
 }

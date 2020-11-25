@@ -5,6 +5,8 @@ import {Form, Label, Text, Textarea, Badge, Item } from 'native-base';
 import { FormikProps,FormikErrors, FormikHandlers, FormikHelpers } from "formik";
 import Tags from 'react-native-tags';
 import Reactotron from '../../../dev/ReactotronConfig';
+import { QueryFormType } from '../../definitions/common-definitions';
+import { Colors } from 'react-native-paper';
 
 interface QFormValues{
     title:string;
@@ -13,14 +15,46 @@ interface QFormValues{
     server?:string;
     [val:string]:any
 }
+interface QueryFormProps{
+    formik:any;
+    mode:QueryFormType;
+}
 // type QFormik = FormikProps<QFormValues>  & FormikHandlers & FormikHelpers<QFormValues>;
-function QueryForm({formik}:any){
+function QueryForm({formik,mode}:QueryFormProps){
     // Reactotron.log!("formik-touched:",formik.touched);
+    const showTags = () => {
+        switch(mode){
+            case QueryFormType.QUERY:
+                return(
+                    <Tags
+                        initialText = ""
+                        textInputProps = {{
+                            placeholder: "Type your tags, comma-separated",
+                        }}
+                        initialTags = {formik.values.tags}
+                        inputStyle={styles.tagInput}
+                        onChangeTags = {tags => formik.setFieldValue('tags',tags)}
+                        containerStyle={styles.tagContainer}
+                        tagTextStyle = {styles.textStyle}
+                        style = {styles.tagsField}
+                    />
+                );
+            case QueryFormType.RESPONSE:
+                return (
+                <Tags
+                    initialTags = {formik.values.tags}
+                    containerStyle={styles.tagContainer}
+                    tagTextStyle = {styles.textStyle}
+                    readonly
+                />
+                )
+        }
+    }
     return (
         <Form style={{flex:1,paddingHorizontal:10}}>
             <FormField
                 label = "Title"
-                itemProps = {{floatingLabel:true, error:(formik.errors.title)?true:false}}
+                itemProps = {{floatingLabel:true, error:(formik.errors.title)?true:false,regular:true}}
                 inputProps = {{maxLength:100,style:styles.textStyle}}
                 changeHandler = {formik.handleChange('title')}
                 blurHandler = {formik.handleBlur('title')}
@@ -29,20 +63,9 @@ function QueryForm({formik}:any){
             {
                 formik.touched.title && formik.errors.title && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.title}</Text>
             }
-            
-            <Tags
-                initialText = ""
-                textInputProps = {{
-                    placeholder: "Type your tags, comma-separated",
-                }}
-                initialTags = {formik.values.tags}
-                inputStyle={styles.tagInput}
-                onChangeTags = {tags => formik.setFieldValue('tags',tags)}
-                containerStyle={styles.tagContainer}
-                tagTextStyle = {styles.textStyle}
-                style = {styles.tagsField}
-                
-            />
+            {
+                showTags()
+            }
             
             {
                 formik.touched.tags && formik.errors.tags && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.tags}</Text>
@@ -62,22 +85,6 @@ function QueryForm({formik}:any){
             {
                 formik.errors.server && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.server}</Text>
             }
-            {/* <Button
-                rounded success bordered
-                title = "save as draft"
-                onPress= {() => Alert.alert("this will save it as draft")}
-            />
-             <Button 
-                rounded primary
-                onPress= {formik.handleSubmit}
-                title = "Publish"
-              />
-              <Button
-                    onPress = {() => Alert.alert("Are you sure?")}
-                    bordered danger rounded
-                    container={{ flex: 1, justifyContent: "center" }}
-                    title = "Discard"
-                /> */}
         </Form>
     )
 }
@@ -114,8 +121,13 @@ const styles = StyleSheet.create({
     tagContainer:{
         justifyContent:"center"
     },
+    tagContainerR:{
+        justifyContent:"center",
+        backgroundColor:Colors.blueA400,
+        color:Colors.white
+    },
     tagInput:{
-        backgroundColor:"white",
+        backgroundColor:Colors.white,
         fontSize:20
     }
 })

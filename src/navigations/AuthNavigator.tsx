@@ -11,7 +11,7 @@ const AuthNavigator = createStackNavigator();
 
 export default function AuthStackNavigator(props: any) {
     return (
-        <AuthNavigator.Navigator initialRouteName={Screens.SIGN_IN} >
+        <AuthNavigator.Navigator initialRouteName={Screens.SIGN_IN}  >
             <AuthNavigator.Screen name={Screens.SIGN_IN} component={SignInScreen} />
             <AuthNavigator.Screen name={Screens.SIGN_UP} component={SignUpScreen} />
         </AuthNavigator.Navigator>
