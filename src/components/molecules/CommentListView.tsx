@@ -13,6 +13,7 @@ import { bindActionCreators } from 'redux';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 import { defaultRequest } from '../../definitions/query-definitions';
 import { Grid,Row,Col } from 'react-native-easy-grid';
+import { BottomSheetFlatList, TouchableOpacity as SheetTouchable } from '@gorhom/bottom-sheet'
 
 type T = any
 interface CommentViewProps{
@@ -30,13 +31,8 @@ const commentInitialValues = {
 }
 const CommentListView = ({query,comments,error,loading,getComments,newComment }:CommentViewProps) => {
 
-    // const [commentState,setCommentState] = useState(comments);
-    // useEffect(() => {
-    //     setCommentState(prevState => prevState.concat(comments))
-    // },[comments])
-    reactotron.log!("type",comments,typeof comments);
     const renderListItem = ({item}) => {
-        return <CommentView comment={item}/>
+        return <CommentView comment={item}/>           
     }
     const newCommentForm = () => {
         return (
@@ -65,9 +61,11 @@ const CommentListView = ({query,comments,error,loading,getComments,newComment }:
                                 />
                             </Col>
                             <Col size={1}>
-                                <IconButton icon="send" onPress={handleSubmit}
-                                    disabled={isSubmitting} color={Colors.brown600}
-                                />
+                                <SheetTouchable onPress={handleSubmit} disabled={isSubmitting || values.comment===""}>
+                                    <IconButton icon="send" 
+                                        disabled={isSubmitting || values.comment===""} color={Colors.brown600}
+                                    />
+                                </SheetTouchable>
                             </Col>
                         </Row>
                     </Grid>
@@ -86,7 +84,7 @@ const CommentListView = ({query,comments,error,loading,getComments,newComment }:
                         <Text style={{fontSize:30,color:"red"}}>Oops!Error fetching comments!, {error}</Text>
                     </Content>)
         }
-        else{
+        else if(loading){
             components = x.map((e,i) => {
                 return  (
                         <Placeholder
@@ -100,20 +98,28 @@ const CommentListView = ({query,comments,error,loading,getComments,newComment }:
                 )
             })
         }
+        else{
+            components = (
+                <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+                    <Text> NO COMMENTS YET </Text>
+                </View>
+            )
+        }
         return (<>{components}</>);        
     }
     
     return (
-                <View style ={{
-                    backgroundColor:"white",
-                }}>
-                <FlatList data = {(comments)?comments:[]} renderItem = {renderListItem} 
-                    keyExtractor = {item => (item)?item.data._id:`${Date.now()}`}
+                // <View style ={{
+                //     backgroundColor:"white",
+                // }}>
+                <BottomSheetFlatList data = {(comments)?comments:[]} renderItem = {renderListItem} 
+                    keyExtractor = {item => (item.data)?item.data._id:`${Date.now()}`}
                     ListHeaderComponent = {newCommentForm}
                     ListEmptyComponent = {placeholder}
+                    contentContainerStyle={{backgroundColor:"white"}}
                     // refreshControl = {<RefreshControl refreshing={loading} onRefresh={() => Alert.alert('this will refresh comments')}/>}
                 />
-                </View>
+                // </View>
         )
     
 }

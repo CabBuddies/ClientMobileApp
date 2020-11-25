@@ -8,7 +8,7 @@ import MyProfileScreen from '../screens/user-screens/MyProfileScreen';
 import SettingsScreen from '../screens/user-screens/SettingsScreen';
 import AppTabsNavigator from './AppNavigator';
 import { connect } from 'react-redux';
-import {signOut} from '../redux/actions/auth-action';
+import { signOut } from '../redux/actions/auth-action';
 import { bindActionCreators } from 'redux';
 import { Alert, View } from 'react-native';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
@@ -94,10 +94,10 @@ function ProfileDrawerNavigator({ signOut }: any) {
 //       };
 //   }
 
-function mapDispatchToProps(dispatch){
-    return{
-        signOut: bindActionCreators(signOut,dispatch)
+function mapDispatchToProps(dispatch) {
+    return {
+        signOut: bindActionCreators(signOut, dispatch)
     }
 }
 
-export default connect(null,mapDispatchToProps)(ProfileDrawerNavigator);
+export default connect(null, mapDispatchToProps)(ProfileDrawerNavigator);

@@ -19,7 +19,7 @@ function ChatTopTabNavigator() {
     return(
         <ChatNavigator.Navigator initialRouteName={Screens.CHAT_GROUP} >
             <ChatNavigator.Screen name={Screens.CHAT_GROUP} component={GroupChatScreen} />
-            <ChatNavigator.Screen  name={Screens.CHAT_DIRECT} component={DirectChatScreen} />
+            <ChatNavigator.Screen name={Screens.CHAT_DIRECT} component={DirectChatScreen} />
         </ChatNavigator.Navigator>
     )
 }

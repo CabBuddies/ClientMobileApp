@@ -4,11 +4,7 @@
 
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import ChatNavigator from './ChatNavigator';
-import PackageDeliveryScreen from '../screens/app-screens/PackageDeliveryScreen';
-import RideScreen from '../screens/app-screens/RideScreen';
-import TravelQueryScreen from '../screens/app-screens/query-screens/TravelQueryScreen';
 import QueryNavigatorScreen from './QueryNavigator';
 import { Screens } from "../definitions/screen-definitions";
 import { Icon } from 'native-base';

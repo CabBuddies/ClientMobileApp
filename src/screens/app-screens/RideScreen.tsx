@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Dimensions,StyleSheet } from 'react-native';
-import { Header , Container, Content, Left, Body, Text, Segment, Title} from "native-base";
+import React from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
+import { Container, Content, Text } from "native-base";
 import MapView from 'react-native-maps';
 
 
 export default function RideScreen({ navigation }) {
-    
-    return(
+
+    return (
         <Container>
             <Content>
-                <MapView style={styles.mapStyle}/>
+                <MapView style={styles.mapStyle} />
                 <Text ></Text>
             </Content>
         </Container>
@@ -24,5 +24,5 @@ const styles = StyleSheet.create({
     mapStyle: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
-      },
+    },
 });

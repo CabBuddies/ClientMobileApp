@@ -1,30 +1,32 @@
-import React, {useRef, useLayoutEffect} from 'react'
+import React, {useRef, useLayoutEffect, useMemo, useEffect} from 'react'
 import { View } from 'react-native';
-import { Text, Container, Content, Body } from "native-base";
-import { QueryPreview } from '../../../components/organisms'
-import { IQueryState } from '../../../redux/initialState';
+import { Container, Content, Body } from "native-base";
 import { connect } from 'react-redux';
 import reactotron from '../../../../dev/ReactotronConfig';
-import QueryFullView from '../../../components/organisms/QueryFullView';
-import { Placeholder, PlaceholderLine, PlaceholderMedia, Shine } from 'rn-placeholder';
+import PostFullView from '../../../components/organisms/PostFullView';
 import { HeaderBackButton, StackNavigationProp } from '@react-navigation/stack';
 import {QueryStackParamList} from "../../../navigations/QueryNavigator";
 import { Screens } from '../../../definitions/screen-definitions';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
-import { IQuery } from 'node-rest-objects/dist/data/queries';
+import { IQuery, IResponse } from 'node-rest-objects/dist/data/queries';
 import { bindActionCreators } from 'redux';
-import { loadComments, writeComment } from '../../../redux/actions/query-actions';
+import { loadComments, writeComment,loadResponses,writeResponse } from '../../../redux/actions/query-actions';
 import { CButton } from '../../../components/atoms';
 import { Alert, StyleSheet } from 'react-native';
 import CommentListView from '../../../components/molecules/CommentListView';
-import BottomSheet from 'reanimated-bottom-sheet';
-import Animated from 'react-native-reanimated';
-import { TextInput as PaperInput } from 'react-native-paper';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { ContentLoading } from '../../../components/molecules';
+import { FullViewType, PlaceholderSize } from '../../../definitions/common-definitions';
+import ResponseList from '../../../components/organisms/ResponseList';
+import { Colors } from 'react-native-paper';
+import { VirtualizedContent } from '../../../components/organisms';
 
 type QueryViewScreenNav = StackNavigationProp<QueryStackParamList>;
 interface QueryViewScreenProps{
     navigation: QueryViewScreenNav;
     queryData:RESTObject<IQuery>;
+    responses:RESTObject<IResponse>[];
+    getResponses?:any;
     newComment?:any;
     getComments?:any;
     loading:boolean;
@@ -38,10 +40,10 @@ const defaultRequest = {
 
 
 
-function QueryView({ navigation, queryData,loading, newComment, getComments }: QueryViewScreenProps) {
+function QueryView({ navigation, queryData,loading, getComments,responses, getResponses }: QueryViewScreenProps) {
     reactotron.log!("queryData in QUERY_VIEW",queryData,loading);
     const commentRef = useRef<any>();
-    const fall = new Animated.Value(1);
+    const snapPoints = useMemo(() => [0,'25%','50%','75%'],[]);
     const cancelNav = () => {
         navigation.navigate(Screens.GUIDE_ME);
     }
@@ -58,11 +60,16 @@ function QueryView({ navigation, queryData,loading, newComment, getComments }: Q
         getComments(queryData,defaultRequest)
         .then(() => {
             if(commentRef.current){
+                reactotron.log!("commentRef",commentRef);
                 commentRef.current.snapTo(1);
             }
         })
         
     }
+    
+    useEffect(() => {
+        getResponses(queryData);
+    },[])
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -75,38 +82,22 @@ function QueryView({ navigation, queryData,loading, newComment, getComments }: Q
 
     return (
         <Container>
-            <Content>
-                {
-                    (loading || !queryData)?
-                    (<Placeholder
-                        Left={PlaceholderMedia}
-                        Animation={(props) => <Shine {...props} reverse={false}/>}
-                        style = {{paddingTop:20}}
-                    >
-                        <PlaceholderLine width={80} />
-                        <PlaceholderLine />
-                        <PlaceholderLine />
-                        <PlaceholderLine />
-                        <PlaceholderLine />
-                        <PlaceholderLine width={30} />
-                        
-                    </Placeholder>)
-                    : <QueryFullView query={queryData} onComment={getCommentFunc} />
-                }
-                </Content>
+                <VirtualizedContent>
+                    {
+                        (loading && !queryData)?
+                        (<ContentLoading size={PlaceholderSize.MEDIUM}/>)
+                        : <PostFullView type={FullViewType.QUERY} content={queryData} onComment={getCommentFunc} commentDisabled={loading} />
+                    }
+                    <ResponseList />
+                </VirtualizedContent>
                 <BottomSheet
                     ref={commentRef}
-                    snapPoints = {["85%","70%","50%","15%","0%"]}
-                    callbackNode={fall}
-                    borderRadius={10}
-                    enabledGestureInteraction={true}
-                    renderContent={() => <CommentListView />}
-                    renderHeader = {renderSheetHeader}
-                    initialSnap={4}
-                    enabledContentTapInteraction={false}
-                    enabledContentGestureInteraction={true}
-                    onOpenStart = {() => reactotron.log!("bottom-sheet-opened")}
-                />
+                    snapPoints = {snapPoints}
+                    initialSnapIndex = {-1}
+                    backgroundComponent={() => <View style={styles.bottomSheetBack}/>}
+                >
+                    <CommentListView/> 
+                </BottomSheet>
                 
         </Container>
     )
@@ -116,13 +107,16 @@ function mapStateToProps(state){
     const { queryState } = state;
     return {
         queryData : queryState.query,
-        loading : queryState.loading
+        loading : queryState.loading,
+        responses:queryState.response
     }
 }
 function mapDispatchToProps(dispatch){
     return {
         newComment: bindActionCreators(writeComment,dispatch),
         getComments: bindActionCreators(loadComments,dispatch),
+        newResponse: bindActionCreators(writeResponse,dispatch),
+        getResponses: bindActionCreators(loadResponses,dispatch)
     }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(QueryView)
@@ -149,4 +143,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#00000040',
         marginBottom: 10,
       },
+      responseContainer:{
+          flex:1,
+          paddingTop:40
+      },
+      bottomSheetBack:{
+          backgroundColor:Colors.white,
+      }
 })
