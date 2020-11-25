@@ -5,6 +5,7 @@ import Reactotron from "../../dev/ReactotronConfig";
 import { QueryStatus } from "../redux/initialState";
 import axios from 'axios';
 import reactotron from "reactotron-react-native";
+import queryReducer from "../redux/reducers/query-reducer";
 // const draftTemplateRequest = {
 //     title:"What can I do about the BART being unavailable to San Jose",
 //     tags: ["BART","Bay Area","San Jose","Public Transport"],
@@ -136,4 +137,67 @@ export async function createResponse(query:Query,request){
     }
 }
 // ------------------------------- UPDATE APIs ------------------------------------------------
+export async function updateQuery(query:Query,request){
+    try {
+        query.setPublished(request);
+        query.setStatus("published");
+        await query.update();
+        // Reactotron.log!("query: ",query);
+        return query;    
+    } catch (error) {
+        Reactotron.log!(`Query-API: error updating the query`,error);
+        throw error;
+    }
+}
+export async function updateResponse(response:Response,request){
+    try {
+        response.setPublished(request);
+        response.setStatus("published");
+        await response.update();
+        // Reactotron.log!("response: ",response);
+        return response;    
+    } catch (error) {
+        Reactotron.log!(`Query-API: error updating the response`,error);
+        throw error;
+    }
+}
+export async function updateComment(comment:Comment,request){
+    try {
+        comment.data.body = request;
+        await comment.update();
+        Reactotron.log!("comment-api-response",comment.data);
+        return comment;
+    } catch (error) {
+        Reactotron.log!("Query-API: Error updating comment",error);
+        throw error;
+    }   
+}
+// ------------------------------ DELETE APIs -------------------------------------------------------
+export async function deleteQuery(query:Query){
+    try {
+        await query.delete();
+        return query;
+    } catch (error) {
+        Reactotron.log!(`Query-API: error creating the query`,error);
+        throw error;
+    }
+}
+export async function deleteResponse(response:Response){
+    try {
+        await response.delete();
+        return response;
+    } catch (error) {
+        Reactotron.log!(`Query-API: error creating the query`,error);
+        throw error;
+    }
+}
+export async function deleteComment(comment:Comment){
+    try {
+        await comment.delete();
+        return comment;
+    } catch (error) {
+        Reactotron.log!(`Query-API: error creating the query`,error);
+        throw error;
+    }
+}
 

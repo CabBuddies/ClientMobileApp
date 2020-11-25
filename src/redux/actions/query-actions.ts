@@ -3,7 +3,7 @@ import { apiActionGenerator, ApiError, IFetchActionCreators } from "./common-typ
 import Reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import { IQuery } from "node-rest-objects/dist/data/queries";
-import { createComment, createQuery, createResponse, getAllComments, getAllResponses } from "../../api/query-api";
+import { createComment, createQuery, createResponse, deleteComment, deleteQuery, deleteResponse, getAllComments, getAllResponses, updateComment, updateQuery } from "../../api/query-api";
 import { ErrorType } from "../initialState";
 
 // export function loadingQuery():IQueryAction{
@@ -110,6 +110,34 @@ export function writeQuery(data){
     }
 }
 
+export function editQuery(query,data){
+    return async dispatch => {
+        dispatch(queryUpdateActions.createLoadingAction())
+        updateQuery(query,data)
+        .then(response => {
+            Reactotron.log!("query-create-response",response);
+            dispatch(queryUpdateActions.createSuccessAction(response))
+        }).catch(error => {
+            Reactotron.error!("query-creation-failure",error);
+            dispatch(queryUpdateActions.createFailureAction(error))
+        })
+    }
+}
+
+export function removeQuery(query){
+    return async dispatch => {
+        dispatch(queryUpdateActions.createLoadingAction())
+        deleteQuery(query)
+        .then(response => {
+            Reactotron.log!("query-create-response",response);
+            dispatch(queryUpdateActions.createSuccessAction(response))
+        }).catch(error => {
+            Reactotron.error!("query-creation-failure",error);
+            dispatch(queryUpdateActions.createFailureAction(error))
+        })
+    }
+}
+
 export function loadResponses(query,req){
     return async dispatch => {
 		dispatch(responseFetchActions.createLoadingAction())
@@ -135,6 +163,34 @@ export function writeResponse(query,data){
 	}
 }
 
+export function editResponse(response,data){
+	return async dispatch => {
+		dispatch(responseCreateActions.createLoadingAction());
+		createResponse(response,data)
+		.then(response => {
+			dispatch(responseCreateActions.createSuccessAction(response));
+		}).catch(error => {
+			dispatch(responseCreateActions.createFailureAction(error));
+		})
+	}
+}
+
+export function removeResponse(response){
+    return async dispatch => {
+        dispatch(queryUpdateActions.createLoadingAction())
+        deleteResponse(response)
+        .then(response => {
+            Reactotron.log!("query-create-response",response);
+            dispatch(queryUpdateActions.createSuccessAction(response))
+        }).catch(error => {
+            Reactotron.error!("query-creation-failure",error);
+            dispatch(queryUpdateActions.createFailureAction(error))
+        })
+    }
+}
+
+
+
 export function writeComment(query,data){
     return async dispatch => {
         dispatch(commentCreateActions.createLoadingAction());
@@ -159,6 +215,30 @@ export function loadComments(query,req){
         .catch(error => {
             Reactotron.log!("loading comments error",error);
             dispatch(commentFetchActions.createLoadingAction(error));
+        })
+    }
+}
+
+export function removeComment(comment){
+    return async dispatch => {
+        dispatch(commentDeleteActions.createLoadingAction());
+        deleteComment(comment)
+        .then(response => {
+            dispatch(commentDeleteActions.createSuccessAction(response));
+        }).catch(error => {
+            dispatch(commentDeleteActions.createFailureAction(error));
+        })
+    }
+}
+
+export function editComment(comment,data){
+    return async dispatch => {
+        dispatch(commentUpdateActions.createLoadingAction());
+        updateComment(comment,data)
+        .then(response => {
+            dispatch(commentUpdateActions.createSuccessAction(response));
+        }).catch(error => {
+            dispatch(commentUpdateActions.createFailureAction(error));
         })
     }
 }

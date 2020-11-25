@@ -51,6 +51,9 @@ interface TravelQueryScreenProps{
 
 // }
 const defaultSearchRequest:QueryRequest = {
+    query:{
+        "status":"published"
+    },
     sort:{
         "createdAt":ResultOrder.DESCENDING
     },

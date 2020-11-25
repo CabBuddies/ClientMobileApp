@@ -12,13 +12,24 @@ const queryActionHandler = guardedState => ({
         error:undefined,
         errorType:undefined
     }),
-    [FetchActions.SUCCESS]:(state,action:IQueryAction) => ({
-        ...state,
-        loading:action.loading,
-        query:action.payload,
-        error:undefined,
-        errorType:undefined
-    }),
+    [FetchActions.SUCCESS]:(state,action:IQueryAction) => {
+        if(action.type.startsWith("query-delete")){
+            return {
+                ...state,
+                loading:action.loading,
+                query:undefined,
+                error:undefined,
+                errorType:undefined
+            }
+        }
+        return {
+            ...state,
+            loading:action.loading,
+            query:action.payload,
+            error:undefined,
+            errorType:undefined
+        }  
+    },
     [FetchActions.FAILURE]:(state,action:IQueryAction) => ({
         ...state,
         loading:action.loading,
@@ -26,17 +37,6 @@ const queryActionHandler = guardedState => ({
         errorType:action.errorType
     }),
 });
-
-export const queryReducerGenerator = (coreName,screenInitialState?:any) => {
-    const guardedState = initialState.queryState || initialState;
-    return reducerGenerator(
-        coreName,
-        queryActionHandler(guardedState),
-        guardedState
-    )
-}
-const queryFetchReducer = queryReducerGenerator(CoreActions.QUERY_FETCH);
-const queryCreateReducer = queryReducerGenerator(CoreActions.QUERY_CREATE);
 
 const commentActionHandler = guardedState => ({
     [FetchActions.BEGIN]: (state,action:IQueryAction) => {
@@ -67,6 +67,18 @@ const commentActionHandler = guardedState => ({
                 errorType:undefined
             }
         }
+        else if(action.type.startsWith("comment-delete")){
+            let comments:Array<any> = state.comment;
+            let deletedComment = action.payload;
+            comments = comments.filter(obj => obj.data._id !== deletedComment.data._id);
+            return {
+                ...state,
+                loading:action.loading,
+                comment:comments,
+                error:undefined,
+                errorType:undefined
+            }
+        }
         return {
             ...state,
             loading:action.loading,
@@ -83,16 +95,6 @@ const commentActionHandler = guardedState => ({
         errorType:action.errorType
     }),
 });
-export const commentReducerGenerator = (coreName,screenInitialState?:any) => {
-    const guardedState = initialState.queryState || initialState;
-    return reducerGenerator(
-        coreName,
-        commentActionHandler(guardedState),
-        guardedState
-    )
-}
-const commentFetchReducer = commentReducerGenerator(CoreActions.COMMENT_FETCH);
-const commentCreateReducer = commentReducerGenerator(CoreActions.COMMENT_CREATE);
 
 const responseActionHandler = guardedState => ({
     [FetchActions.BEGIN]: (state,action:IQueryAction) => {
@@ -100,6 +102,18 @@ const responseActionHandler = guardedState => ({
             return {
                 ...state,
                 loading:action.loading,
+                error:undefined,
+                errorType:undefined
+            }
+        }
+        else if(action.type.startsWith("comment-delete")){
+            let responses:Array<any> = state.comment;
+            let deletedResponse = action.payload;
+            responses = responses.filter(obj => obj.data._id !== deletedResponse.data._id);
+            return {
+                ...state,
+                loading:action.loading,
+                response:responses,
                 error:undefined,
                 errorType:undefined
             }
@@ -137,21 +151,87 @@ const responseActionHandler = guardedState => ({
         error:action.error,
         errorType:action.errorType
     }),
-})
-export const responseReducerGenerator = (coreName,screenInitialState?:any) => {
+});
+
+export const genReducerGenerator = (coreName,actionHandler) => {
     const guardedState = initialState.queryState || initialState;
     return reducerGenerator(
         coreName,
-        responseActionHandler(guardedState),
+        actionHandler(guardedState),
         guardedState
     )
 }
-const responseFetchReducer = responseReducerGenerator(CoreActions.RESPONSE_FETCH);
-const responseCreateReducer= responseReducerGenerator(CoreActions.RESPONSE_CREATE);
+// export const queryReducerGenerator = (coreName,screenInitialState?:any) => {
+//     const guardedState = initialState.queryState || initialState;
+//     return reducerGenerator(
+//         coreName,
+//         queryActionHandler(guardedState),
+//         guardedState
+//     )
+// }
+// export const commentReducerGenerator = (coreName,screenInitialState?:any) => {
+//     const guardedState = initialState.queryState || initialState;
+//     return reducerGenerator(
+//         coreName,
+//         commentActionHandler(guardedState),
+//         guardedState
+//     )
+// }
+// export const responseReducerGenerator = (coreName,screenInitialState?:any) => {
+//     const guardedState = initialState.queryState || initialState;
+//     return reducerGenerator(
+//         coreName,
+//         responseActionHandler(guardedState),
+//         guardedState
+//     )
+// }
+enum GenMode{
+    QUERY = "query",
+    RESPONSE="response",
+    COMMENT = "comment"
+}
+function generateReducers(mode:GenMode){
+    switch(mode){
+        case GenMode.QUERY:
+            return[
+                genReducerGenerator(CoreActions.QUERY_FETCH,queryActionHandler),
+                genReducerGenerator(CoreActions.QUERY_CREATE,queryActionHandler),
+                genReducerGenerator(CoreActions.QUERY_UPDATE,queryActionHandler),
+                genReducerGenerator(CoreActions.QUERY_DELETE,queryActionHandler)
+            ];
+        case GenMode.COMMENT:
+            return [
+                genReducerGenerator(CoreActions.COMMENT_FETCH,commentActionHandler),
+                genReducerGenerator(CoreActions.COMMENT_CREATE,commentActionHandler),
+                genReducerGenerator(CoreActions.COMMENT_UPDATE,commentActionHandler),
+                genReducerGenerator(CoreActions.COMMENT_DELETE,commentActionHandler)
+            ];
+        case GenMode.RESPONSE:
+            return [
+                genReducerGenerator(CoreActions.RESPONSE_FETCH,responseActionHandler),
+                genReducerGenerator(CoreActions.RESPONSE_CREATE,responseActionHandler),
+                genReducerGenerator(CoreActions.RESPONSE_UPDATE,responseActionHandler),
+                genReducerGenerator(CoreActions.RESPONSE_DELETE,responseActionHandler)
+            ];
+    }
+}
+// const queryFetchReducer = queryReducerGenerator(CoreActions.QUERY_FETCH);
+// const queryCreateReducer = queryReducerGenerator(CoreActions.QUERY_CREATE);
+// const commentFetchReducer = commentReducerGenerator(CoreActions.COMMENT_FETCH);
+// const commentCreateReducer = commentReducerGenerator(CoreActions.COMMENT_CREATE);
+// const responseFetchReducer = responseReducerGenerator(CoreActions.RESPONSE_FETCH);
+// const responseCreateReducer= responseReducerGenerator(CoreActions.RESPONSE_CREATE);
 
-const queriesReducer = reduceReducers(initialState.queryState,queryFetchReducer,queryCreateReducer);
-const commentsReducer = reduceReducers(initialState.queryState,commentFetchReducer,commentCreateReducer);
-const responseReducer = reduceReducers(initialState.queryState,responseFetchReducer,responseCreateReducer);
+const queryReducers = generateReducers(GenMode.QUERY);
+const commentReducers = generateReducers(GenMode.COMMENT);
+const responseReducers = generateReducers(GenMode.RESPONSE);
+
+
+
+
+const queriesReducer = reduceReducers(initialState.queryState,...queryReducers);
+const commentsReducer = reduceReducers(initialState.queryState,...commentReducers);
+const responseReducer = reduceReducers(initialState.queryState,...responseReducers);
 
 
 const queryReducer = reduceReducers(initialState.queryState,queriesReducer,commentsReducer,responseReducer);
