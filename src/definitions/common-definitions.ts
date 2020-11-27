@@ -1,3 +1,5 @@
+import { IUser } from "node-rest-objects/dist/data/user-management";
+
 export enum MenuModes{
     CRUD = "crud",
     TEXT = "text"
@@ -19,3 +21,5 @@ export enum QueryFormType{
     QUERY="query",
     RESPONSE="response"
 }
+
+export interface IUserDetails extends IUser{}

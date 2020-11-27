@@ -22,8 +22,9 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra":{
-      "serverIp":"10.0.0.3"
+    "extra": {
+      "serverIp": "192.168.0.14",
+      "imgbbKey": "424c8a8ae8d2631b1135558543f56763"
     }
   }
 }

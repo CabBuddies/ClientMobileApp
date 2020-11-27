@@ -18,7 +18,7 @@ export interface IFetchAction{
     type:string;
     loading:boolean;
     payload?:any;
-    error?:string;
+    error?:any;
     errorType?:string;
 }
 
@@ -43,7 +43,7 @@ const createFailureAction = name => (error:ApiError):IFetchAction => {
         type:typeGenerator(name,FetchActions.FAILURE),
         loading:false,
         payload:undefined,
-        error:error.message,
+        error:error,
         errorType:typeGenerator(name,"error")
     }
 }

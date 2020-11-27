@@ -13,8 +13,10 @@ import { bindActionCreators } from 'redux';
 import { Alert, View } from 'react-native';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
-import { Button, Icon } from 'native-base';
 import { TouchableOpacity } from '@gorhom/bottom-sheet';
+import { Text } from 'react-native-paper/lib/typescript/src/components/Avatar/Avatar';
+import { Button } from 'react-native-paper';
+import EditMyProfileScreen from '../screens/user-screens/EditMyProfileScreen';
 
 
 // import { CButton } from "../components/atoms"
@@ -27,10 +29,11 @@ const MyProfileStack = createStackNavigator();
 function MyProfileStackNavigator() {
     const navigation = useNavigation();
     return (
-        <MyProfileStack.Navigator initialRouteName={Screens.PROFILE} mode="modal" screenOptions={{
-            headerLeft: () => <HeaderBackButton onPress={() => navigation.goBack()} />
-        }} >
-            <MyProfileStack.Screen name={Screens.PROFILE} component={MyProfileScreen} />
+        <MyProfileStack.Navigator initialRouteName={Screens.PROFILE} mode="modal" >
+            <MyProfileStack.Screen name={Screens.PROFILE} component={MyProfileScreen} options={{
+                headerLeft: () => <HeaderBackButton onPress={() => navigation.goBack()} />
+            }} />
+            <MyProfileStack.Screen name={Screens.EDIT_PROFILE} component={EditMyProfileScreen} />
         </MyProfileStack.Navigator>
     );
 }
