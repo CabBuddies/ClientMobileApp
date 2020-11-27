@@ -5,6 +5,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack'
 import { Screens } from "../definitions/screen-definitions";
 import SignInScreen from '../screens/auth-screens/SignInScreen';
+import LoginScreen from '../screens/auth-screens/LoginScreen';
 import SignUpScreen from '../screens/auth-screens/SignUpScreen';
 
 const AuthNavigator = createStackNavigator();
