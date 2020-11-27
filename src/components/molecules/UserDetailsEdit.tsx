@@ -17,16 +17,10 @@ export default function UserDetailsEdit({ formik }) {
     }
 
     return (
-        <View>
             <Form>
-                <Button
-                    mode="text"
-                    uppercase={false}
-                    onPress={() => {
-                        reactotron.log!(`imageRef.current: `, imageRef.current);
-                    }}>
+                {/* <TouchableOpacity> */}
                     <ImagePicker props={{ title: "Select Avatar", icon: "image" }} imageCB={imageCB} />
-                </Button>
+                {/* </TouchableOpacity> */}
                 <FormField
                     label="First Name"
                     itemProps={{ floatingLabel: true }}
@@ -50,6 +44,5 @@ export default function UserDetailsEdit({ formik }) {
                     </Button>
                 </TouchableOpacity>
             </Form>
-        </View>
     )
 }

@@ -32,7 +32,7 @@ function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails }: U
     }, [])
 
     const editProfileRef = useRef<any>();
-    const snapPoints = useMemo(() => [0, '45%', '85%', '100%'], []);
+    const snapPoints = useMemo(() => [0, '45%','85%', '100%'], []);
     const navigation = useNavigation();
 
     const renderSheetHeader = () => {
