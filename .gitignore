@@ -17,3 +17,4 @@ web-build/
 *.log
 api/api-definitions.ts
 dev/*
+.vscode/settings.json

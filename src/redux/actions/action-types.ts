@@ -96,6 +96,8 @@ export enum CoreActions{
     COMMENT_CREATE="comment-create",
     COMMENT_DELETE="comment-delete",
     COMMENT_UPDATE="comment-update",
+    OPINION_UPVOTE = "opinion-upvote",
+    OPINION_DOWNVOTE = "opinion-downvote",
     GROUP_LIST = "group-list",
     GROUP = "group",
     POST_LIST = "post-list",
