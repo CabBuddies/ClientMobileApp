@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 import { CForm }   from '../../components/organisms';
 import {Container, Content, Toast } from 'native-base';
 import { Formik } from 'formik';

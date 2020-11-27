@@ -1,71 +1,113 @@
-import React, { useEffect } from 'react';
-import { Avatar, Colors, Title, Text, Subheading, Caption, DataTable, TextInput } from 'react-native-paper';
-import { Container, Content } from "native-base";
-import { IAppState, IProfileState } from '../../redux/initialState';
+import React, { useEffect, useMemo, useLayoutEffect } from 'react';
+import { Colors, Button } from 'react-native-paper';
+import { Container } from "native-base";
+import { IAppState } from '../../redux/initialState';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getUser } from "../../redux/actions/user-action";
-import { StyleSheet, View } from 'react-native';
+import { getUser, saveUser } from "../../redux/actions/user-action";
+import { Alert, StyleSheet, View } from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
+import UserDetailsPreview from '../../components/molecules/UserDetailsPreview';
+import { useRef } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import UserDetailsEdit from '../../components/molecules/UserDetailsEdit';
+import { Formik } from 'formik';
+import * as yup from 'yup';
+import RelationsTopTabNavigator from '../../navigations/RelationsNavigator';
+import reactotron from '../../../dev/ReactotronConfig';
+import { User } from 'node-rest-objects/dist/data/user-management';
 
 interface UserDetails {
     navigation: any;
     getUserDetails: any;
-    user: IProfileState;
+    user: User | undefined;
+    loading?: boolean | undefined;
+    updateUserDetails: any;
 }
 
-function MyProfileScreen({ navigation, getUserDetails, user }: UserDetails) {
+function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails }: UserDetails) {
+
     useEffect(() => {
         getUserDetails()
     }, [])
 
-    const name = user.firstName + ' ' + user.lastName;
+    const editProfileRef = useRef<any>();
+    const snapPoints = useMemo(() => [0, '45%', '85%', '100%'], []);
+    const navigation = useNavigation();
 
-    const renderAvatar = () => {
-        if (user?.displayPicture) {
-            const uri = user?.displayPicture;
-            return <Avatar.Image source={{ uri: uri }} />
-        }
-        else {
-            const text = user?.firstName.charAt(0) + user?.lastName.charAt(0);
-            return <Avatar.Text size={100} style={{ backgroundColor: Colors.blueA700 }} label={text} />
-        }
+    const renderSheetHeader = () => {
+        return (
+            <View style={styles.sheetHeader}>
+                <View style={styles.panelHeader}>
+                    <View style={styles.panelHandle} />
+                </View>
+            </View>
+        )
     }
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <Button mode="text" compact uppercase={false} onPress={() => {
+                if (editProfileRef.current)
+                    editProfileRef.current.snapTo(2);
+            }}>Edit</Button>
+        })
+    });
+
+    const userEditValidationSchema = yup.object({
+        firstName: yup.string().required('Firstname is required'),
+        lastName: yup.string().required('Lastname is required')
+    })
+
+    const saveUserDetails = (values) => {
+        reactotron.log!(`SAVING USER DETAILS`, values);
+        updateUserDetails(user, values);
+    }
+
+    let firstName = "";
+    let lastName = "";
+    let displayPicture = "";
+
+    if (user?.data) {
+        firstName = user.data.firstName;
+        lastName = user.data.lastName;
+        displayPicture = user.data.displayPicture;
+    }
+
 
     return (
         <Container>
-            <Content style={{ flex: 1 }} contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}>
-                <View style={styles.avatar} >
-                    {renderAvatar()}
-                    <Caption>{name}</Caption>
-                </View>
-                <DataTable style={{ justifyContent: "center" }}>
-                    <DataTable.Row>
-                        <DataTable.Cell>
-                            <Title>First Name</Title>
-                        </DataTable.Cell>
-                        <DataTable.Cell>
-                            <Subheading>{user.firstName}</Subheading>
-                        </DataTable.Cell>
-                    </DataTable.Row>
-                    <DataTable.Row>
-                        <DataTable.Cell>
-                            <Title>Last Name</Title>
-                        </DataTable.Cell>
-                        <DataTable.Cell>
-                            <Subheading>{user.lastName}</Subheading>
-                        </DataTable.Cell>
-                    </DataTable.Row>
-                    <DataTable.Row>
-                        <DataTable.Cell>
-                            <Title>Email</Title>
-                        </DataTable.Cell>
-                        <DataTable.Cell>
-                            <Text>{user.email}</Text>
-                        </DataTable.Cell>
-                    </DataTable.Row>
-                </DataTable>
-                {(!user.email) && <Text>Please consider signing in to take advantage of all the features</Text>}
-            </Content>
+            <UserDetailsPreview user={user?.data} />
+            <RelationsTopTabNavigator />
+            {
+                user?.data
+                &&
+                <BottomSheet
+                    ref={editProfileRef}
+                    snapPoints={snapPoints}
+                    initialSnapIndex={-1}
+                    backgroundComponent={() => <View style={styles.bottomSheetBack}></View>}
+                    handleComponent={renderSheetHeader}
+                >
+                    <View style={{ backgroundColor: Colors.white, height: '100%' }}>
+                        <Formik
+                            initialValues={{ firstName, lastName, displayPicture }}
+                            validationSchema={userEditValidationSchema}
+                            onSubmit={(values, actions) => {
+                                saveUserDetails(values);
+                                editProfileRef.current.close();
+                                actions.resetForm();
+                            }}
+                        >
+                            {
+                                (props) => (
+                                    <UserDetailsEdit formik={props} />
+                                )
+                            }
+                        </Formik>
+                    </View>
+                </BottomSheet>
+            }
         </Container>
     )
 
@@ -74,12 +116,16 @@ function MyProfileScreen({ navigation, getUserDetails, user }: UserDetails) {
 function mapStateToProps(state: IAppState) {
     const { userState } = state;
     return {
-        user: userState.profileState,
+        user: userState.user,
+        loading: userState.loading,
+        error: userState.error,
+        errorType: userState.errorType
     }
 }
 function mapDispatchToProps(dispatch) {
     return {
-        getUserDetails: bindActionCreators(getUser, dispatch)
+        getUserDetails: bindActionCreators(getUser, dispatch),
+        updateUserDetails: bindActionCreators(saveUser, dispatch)
     }
 }
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -90,5 +136,32 @@ const styles = StyleSheet.create({
         margin: 10,
         justifyContent: "center",
         alignItems: "center"
-    }
-})
+    },
+    inputField: {
+        color: Colors.white
+    },
+    bottomSheetBack: {
+        backgroundColor: Colors.white
+    },
+    sheetHeader: {
+        backgroundColor: '#eeeeee',
+        shadowColor: '#333333',
+        shadowOffset: { width: -1, height: -3 },
+        shadowRadius: 2,
+        shadowOpacity: 0.4,
+        // elevation: 5,
+        paddingTop: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+    },
+    panelHeader: {
+        alignItems: 'center',
+    },
+    panelHandle: {
+        width: 40,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#00000040',
+        marginBottom: 10,
+    },
+});

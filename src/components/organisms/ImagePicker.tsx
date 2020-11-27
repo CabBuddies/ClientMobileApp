@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, Platform, Alert } from 'react-native';
+import { Platform, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { Button } from 'react-native-paper';
-export default function ImagePickerContainer() {
-  const [image, setImage] = useState<any>(null);
+import { Button, HelperText } from 'react-native-paper';
+import axios from 'axios';
+import Constants from "expo-constants";
+import { View } from 'react-native';
+
+export default function ImagePickerContainer({ props, imageCB }) {
+  const [image, setImage] = useState<any>('');
+  const [uploading, toggleUploading] = useState(false);
+  const [error, setError] = useState({error: false, message: ''});
+  const [success, setSuccess] = useState(false);
+
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -20,16 +28,43 @@ export default function ImagePickerContainer() {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true
     });
-    console.log(`result: `,result);
+
     if (!result.cancelled) {
-      setImage(result.uri);
+      toggleUploading(true);
+      await uploadImage(result.base64 || '');
     }
   };
+
+  async function uploadImage(base64: string) {
+    let body = new FormData();
+    body.append("image", base64);
+    axios.request({
+      method: "post",
+      url: `https://api.imgbb.com/1/upload?key=${Constants.manifest.extra.imgbbKey}`,
+      data: body
+    }).then((response) => {
+      console.log('image url: ', response.data.data.image.url);
+      setSuccess(true);
+      toggleUploading(false);
+      setImage(response.data.data.image.url);
+      console.log(`image state: `, image);
+      imageCB(response.data.data.image.url);
+    }).catch(err => {
+      console.log(err.response.data);
+      setError({
+        error: true,
+        message: err.response.data
+      });
+    });
+  }
+
   return (
-    <>
-      <Button onPress={pickImage}>Pick an image from camera roll</Button>
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-    </>
+    <View style={{justifyContent: 'center'}} >
+      <Button onPress={pickImage} icon={props.icon} loading={uploading} >{props.title}</Button>
+      { error.error && <HelperText type="error" visible={error.error}>UPLOAD FAILED</HelperText>}
+      { success && <HelperText type="info" visible={success}>SUCCESSFULLY UPLOADED</HelperText> }
+    </View>
   );
 }

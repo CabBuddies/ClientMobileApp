@@ -1,3 +1,4 @@
+import reduceReducers from "reduce-reducers";
 import { CoreActions, IUserAction,FetchActions } from "../actions/action-types";
 import { actionHandlerGenerator, reducerGenerator } from "../generators";
 import { IUserState, initialState } from "../initialState";
@@ -10,7 +11,7 @@ const userActionHandler = initialState => ( {
     [FetchActions.SUCCESS]:(state,action:IUserAction) => ({
         ...state,
         loading:action.loading,
-        profileState:action.payload
+        user:action.payload
     }),
     [FetchActions.FAILURE]:(state,action:IUserAction) => ({
         ...state,
@@ -27,8 +28,8 @@ export const userReducerGenerator = (coreName,screenInitialState?:any) => {
         guardedState
     )
 }
-
-const userReducer = userReducerGenerator(CoreActions.USER_FETCH);
+const userReducers = [userReducerGenerator(CoreActions.USER_SAVE),userReducerGenerator(CoreActions.USER_FETCH)];
+const userReducer = reduceReducers(initialState.userState,...userReducers);
 
 export default userReducer;
 // export default function userReducer(state:IUserState = initialState.userState,action:IUserAction ):IUserState{

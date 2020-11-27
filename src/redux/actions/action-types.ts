@@ -90,6 +90,7 @@ export enum CoreActions{
     RESPONSE_DELETE="response-delete",
     USER = "user",
     USER_FETCH = "user-fetch",
+    USER_SAVE = "user-save",
     AUTH = "auth",
     COMMENT = "comment",
     COMMENT_FETCH="comment-fetch",

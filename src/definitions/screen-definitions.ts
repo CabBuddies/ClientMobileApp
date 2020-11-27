@@ -5,6 +5,7 @@ export enum Screens{
     SIGN_IN = "SignIn",
     SIGN_UP = "SignUp",
     PROFILE = "My Profile",
+    EDIT_PROFILE = "Edit Profile",
     SETTINGS = "Settings",
     APP = "Travel Buff",
     GUIDE_ME = "Guide Me",
@@ -15,5 +16,7 @@ export enum Screens{
     CHAT_GROUP = "Group",
     CHAT_DIRECT = "Direct",
     PACKAGE_DELIVERY = "Package Delivery",
-    GUILD = "Guilds"
+    GUILD = "Guilds",
+    FOLLOWERS = "Followers",
+    FOLLOWING = "Following"
 }

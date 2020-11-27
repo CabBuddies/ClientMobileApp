@@ -1,5 +1,5 @@
 import { IQuery } from "node-rest-objects/dist/data/queries";
-import { IUser } from "node-rest-objects/dist/data/user-management";
+import { IUser, User } from "node-rest-objects/dist/data/user-management";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import { defaultRequest, IQueryStats, IRequest } from "../definitions/query-definitions";
 import { Screens } from "../definitions/screen-definitions";
@@ -14,7 +14,7 @@ export enum ErrorType{
 }
 interface CommonStates{
     loading?:boolean;
-    error?:string;
+    error?:any;
     errorType?:string;
 }
 
@@ -35,7 +35,7 @@ export interface IAuthState extends CommonStates{
 }
 
 export interface IUserState extends CommonStates{
-    profileState:IProfileState;
+    user: User | undefined;
     currentScreen?:Screens;
 }
 
@@ -79,14 +79,8 @@ const defaultQueryListState:IQueryListState = {
     queries: undefined
 }
 const defaultUserState:IUserState = {
-    profileState: {
-        _id: "123456",
-        userId:"123456",
-        firstName:"anonymous",
-        lastName:"user",
-        email:"anonymous",
-        displayPicture:""
-    },
+    user: undefined,
+    loading: false,
     currentScreen:Screens.APP
 }
 const defaultQueryState:IQueryState = {
