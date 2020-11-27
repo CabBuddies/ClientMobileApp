@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { StyleSheet } from "react-native";
+import { KeyboardAvoidingView, StyleSheet } from "react-native";
 import { CButton as Button } from "../../components/atoms";
 import { CForm, SocialLogin } from "../../components/organisms";
 // import { FormBuilder } from "../../components/organisms"
@@ -14,9 +14,12 @@ import Reactotron from 'reactotron-react-native'
 import { filterPassword } from "../../utils";
 import { RootStackParamList } from "../../navigations/RootNavigator";
 import { connect } from "react-redux";
-import { guestUser, login } from "../../redux/actions/auth-action";
+import { guestUser, login, signUp } from "../../redux/actions/auth-action";
 import { bindActionCreators } from "redux";
 import { Screens } from "../../definitions/screen-definitions";
+import * as Google from "expo-google-app-auth";
+import Constants from "expo-constants";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 type AuthNavigation = StackNavigationProp<RootStackParamList>;
 
@@ -25,7 +28,7 @@ interface SignInValues {
 	password: string;
 }
 
-function SignInScreen({ navigation, guestLogin, userLogin,error }: any) {
+function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: any) {
 	// const { signIn, anonymous } = useContext(AuthContext);
 
 	const signInValSchema = yup.object({
@@ -60,19 +63,58 @@ function SignInScreen({ navigation, guestLogin, userLogin,error }: any) {
 	};
 
 	const initialValues = {
-		email: "karthik.munipalle21@cabbuddies.com",
-		password: "edokati",
+		email: "abhivadnala@gmail.com",
+		password: "123456",
 	};
+
+	const googleUserMapper = (googleUser) => {
+		let email = googleUser.email;
+		let firstname = googleUser.givenName;
+		let lastname = googleUser.familyName;
+		let password = googleUser.id;
+		let displayPicture = googleUser.photoUrl;
+		return {email, firstname, lastname, password, displayPicture};
+	}
+
+	const signInWithGoogle = async () => {
+		console.log(`constants: `, Constants.manifest.extra);
+		try {
+		  const result = await Google.logInAsync({
+			iosClientId: Constants.manifest.extra.IOS_CLIENT_ID,
+			androidClientId: Constants.manifest.extra.ANDROID_CLIENT_ID,
+			scopes: ["profile", "email"]
+		  });
+	
+		  if (result.type === "success") {
+			console.log("LoginScreen.js.js 21 | ", result.user ,result.user.givenName);
+			const newgoogleUser = googleUserMapper(result.user);
+			console.log(`new google user: `,newgoogleUser);
+			userSignUp(newgoogleUser);
+			if(error) {
+				Reactotron.error!(error,null);
+			}
+			// this.props.navigation.navigate("Profile", {
+			//   username: result.user.givenName
+			// }); //after Google login redirect to Profile
+			return result.accessToken;
+		  } else {
+			return { cancelled: true };
+		  }
+		} catch (e) {
+		  console.log('LoginScreen.js.js 30 | Error with login', e);
+		  return { error: true };
+		}
+	  };
 
 	return (
 		<Container>
-			<Content>
+			<KeyboardAwareScrollView>
 				<Grid>
 					<Row style={{ justifyContent: "center" }}>
 						<Thumbnail source={phi} style={{ marginTop: 20 }} />
 					</Row>
 					<Row>
-						<SocialLogin />
+						<SocialLogin google={signInWithGoogle} />
 					</Row>
 
 					<Row>
@@ -95,7 +137,7 @@ function SignInScreen({ navigation, guestLogin, userLogin,error }: any) {
 						/>
 					</Row>
 				</Grid>
-			</Content>
+			</KeyboardAwareScrollView>
 			<Footer style={{ backgroundColor: "#fff" }}>
 				<Button
 					transparent
@@ -118,14 +160,15 @@ function mapStateToProps(state){
 	const {authState} = state;
 	return{
 		isSignedIn:authState.isSignedIn,
-		error: authState.error
+		error: authState.error,
 	}
 }
 
 function matchDispatchToProps(dispatch) {
 	return {
 		guestLogin: bindActionCreators(guestUser, dispatch),
-		userLogin: bindActionCreators(login, dispatch)
+		userLogin: bindActionCreators(login, dispatch),
+		userSignUp: bindActionCreators(signUp, dispatch),
 	}
 }
 

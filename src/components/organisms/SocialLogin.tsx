@@ -1,8 +1,9 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import {CButton as Button} from '../atoms';
-import { Grid, Row, Col } from 'react-native-easy-grid'; 
-export default function SocialLogin() {
+import { Grid, Row, Col } from 'react-native-easy-grid';
+
+export default function SocialLogin({ google }) {
     return (
     <Grid>
         <Col>
@@ -12,6 +13,7 @@ export default function SocialLogin() {
                 icon= "logo-google"
                 title = "google"
                 iconLeft
+                onPress={google}
                 />
             </Row>
             <Row>

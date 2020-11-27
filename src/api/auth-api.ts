@@ -28,9 +28,11 @@ export async function signInApp(request:any){
 export async function signUpApp(request:any)
 {
     try {
-      const { email, password, firstname, lastname } = request;
+      let { email, password, firstname, lastname ,registrationType,displayPicture } = request;
+      registrationType = registrationType || "inapp";
+      displayPicture= displayPicture || "";
       Reactotron.log!("request", request);
-      const response = await Auth.register(email, password, firstname, lastname, "inapp");
+      const response = await Auth.register(email, password, firstname, lastname, registrationType, displayPicture);
       return response;
     } catch (err) {
       Reactotron.log!("Error in signUp API", err);
