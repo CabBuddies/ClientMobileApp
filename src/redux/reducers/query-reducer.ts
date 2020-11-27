@@ -8,7 +8,6 @@ const queryActionHandler = guardedState => ({
     [FetchActions.BEGIN]: (state,action:IQueryAction) => ({
         ...state,
         loading:action.loading,
-        query:undefined,
         error:undefined,
         errorType:undefined
     }),
@@ -31,11 +30,11 @@ const queryActionHandler = guardedState => ({
         }  
     },
     [FetchActions.FAILURE]:(state,action:IQueryAction) => ({
-        ...state,
-        loading:action.loading,
-        error:action.error,
-        errorType:action.errorType
-    }),
+            ...state,
+            loading:action.loading,
+            error:action.error,
+            errorType:action.errorType
+        }),
 });
 
 const commentActionHandler = guardedState => ({
@@ -98,22 +97,11 @@ const commentActionHandler = guardedState => ({
 
 const responseActionHandler = guardedState => ({
     [FetchActions.BEGIN]: (state,action:IQueryAction) => {
-        if(action.type.startsWith("response-create")){
+        if(action.type.startsWith("response-fetch")){
             return {
                 ...state,
                 loading:action.loading,
-                error:undefined,
-                errorType:undefined
-            }
-        }
-        else if(action.type.startsWith("comment-delete")){
-            let responses:Array<any> = state.comment;
-            let deletedResponse = action.payload;
-            responses = responses.filter(obj => obj.data._id !== deletedResponse.data._id);
-            return {
-                ...state,
-                loading:action.loading,
-                response:responses,
+                response:undefined,
                 error:undefined,
                 errorType:undefined
             }
@@ -121,7 +109,6 @@ const responseActionHandler = guardedState => ({
         return {
             ...state,
             loading:action.loading,
-            response:undefined,
             error:undefined,
             errorType:undefined
         }
@@ -132,6 +119,19 @@ const responseActionHandler = guardedState => ({
                 ...state,
                 loading:action.loading,
                 response:[action.payload,...state.response],
+                error:undefined,
+                errorType:undefined
+            }
+        }
+        else if(action.type.startsWith("response-delete")){
+            let responses:Array<any> = state.response;
+            let deletedResponse = action.payload;
+            responses = responses.filter(obj => obj.data._id !== deletedResponse?.data._id);
+            console.log("responses",responses);
+            return {
+                ...state,
+                loading:action.loading,
+                response:responses,
                 error:undefined,
                 errorType:undefined
             }
@@ -225,8 +225,6 @@ function generateReducers(mode:GenMode){
 const queryReducers = generateReducers(GenMode.QUERY);
 const commentReducers = generateReducers(GenMode.COMMENT);
 const responseReducers = generateReducers(GenMode.RESPONSE);
-
-
 
 
 const queriesReducer = reduceReducers(initialState.queryState,...queryReducers);

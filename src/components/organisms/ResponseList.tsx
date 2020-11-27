@@ -1,7 +1,7 @@
 import React,{ useRef, useMemo } from 'react'
 import { StyleSheet, FlatList, View} from 'react-native'
 import { FullViewType, PlaceholderSize, QueryFormType } from '../../definitions/common-definitions';
-import {Colors, Text, Title, Button as PaperButton, Divider } from 'react-native-paper';
+import {Colors, Text, Title, Button as PaperButton, Divider, Card } from 'react-native-paper';
 import PostFullView from './PostFullView';
 import { ContentLoading } from '../molecules';
 import { connect } from 'react-redux';
@@ -49,8 +49,9 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
     }
     const headerComponent = () => (
         <View>
-            <>
-            <Title style={styles.title}>ADD RESPONSE</Title>
+            <Card>
+            <Card.Title title="Add Response"/>
+            <Card.Actions>
             <Formik
                     innerRef={formRef}
                     initialValues = {responseInitialValues}
@@ -65,7 +66,8 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
                     {(props) => <QueryForm mode={QueryFormType.RESPONSE} formik={props}/>}
             </Formik>
             <PaperButton disabled ={loading} mode="text" onPress={submit} compact={true}>Post</PaperButton>
-            </>
+            </Card.Actions>
+            </Card>
             <Title style={styles.title}>RESPONSES</Title>
         </View>
     )
@@ -94,6 +96,7 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
             ListEmptyComponent={renderEmptyComponent}
             ListHeaderComponent={headerComponent}
             ItemSeparatorComponent={() => <Divider />}
+            extraData={responses}
         />
     )
 }

@@ -38,6 +38,7 @@ interface TravelQueryScreenProps {
     error: string;
     getQueries: any;
     getQuery: any;
+    queryData:any;
 }
 // enum EditRequest{
 //     LOAD_MORE = "load-more",
@@ -62,11 +63,11 @@ const defaultSearchRequest: QueryRequest = {
 }
 
 
-function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQuery }: TravelQueryScreenProps) {
+function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQuery, queryData }: TravelQueryScreenProps) {
 
     useEffect(() => {
         getQueries(defaultSearchRequest);
-    }, [])
+    }, [queryData])
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -77,9 +78,8 @@ function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQ
     })
 
     const nav = (item) => {
-        getQuery(item).then(() => {
-            navigation.navigate(Screens.QUERY_VIEW, { name: "Query View" });
-        });
+        getQuery(item);
+        navigation.navigate(Screens.QUERY_VIEW, { name: "Query View" });
 
     }
     const newQueryNav = () => {
@@ -131,6 +131,7 @@ function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQ
                     onChangeText={() => Alert.alert(`othindu`)}
                     value=''
                 />)}
+                extraData={cards}
                 refreshControl={<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)} />}
             />
 
@@ -138,11 +139,12 @@ function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQ
     )
 }
 function mapStateToProps(state) {
-    const { queryListState } = state;
+    const { queryListState,queryState } = state;
     return {
         cards: queryListState.queries,
         loading: queryListState.loading,
-        error: queryListState.error
+        error: queryListState.error,
+        queryData:queryState.query
     }
 }
 

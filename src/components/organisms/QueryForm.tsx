@@ -6,7 +6,7 @@ import { FormikProps,FormikErrors, FormikHandlers, FormikHelpers } from "formik"
 import Tags from 'react-native-tags';
 import Reactotron from '../../../dev/ReactotronConfig';
 import { QueryFormType } from '../../definitions/common-definitions';
-import { Colors } from 'react-native-paper';
+import { Chip, Colors } from 'react-native-paper';
 
 interface QFormValues{
     title:string;
@@ -34,6 +34,15 @@ function QueryForm({formik,mode}:QueryFormProps){
                         initialTags = {formik.values.tags}
                         inputStyle={styles.tagInput}
                         onChangeTags = {tags => formik.setFieldValue('tags',tags)}
+                        renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
+                            <Chip key={`${tag}-${index}`} onPress={onPress} 
+                                icon="close-circle"
+                                style={[styles.tag,styles.queryTag]} 
+                                textStyle={styles.tagText}
+                            >
+                              {tag}
+                            </Chip>
+                          )}
                         containerStyle={styles.tagContainer}
                         tagTextStyle = {styles.textStyle}
                         style = {styles.tagsField}
@@ -45,6 +54,14 @@ function QueryForm({formik,mode}:QueryFormProps){
                     initialTags = {formik.values.tags}
                     containerStyle={styles.tagContainer}
                     tagTextStyle = {styles.textStyle}
+                    renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
+                        <Chip key={`${tag}-${index}`} onPress={onPress} 
+                            style={[styles.tag,styles.responseTag]} 
+                            textStyle={styles.tagText}
+                        >
+                          {tag}
+                        </Chip>
+                      )}
                     readonly
                 />
                 )
@@ -129,5 +146,18 @@ const styles = StyleSheet.create({
     tagInput:{
         backgroundColor:Colors.white,
         fontSize:20
-    }
+    },
+    tag:{
+		justifyContent:"center",
+	},
+	queryTag:{
+		backgroundColor:Colors.blueA700,
+	},
+	responseTag:{
+		backgroundColor:Colors.green600,
+    },
+    tagText:{
+		fontSize:12,
+		color:Colors.white
+	}
 })

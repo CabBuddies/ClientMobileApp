@@ -23,6 +23,9 @@ export interface IRequest{
 }
 
 export const defaultRequest:IRequest = {
+    query:{
+        "status":"published"
+    },
     sort:{
         "createdAt":-1
     },

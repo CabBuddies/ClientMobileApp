@@ -104,7 +104,7 @@ export function writeQuery(data){
             Reactotron.log!("query-create-response",response);
             dispatch(queryCreateActions.createSuccessAction(response))
         }).catch(error => {
-            Reactotron.error!("query-creation-failure",error);
+            Reactotron.log!("query-creation-failure",error);
             dispatch(queryCreateActions.createFailureAction(error))
         })
     }
@@ -118,7 +118,7 @@ export function editQuery(query,data){
             Reactotron.log!("query-create-response",response);
             dispatch(queryUpdateActions.createSuccessAction(response))
         }).catch(error => {
-            Reactotron.error!("query-creation-failure",error);
+            Reactotron.log!("query-creation-failure",error);
             dispatch(queryUpdateActions.createFailureAction(error))
         })
     }
@@ -126,14 +126,14 @@ export function editQuery(query,data){
 
 export function removeQuery(query){
     return async dispatch => {
-        dispatch(queryUpdateActions.createLoadingAction())
+        dispatch(queryDeleteActions.createLoadingAction())
         deleteQuery(query)
         .then(response => {
-            Reactotron.log!("query-create-response",response);
-            dispatch(queryUpdateActions.createSuccessAction(response))
+            Reactotron.log!("query-delete-response",response);
+            dispatch(queryDeleteActions.createSuccessAction(response))
         }).catch(error => {
-            Reactotron.error!("query-creation-failure",error);
-            dispatch(queryUpdateActions.createFailureAction(error))
+            Reactotron.log!("query-delete-failure",error);
+            dispatch(queryDeleteActions.createFailureAction(error))
         })
     }
 }
@@ -154,7 +154,7 @@ export function loadResponses(query,req){
 export function writeResponse(query,data){
 	return async dispatch => {
 		dispatch(responseCreateActions.createLoadingAction());
-		createResponse(query,data)
+		await createResponse(query,data)
 		.then(response => {
 			dispatch(responseCreateActions.createSuccessAction(response));
 		}).catch(error => {
@@ -165,26 +165,28 @@ export function writeResponse(query,data){
 
 export function editResponse(response,data){
 	return async dispatch => {
-		dispatch(responseCreateActions.createLoadingAction());
+		dispatch(responseUpdateActions.createLoadingAction());
 		createResponse(response,data)
 		.then(response => {
-			dispatch(responseCreateActions.createSuccessAction(response));
+			dispatch(responseUpdateActions.createSuccessAction(response));
 		}).catch(error => {
-			dispatch(responseCreateActions.createFailureAction(error));
+			dispatch(responseUpdateActions.createFailureAction(error));
 		})
 	}
 }
 
 export function removeResponse(response){
+    Reactotron.log!("in remove response thunk");
     return async dispatch => {
-        dispatch(queryUpdateActions.createLoadingAction())
+        dispatch(responseDeleteActions.createLoadingAction());
+        Reactotron.log!("dispatched the loading action in remove response thunk");
         deleteResponse(response)
         .then(response => {
             Reactotron.log!("query-create-response",response);
-            dispatch(queryUpdateActions.createSuccessAction(response))
+            dispatch(responseDeleteActions.createSuccessAction(response))
         }).catch(error => {
-            Reactotron.error!("query-creation-failure",error);
-            dispatch(queryUpdateActions.createFailureAction(error))
+            Reactotron.log!("query-creation-failure",error);
+            dispatch(responseDeleteActions.createFailureAction(error))
         })
     }
 }

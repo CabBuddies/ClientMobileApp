@@ -18,7 +18,7 @@ export const applyLocalDefinitions = () =>{
     
     DOMAIN.USER_MANAGEMENT = APIDefinitions.USER_MANAGEMENT_LOCAL,
     DOMAIN.QUERIES = APIDefinitions.QUERIES_LOCAL,
-    // DOMAIN.GROUPS = APIDefinitions.GROUPS_LOCAL
+    DOMAIN.GROUPS = APIDefinitions.GROUPS_LOCAL
     refreshAPI();
 
     console.log("Definitions RESET", DOMAIN);

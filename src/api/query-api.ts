@@ -178,13 +178,14 @@ export async function deleteQuery(query:Query){
         await query.delete();
         return query;
     } catch (error) {
-        Reactotron.log!(`Query-API: error creating the query`,error);
+        Reactotron.log!(`Query-API: error deleting the query`,error);
         throw error;
     }
 }
 export async function deleteResponse(response:Response){
     try {
         await response.delete();
+        Reactotron.log!("deleted response",response);
         return response;
     } catch (error) {
         Reactotron.log!(`Query-API: error creating the query`,error);

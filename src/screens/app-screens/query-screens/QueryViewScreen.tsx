@@ -33,6 +33,9 @@ interface QueryViewScreenProps{
 }
 
 const defaultRequest = {
+    query:{
+        "status":"published"
+    },
     sort:{
         "createdAt":-1
     }
@@ -41,7 +44,6 @@ const defaultRequest = {
 
 
 function QueryView({ navigation, queryData,loading, getComments,responses, getResponses }: QueryViewScreenProps) {
-    reactotron.log!("queryData in QUERY_VIEW",queryData,loading);
     const commentRef = useRef<any>();
     const snapPoints = useMemo(() => [0,'25%','50%','75%'],[]);
     const cancelNav = () => {
@@ -68,8 +70,10 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
     }
     
     useEffect(() => {
-        getResponses(queryData);
-    },[])
+        if(queryData){
+            getResponses(queryData,defaultRequest); 
+        }
+    },[queryData])
 
     useLayoutEffect(() => {
         navigation.setOptions({
