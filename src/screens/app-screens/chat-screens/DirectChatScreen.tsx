@@ -5,6 +5,13 @@ import { StyleSheet, TextInput, View, LogBox, Button } from 'react-native'
 import RealtimeDatabase from 'node-rest-objects/dist/rest/realtime.database'
 import { IAppState } from '../../../redux/initialState'
 import { connect } from 'react-redux'
+
+interface IMessage{
+    author:string,
+    text:string,
+    time:number
+}
+
 const firebaseConfig = {
     //Your firebase config here
     apiKey: "AIzaSyDl4dmvk0tBIX0-BWCaOZy0MjAcTtLHo60",
@@ -16,7 +23,9 @@ const firebaseConfig = {
     appId: "1:1067716858916:web:298c461c0439c497d5b4b1",
     measurementId: "G-VQLJ1DMMJ5"
 }
+
 RealtimeDatabase.getApp({ options: firebaseConfig })
+
 //@ts-ignore
 // if (firebase.apps.length === 0) {
 //     //@ts-ignore
@@ -28,7 +37,8 @@ RealtimeDatabase.getApp({ options: firebaseConfig })
 // const chatsRef = db.collection('chats')
 
 
-function DirectChatScreen({ userName }) {
+function DirectChatScreen({ userName, _user }) {
+    userName = userName.toLowerCase();
     const friendMap = {
         "abhilash": "karthik",
         "karthik": "abhilash"
@@ -54,6 +64,11 @@ function DirectChatScreen({ userName }) {
     //     RealtimeDatabase.observePath({path:`user/${friendMap[]}`})
     //     return () => unsubscribe()
     // }, [])
+    useEffect(()=>{
+        RealtimeDatabase.observePath({path:`user/${userName}`,callback:(val)=>{
+            appendMessages([val]);
+        }})
+    },[])
     const appendMessages = useCallback(
         (messages) => {
             setMessages((previousMessages) => GiftedChat.append(previousMessages, messages))
@@ -73,10 +88,12 @@ function DirectChatScreen({ userName }) {
         setUser(user)
     }
     async function handleSend(messages) {
-        console.log(`messages: `, messages[0].text, 'username', userName);
-        //const writes = messages.map((m) => chatsRef.add(m))
-        // await Promise.all(writes)
+        console.log(`messages: `, messages[0].text, 'username', userName,'message',messages[0]);
+        //const message:IMessage = {author:userName,text:messages[0].text,time:new Date().getTime()};
+        RealtimeDatabase.pushToPath({path:`user/${friendMap[userName]}`,value:messages[0]});
+        appendMessages(messages)
     }
+
     if (!user) {
         return (
             <View style={styles.container}>
@@ -85,6 +102,7 @@ function DirectChatScreen({ userName }) {
             </View>
         )
     }
+
     return <GiftedChat messages={messages} user={user} onSend={handleSend} />
 }
 

@@ -42,6 +42,8 @@ export interface IAuthState extends CommonStates {
 export interface IUserState extends CommonStates {
     user: User | undefined;
     currentScreen?: Screens;
+    followers?: User[];
+    following?: User[];
 }
 
 export interface IProfileState extends CommonStates, IUser {
