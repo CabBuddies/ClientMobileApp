@@ -65,7 +65,9 @@ export enum AuthActions{
     AUTH_ERROR="auth-error",
     ANONYMOUS = "anonymous",
     REFRESH = "refresh-token",
-    LOGOUT = "logout"
+    LOGOUT = "logout",
+    CONFIRM = "confirm",
+    CONFIRM_FAILURE = "confirm-failure"
 }
 
 export enum QueryListActions{

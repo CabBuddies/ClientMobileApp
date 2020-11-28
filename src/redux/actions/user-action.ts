@@ -22,8 +22,8 @@ const saveUserActions: any = apiActionGenerator(CoreActions.USER_SAVE);
 export function saveUser(user: User, data: { firstName: string, lastName: string, displayPicture: string }) {
     return async dispatch => {
         dispatch(saveUserActions.createLoadingAction());
-        user.data._id='';
-        user.data.userId='';
+        user.data._id = '';
+        user.data.userId = '';
         user.data.firstName = data.firstName;
         user.data.lastName = data.lastName;
         user.data.displayPicture = data.displayPicture;
