@@ -21,5 +21,11 @@ export enum QueryFormType{
     QUERY="query",
     RESPONSE="response"
 }
+export enum OpinionType{
+    FOLLOW = 'follow',
+    UPVOTE = 'upvote',
+    DOWNVOTE = 'downvote',
+    REPORT = 'spamreport'
+}
 
 export interface IUserDetails extends IUser{}

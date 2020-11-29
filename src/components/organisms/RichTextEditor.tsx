@@ -311,9 +311,7 @@ class RichTextEditor extends Component {
 
 
         return (
-            <KeyboardAvoidingView
-                keyboardVerticalOffset={IS_IOS ? 0 : 0}
-            >
+            <>
                 <MenuProvider style={{ flex: 1 }}>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
                         <View style={styles.main}>
@@ -441,7 +439,7 @@ class RichTextEditor extends Component {
                         />
                     </View>
                 </MenuProvider>
-            </KeyboardAvoidingView>
+            </>
         );
     }
 

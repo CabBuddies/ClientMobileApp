@@ -4,13 +4,19 @@ export enum Screens{
     AUTH = "Welcome",
     SIGN_IN = "SignIn",
     SIGN_UP = "SignUp",
-    PROFILE = "My Profile",
+    PROFILE = "Profile",
+    USER_PROFILE = "User Profile",
+    MY_PROFILE = "My Profile",
     EDIT_PROFILE = "Edit Profile",
     SETTINGS = "Settings",
     APP = "Travel Buff",
+    NK_PROXY = "Proxy",
     GUIDE_ME = "Guide Me",
     QUERY_VIEW = "QueryView",
     QUERY_CREATE = "New Query",
+    USER_QUERIES = "Queries",
+    USER_GROUPS = "Groups",
+    USER_RELATIONS = "Relations",
     RIDE = "Find a ride",
     CHATS = "Chats",
     CHAT_GROUP = "Group",
@@ -18,5 +24,6 @@ export enum Screens{
     PACKAGE_DELIVERY = "Package Delivery",
     GUILD = "Guilds",
     FOLLOWERS = "Followers",
-    FOLLOWING = "Following"
+    FOLLOWING = "Following",
+    SEARCH = "Search"
 }

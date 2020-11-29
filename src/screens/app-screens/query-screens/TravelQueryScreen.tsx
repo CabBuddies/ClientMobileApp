@@ -3,12 +3,7 @@ import { FlatList, Alert, RefreshControl } from 'react-native'
 import { Container, Content, Item, List, Text, Button } from 'native-base';
 import { CButton } from '../../../components/atoms'
 import { QueryPreview } from '../../../components/organisms'
-import { createQuery, getAllQueries } from "../../../api/query-api";
-import { JSONPrint } from "../../../utils";
-import { IQuery, Query } from 'node-rest-objects/dist/data/queries';
-import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 import { Placeholder, PlaceholderMedia, PlaceholderLine, Shine, Loader } from "rn-placeholder";
-import Reactotron from "../../../../dev/ReactotronConfig";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { QueryStackParamList } from "../../../navigations/QueryNavigator";
 import { Screens } from '../../../definitions/screen-definitions';
@@ -16,9 +11,12 @@ import { fetchAllQueries } from "../../../redux/actions/query-list-action"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchQuery } from '../../../redux/actions/query-actions';
-import SearchRESTObject from 'node-rest-objects/dist/rest/search.rest.object';
 import { IQueryListResponse } from '../../../definitions/query-definitions';
 import { Searchbar } from 'react-native-paper';
+import { ContentLoading } from '../../../components/molecules';
+import { PlaceholderSize } from '../../../definitions/common-definitions';
+import { liveQuerySuggestion } from '../../../api/query-api';
+import reactotron from '../../../../dev/ReactotronConfig';
 
 interface QueryRequest {
     query?: any
@@ -38,20 +36,9 @@ interface TravelQueryScreenProps {
     error: string;
     getQueries: any;
     getQuery: any;
-    queryData:any;
+    queryData: any;
 }
-// enum EditRequest{
-//     LOAD_MORE = "load-more",
-//     SORT_CHANGE = "sort-change",
 
-// }
-// const makeRequest = (type:EditRequest,changedVal):QueryRequest{
-//     switch(type){
-//         case EditRequest.LOAD_MORE:
-//             retunr
-//     }
-
-// }
 const defaultSearchRequest: QueryRequest = {
     query: {
         "status": "published"
@@ -62,89 +49,94 @@ const defaultSearchRequest: QueryRequest = {
     pageNum: 1
 }
 
-
 function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQuery, queryData }: TravelQueryScreenProps) {
 
-    useEffect(() => {
-        getQueries(defaultSearchRequest);
-    }, [queryData])
+    let searchBar;
+
+    const [searchQuery, setSearchQuery] = React.useState('');
+    const [userSuggestions, setUserSuggestions] = React.useState<any[]>([]);
+
+    React.useMemo(() => {
+        console.log(searchQuery);
+        liveQuerySuggestion(searchQuery).then((result: any[]) => {
+            setUserSuggestions(result);
+        }).catch((error) => {
+            reactotron.log!(`Query API error `, error);
+        })
+    }, [searchQuery]);
+
+    // useEffect(() => {
+    //     getQueries(defaultSearchRequest);
+    // }, [queryData])
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
                 <CButton transparent title="Create" container={{ flex: 0 }} onPress={newQueryNav} />
             )
-
         })
-    })
+    }, [navigation])
 
     const nav = (item) => {
         getQuery(item);
         navigation.navigate(Screens.QUERY_VIEW, { name: "Query View" });
 
     }
+
     const newQueryNav = () => {
         navigation.navigate(Screens.QUERY_CREATE);
     }
-    const placeholder = () => {
-        const x = new Array(10).fill({});
-        let components;
-        if (error) {
-            components =
-                (<Content>
-                    <Text style={{ fontSize: 30, color: "red" }}>Oops!Error fetching queries!</Text>
-                </Content>)
-        }
-        else {
-            components = x.map((e, i) => {
-                return (
-                    <Placeholder
-                        Left={PlaceholderMedia}
-                        Animation={(props) => <Shine {...props} reverse={false} />}
-                        key={"" + i}
-                    >
-                        <PlaceholderLine width={80} />
-                        <PlaceholderLine />
-                        <PlaceholderLine width={30} />
 
-                    </Placeholder>
-                )
-            })
-        }
-
-        return (<>{components}</>);
-    }
-
+    // const placeholder = () => {
+    //     const x = new Array(10).fill({});
+    //     let components;
+    //     if (error) {
+    //         components =
+    //             (<Content>
+    //                 <Text style={{ fontSize: 30, color: "red" }}>Oops!Error fetching queries!</Text>
+    //             </Content>)
+    //     }
+    //     else {
+    //         components = x.map((e, i) => <ContentLoading key={e + '' + i} size={PlaceholderSize.MEDIUM} />)
+    //     }
+    //     return (<>{components}</>);
+    // }
 
     const renderItem = ({ item }) => {
-        // Reactotron.log!(published);
+        reactotron.log!(`106.TQS `, searchBar);
         return <QueryPreview query={item} itemNav={() => nav(item)} />
     }
 
     return (
-        <Container>
-
-            <FlatList data={cards?.result} renderItem={renderItem}
-                keyExtractor={item => (item) ? item.data._id : `${Date.now()}`}
-                ListEmptyComponent={placeholder}
-                ListHeaderComponent={() => (<Searchbar
-                    placeholder="Search"
-                    onChangeText={() => Alert.alert(`othindu`)}
-                    value=''
-                />)}
-                extraData={cards}
-                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)} />}
+        <>
+            <Searchbar
+                ref={(el) => { searchBar = el }}
+                placeholder="Search"
+                onChangeText={(text: string) => {
+                    setSearchQuery(text)
+                }}
+                onBlur={(e) => reactotron.log!(`on blur spacebar: `, e)}
+                value={searchQuery}
             />
-
-        </Container>
+            <FlatList data={userSuggestions} renderItem={renderItem}
+                keyExtractor={item => (item) ? item.data._id : `${Date.now()}`}
+                // ListEmptyComponent={placeholder}
+                // ListHeaderComponent={() => (
+                    
+                // )}
+            refreshControl={<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)} />}
+            />
+        </>
     )
 }
+
 function mapStateToProps(state) {
-    const { queryListState,queryState } = state;
+    const { queryListState, queryState } = state;
     return {
         cards: queryListState.queries,
         loading: queryListState.loading,
         error: queryListState.error,
-        queryData:queryState.query
+        queryData: queryState.query
     }
 }
 
@@ -156,43 +148,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TravelQueryScreen);
-
-
-// const [queryData,setData] = useState<IQuery | undefined >();
-// const [queries,setQueries] = useState<Query|null>(null);
-// const [cards,setCards] = useState<RESTObject<IQuery>[] | undefined>();
-// const draftTemplateRequest = {
-//     title:"What can I do about the BART being unavailable to San Jose",
-//     tags: ["BART","Bay Area","San Jose","Public Transport"],
-//     body: "It has been a while since the San Jose BART lines have been built,\
-// but the stations are still not open, what can I do about this? ",
-// }
-
-
-
-// const writeQuery = async (request) => {
-//     Reactotron.log!("in write query");
-//     const response = await createQuery(request);
-//     // Reactotron.log!("in write query- response",response);
-//     setQueries(response);
-//     // setData(queries?.getData());
-// }
-
-// const searchQuery = async (request) =>{
-//     Reactotron.log!("in search query");
-//     const response = await getAllQueries(request);
-//     // Reactotron.log!("in search query|response",response);
-//     setCards(response?.result);
-// }
-
-// useEffect( () => {
-//     // Reactotron.log!("running use-effect");
-//     // writeQuery(draftTemplateRequest);
-//     searchQuery(defaultSearchRequest);
-//     Reactotron.log!("queries-data:",cards);
-
-// },[])
-
-// useEffect( () => {
-//     setData(queries?.getData());
-// },[queries])

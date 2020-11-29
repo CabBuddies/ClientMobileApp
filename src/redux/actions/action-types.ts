@@ -97,8 +97,14 @@ export enum CoreActions{
     COMMENT_CREATE="comment-create",
     COMMENT_DELETE="comment-delete",
     COMMENT_UPDATE="comment-update",
-    OPINION_UPVOTE = "opinion-upvote",
-    OPINION_DOWNVOTE = "opinion-downvote",
+    OPINION_CREATE = "opinion-create",
+    OPINION_DELETE ="opinion-delete",
+    OPINION_LIST = "opinion-list",
+    OPINION_FETCH = "opinion-fetch",
+    // OPINION_UPVOTE = "opinion-upvote",
+    // OPINION_DOWNVOTE = "opinion-downvote",
+    // OPINION_FOLLOW = "opinion-follow",
+    // OPINION_REPORT = "opinion-spam-report",
     GROUP_LIST = "group-list",
     GROUP = "group",
     POST_LIST = "post-list",
@@ -143,7 +149,6 @@ export enum CommentActions{
     FETCH_SUCCESS = "comment-fetch-success",
     FETCH_FAILURE = "comment-fetch-failure"
 }
-
 export enum OpinionActions{
     UP_VOTE = "up-vote",
     DOWN_VOTE = "down-vote",

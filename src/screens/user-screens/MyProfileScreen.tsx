@@ -5,7 +5,7 @@ import { IAppState } from '../../redux/initialState';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUser, saveUser } from "../../redux/actions/user-action";
-import { Alert, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import UserDetailsPreview from '../../components/molecules/UserDetailsPreview';
 import { useRef } from 'react';
@@ -13,26 +13,38 @@ import { useNavigation } from '@react-navigation/native';
 import UserDetailsEdit from '../../components/molecules/UserDetailsEdit';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import RelationsTopTabNavigator from '../../navigations/RelationsNavigator';
 import reactotron from '../../../dev/ReactotronConfig';
-import { User } from 'node-rest-objects/dist/data/user-management';
+import { IUser, User } from 'node-rest-objects/dist/data/user-management';
+import { Confirmation } from '../../components/organisms';
+import UserActivityNavigator from '../../navigations/UserActivityNavigator';
+import UserProfileView from './UserProfileView';
 
 interface UserDetails {
     navigation: any;
     getUserDetails: any;
-    user: User | undefined;
     loading?: boolean | undefined;
     updateUserDetails: any;
+    isVerified: boolean | undefined;
+    userProfile: IUser | undefined;
+    route: any;
+    userId: string | undefined;
+    isAnonymous: boolean;
 }
 
-function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails }: UserDetails) {
+function MyProfileScreen({ getUserDetails, route, userId, loading, updateUserDetails, isVerified, userProfile }: UserDetails) {
 
+    // FIXISSUE
     useEffect(() => {
         getUserDetails()
     }, [])
 
+    //isSelf is true
+    const isSelf = true;
+
+    let user = userProfile;//new User();
+
     const editProfileRef = useRef<any>();
-    const snapPoints = useMemo(() => [0, '45%','85%', '100%'], []);
+    const snapPoints = useMemo(() => [0, '45%', '85%', '100%'], []);
     const navigation = useNavigation();
 
     const renderSheetHeader = () => {
@@ -45,14 +57,16 @@ function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails }: U
         )
     }
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => <Button mode="text" compact uppercase={false} onPress={() => {
-                if (editProfileRef.current)
-                    editProfileRef.current.snapTo(2);
-            }}>Edit</Button>
-        })
-    });
+    const onEdit = () => {
+        if (editProfileRef.current)
+            editProfileRef.current.snapTo(2);
+    };
+
+    // useLayoutEffect(() => {
+    //     navigation.setOptions({
+    //         headerRight: () => <Button mode="text" compact uppercase={false} onPress={() => }>Edit</Button>
+    //     })
+    // });
 
     const userEditValidationSchema = yup.object({
         firstName: yup.string().required('Firstname is required'),
@@ -68,46 +82,44 @@ function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails }: U
     let lastName = "";
     let displayPicture = "";
 
-    if (user?.data) {
-        firstName = user.data.firstName;
-        lastName = user.data.lastName;
-        displayPicture = user.data.displayPicture;
+    if (user) {
+        firstName = user.firstName;
+        lastName = user.lastName;
+        displayPicture = user.displayPicture;
     }
+
+    reactotron.log!(`user in my profile screen: `, user && user.userId, userId);
 
 
     return (
         <Container>
-            <UserDetailsPreview user={user?.data} />
-            <RelationsTopTabNavigator />
-            {
-                user?.data
-                &&
-                <BottomSheet
-                    ref={editProfileRef}
-                    snapPoints={snapPoints}
-                    initialSnapIndex={-1}
-                    backgroundComponent={() => <View style={styles.bottomSheetBack}></View>}
-                    handleComponent={renderSheetHeader}
-                >
-                    <View style={{ backgroundColor: Colors.white, height: '100%' }}>
-                        <Formik
-                            initialValues={{ firstName, lastName, displayPicture }}
-                            validationSchema={userEditValidationSchema}
-                            onSubmit={(values, actions) => {
-                                saveUserDetails(values);
-                                editProfileRef.current.close();
-                                actions.resetForm();
-                            }}
-                        >
-                            {
-                                (props) => (
-                                    <UserDetailsEdit formik={props} />
-                                )
-                            }
-                        </Formik>
-                    </View>
-                </BottomSheet>
-            }
+            <UserProfileView userData={user!} userId={userId} isSelf={true} isVerified={isVerified || false} onEdit={onEdit} />
+            {console.log(`user: `, user)}
+            <BottomSheet
+                ref={editProfileRef}
+                snapPoints={snapPoints}
+                initialSnapIndex={-1}
+                backgroundComponent={() => <View style={styles.bottomSheetBack}></View>}
+                handleComponent={renderSheetHeader}
+            >
+                <View style={{ backgroundColor: Colors.white, height: '100%' }}>
+                    <Formik
+                        initialValues={{ firstName, lastName, displayPicture }}
+                        validationSchema={userEditValidationSchema}
+                        onSubmit={(values, actions) => {
+                            saveUserDetails(values);
+                            editProfileRef.current.close();
+                            actions.resetForm();
+                        }}
+                    >
+                        {
+                            (props) => (
+                                <UserDetailsEdit formik={props} />
+                            )
+                        }
+                    </Formik>
+                </View>
+            </BottomSheet>
         </Container>
     )
 
@@ -115,11 +127,15 @@ function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails }: U
 
 function mapStateToProps(state: IAppState) {
     const { userState } = state;
+    const { isConfirmed, profile, userId, anonymous } = state.authState;
     return {
-        user: userState.user,
         loading: userState.loading,
         error: userState.error,
-        errorType: userState.errorType
+        errorType: userState.errorType,
+        isVerified: isConfirmed,
+        userProfile: profile,
+        userId: userId,
+        isAnonymous: anonymous
     }
 }
 function mapDispatchToProps(dispatch) {
@@ -164,4 +180,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#00000040',
         marginBottom: 10,
     },
+    viewBasic: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    }
 });

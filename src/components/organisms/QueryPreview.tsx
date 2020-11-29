@@ -11,6 +11,7 @@ import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import { Avatar, Colors, Card, Paragraph } from "react-native-paper";
 import { Options } from "../atoms";
 import { MenuModes } from "../../definitions/common-definitions";
+import { timeSince } from "../../utils/Helpers";
 
 
 interface QueryPreviewProps {
@@ -34,7 +35,9 @@ export default function QueryPreview({
 	},
 }: QueryPreviewProps) {
 	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats} = query.data;
-	const date:string = createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5);
+	
+
+	const date:string = timeSince(new Date(createdAt))||(createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5));
 
 	const renderAvatar = (props) => {
 		if(author?.displayPicture){
