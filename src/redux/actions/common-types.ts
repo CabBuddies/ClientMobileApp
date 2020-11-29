@@ -12,7 +12,7 @@ export interface ApiError{
 export interface Common{
     loading?:boolean;
     error?:string;
-    errorType?:ErrorType;
+    errorType?:string;
 }
 
 export interface IFetchAction{

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Alert, StyleSheet, ViewStyle } from "react-native";
 import { CustomAvatar, QueryStats } from "../molecules";
 import { IQueryContent, IQueryStats } from "../../definitions/query-definitions";
@@ -9,17 +9,20 @@ import Tags from "react-native-tags";
 import { Options } from "../atoms";
 import reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
-import { FullViewType, MenuModes } from "../../definitions/common-definitions";
+import { FullViewType, MenuModes, OpinionType } from "../../definitions/common-definitions";
 import { useNavigation } from "@react-navigation/native";
 import { Screens } from "../../definitions/screen-definitions";
 import { bindActionCreators } from "redux";
 import { editQuery, editResponse, removeQuery, removeResponse } from "../../redux/actions/query-actions";
 import { connect } from "react-redux";
+import { createOpinion, getOpinion } from "../../api/query-api";
+import { createOpinionThunk, deleteOpinionThunk } from "../../redux/actions/opinion-action";
+import { IAppState } from "../../redux/initialState";
 
 type T = any
 interface QueryViewProps{
 	type:FullViewType
-    content:RESTObject<T> ,
+    content:RESTObject<IQuery | IResponse> ,
 	style?: ViewStyle | Array<ViewStyle> | null;
 	onComment?:any,
 	commentDisabled?:any;
@@ -27,6 +30,9 @@ interface QueryViewProps{
 	deleteQuery?:any;
 	changeResponse?:any;
 	deleteResponse?:any;
+	addOpinion?:any;
+	removeOpinion?:any;
+	opinions?:Record<string,string>;
     headerNav?: () => void,
     itemNav?: () => void
 }
@@ -36,7 +42,8 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 	commentDisabled=false,
 	headerNav = () => Alert.alert(`header clicked`),
 	itemNav = () => Alert.alert(`this will trigger an update`),
-	deleteQuery,deleteResponse,changeResponse,changeQuery}: QueryViewProps
+	deleteQuery,deleteResponse,changeResponse,changeQuery,
+	addOpinion,removeOpinion, opinions}: QueryViewProps
 	) => {
 
 	if(!content.data){
@@ -48,12 +55,39 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 			</Card>
 		)
 	}
+	let currentOpinions = {
+		[OpinionType.UPVOTE]:'',
+		[OpinionType.DOWNVOTE]:'',
+		[OpinionType.FOLLOW]:'',
+		[OpinionType.REPORT]:'',
+	};
+
+	useEffect(() => {
+		reactotron.log!("current-opinions",currentOpinions);
+		getCurrentOpinion();
+	},[opinions])
 	
 	const navigation = useNavigation();
 	const data:IQuery|IResponse = content.data;
 	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats}= data;
 	const date = createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5);
 	let responseCount;
+	
+	
+	const getCurrentOpinion = () => {
+		Object.keys(currentOpinions).map(opinionType => {
+			switch(type){
+				case FullViewType.QUERY:
+					currentOpinions[opinionType] = getOpinion(opinions,content.data._id,'',opinionType) || '';
+					break;
+				case FullViewType.RESPONSE:
+					currentOpinions[opinionType] = getOpinion(opinions,content.data.queryId,content.data._id,opinionType) || '';
+					break;
+			}
+		})
+		
+		
+	}
 	const generateTags = () => {
 		switch(type){
 			case FullViewType.QUERY:
@@ -67,6 +101,26 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 	const renderAvatar = (props) => {
 		return <CustomAvatar size={24} {...props} data={author}/>
 	} 
+	const onUpvote = () => {
+		if(currentOpinions[OpinionType.UPVOTE]===''){
+			addOpinion(content,OpinionType.UPVOTE).then(() => {
+				// TODO: need to refetch opinions
+			});
+		}
+		else{
+			removeOpinion(currentOpinions[OpinionType.UPVOTE]);
+		}
+	}
+	const onDownVote = () => {
+		if(currentOpinions[OpinionType.DOWNVOTE]===''){
+			addOpinion(content,OpinionType.DOWNVOTE).then(() => {
+				//TODO: need to refetch opinions
+			});
+		}
+		else{
+			removeOpinion(currentOpinions[OpinionType.DOWNVOTE]);
+		}
+	}
 	const onDelete = () => {
 		switch(type){
 			case FullViewType.QUERY:
@@ -121,22 +175,33 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 			</Card.Content>
 				<Card.Title title={author?.firstName +' '+ author?.lastName} subtitle={date} left={(props) => renderAvatar(props)}/>
 			<Card.Actions style={styles.actions}>
-				<QueryStats stats={stats} onComment = {onComment} commentDisabled={commentDisabled}/>
+				<QueryStats 
+				stats={stats} onComment = {onComment} 
+				commentDisabled={commentDisabled} 
+				onUpVote={onUpvote} onDownVote={onDownVote}
+				/>
 			</Card.Actions>
 		</Card>
     )
 }
 
-
+function mapStateToProps(state:IAppState){
+	const { queryOpinionState } = state; 
+	return {
+		opinions:queryOpinionState.opinionList
+	}
+}
 function mapDispatchToProps(dispatch){
 	return {
 		changeQuery:bindActionCreators(editQuery,dispatch),
 		deleteQuery:bindActionCreators(removeQuery,dispatch),
 		changeResponse:bindActionCreators(editResponse,dispatch),
-		deleteResponse:bindActionCreators(removeResponse,dispatch)
+		deleteResponse:bindActionCreators(removeResponse,dispatch),
+		addOpinion:bindActionCreators(createOpinionThunk,dispatch),
+		removeOpinion:bindActionCreators(deleteOpinionThunk,dispatch)
 	}
 }
-const connector = connect(null,mapDispatchToProps);
+const connector = connect(mapStateToProps,mapDispatchToProps);
 export default connector(PostFullView)
 
 const styles = StyleSheet.create({

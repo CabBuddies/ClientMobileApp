@@ -6,27 +6,6 @@ import { IQuery } from "node-rest-objects/dist/data/queries";
 import { createComment, createQuery, createResponse, deleteComment, deleteQuery, deleteResponse, getAllComments, getAllResponses, updateComment, updateQuery } from "../../api/query-api";
 import { ErrorType } from "../initialState";
 
-// export function loadingQuery():IQueryAction{
-//     return {
-//         type:QueryActions.LOADING,
-//         loading:true
-//     }
-// }
-// export function successQuery(data):IQueryAction{
-//     return {
-//         type:QueryActions.FETCH_SUCCESS,
-//         loading:false,
-//         payload:data
-//     }
-// }
-// export function failureQuery(error:ApiError):IQueryAction{
-//     return {
-//         type:QueryActions.FETCH_ERROR,
-//         loading:false,
-//         error:error.message,
-//         errorType:ErrorType.QUERY
-//     }
-// }
 enum GenMode{
     QUERY = "query",
     RESPONSE="response",

@@ -21,7 +21,8 @@ export interface Votes{
 interface Actions{
     type: ActionType;
 }
-export default function VotesAtom({voteCount = 0,scoreOnly=false}) {
+
+export default function VotesAtom({voteCount = 0,scoreOnly=false, onUpVote, onDownVote}) {
 
     const initialState = {
         votes: voteCount,
@@ -31,6 +32,7 @@ export default function VotesAtom({voteCount = 0,scoreOnly=false}) {
     const reducer = (state: Votes,action:Actions) => {
         switch(action.type){
             case ActionType.LIKE:
+                onUpVote();
                 if(state.likeColor === Colors.DEFAULT){
                     let voteCount:number;
                     if(state.dislikeColor === Colors.DISLIKE){
@@ -53,6 +55,7 @@ export default function VotesAtom({voteCount = 0,scoreOnly=false}) {
                     }
                 } 
             case ActionType.DISLIKE:
+                onDownVote();
                 if(state.dislikeColor === "black"){
                     let voteCount:number;
                     if(state.likeColor === Colors.LIKE){

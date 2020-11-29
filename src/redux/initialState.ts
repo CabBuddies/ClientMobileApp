@@ -1,4 +1,4 @@
-import { IQuery } from "node-rest-objects/dist/data/queries";
+import { IQuery, ITQOpinion } from "node-rest-objects/dist/data/queries";
 import { IUser, User } from "node-rest-objects/dist/data/user-management";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import { defaultRequest, IQueryStats, IRequest } from "../definitions/query-definitions";
@@ -23,10 +23,12 @@ export interface IAppState{
     userState:IUserState;
     queryListState:IQueryListState;
     queryState:IQueryState;
+    queryOpinionState:IQueryOpinionState;
     requestState:IRequestState;
-
 }
-
+export interface IQueryOpinionState extends CommonStates{
+    opinionList:Record<string,string>;
+}
 
 export interface IAuthState extends CommonStates{
     isSignedIn: boolean;
@@ -86,6 +88,9 @@ const defaultUserState:IUserState = {
 const defaultQueryState:IQueryState = {
     query:undefined
 }
+const defaultQueryOpinionState:IQueryOpinionState ={
+    opinionList:{}
+}
 // const queryState:IQueryState={
 
 // }
@@ -93,6 +98,7 @@ export const initialState:IAppState = {
     authState:defaultAuthState,
     queryListState: defaultQueryListState,
     queryState:defaultQueryState,
+    queryOpinionState:defaultQueryOpinionState,
     userState:defaultUserState,
     requestState:defaultRequest
 }

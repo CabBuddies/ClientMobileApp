@@ -1,4 +1,4 @@
 import JSONPrint from "./JSONPrint";
 
-export { filterPassword } from "./Helpers";
+export { filterPassword, getKeyByValue } from "./Helpers";
 export { default as JSONPrint } from "./JSONPrint";

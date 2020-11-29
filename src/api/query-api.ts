@@ -1,4 +1,4 @@
-import { Comment, IQuery, IResponse, Query, Response } from "node-rest-objects/dist/data/queries";
+import { Comment, IQuery, IResponse, Query, Response, TQOpinion } from "node-rest-objects/dist/data/queries";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import SearchRESTObject from "node-rest-objects/dist/rest/search.rest.object";
 import Reactotron from "../../dev/ReactotronConfig";
@@ -6,6 +6,7 @@ import { QueryStatus } from "../redux/initialState";
 import axios from 'axios';
 import reactotron from "reactotron-react-native";
 import queryReducer from "../redux/reducers/query-reducer";
+import { OpinionType } from "../definitions/common-definitions";
 // const draftTemplateRequest = {
 //     title:"What can I do about the BART being unavailable to San Jose",
 //     tags: ["BART","Bay Area","San Jose","Public Transport"],
@@ -201,4 +202,58 @@ export async function deleteComment(comment:Comment){
         throw error;
     }
 }
+// -------------------------------------------- Opinion ---------------------------------------------------
+export async function createOpinion(restObj:RESTObject<IQuery | IResponse>,type:OpinionType){
+    try{
+        let queryId;
+        let responseId='';
+        const opinion = new TQOpinion();
+        opinion.data.opinionType = type;
+        if(restObj instanceof Response){
+            queryId = restObj.data.queryId;
+            responseId = restObj.data._id;
+            opinion.data.queryId = queryId;
+            opinion.data.responseId = responseId;
+        }
+        else{
+            queryId = restObj.data._id;
+            opinion.data.queryId = queryId;
+        }
+        await opinion.create();
+        const opinionMap = {};
+        opinionMap[`${queryId};${responseId};${type}`] = opinion.data._id;
+        return opinionMap;
+    }
+    catch(error){
+        reactotron.log!(`error creating the opinion`,error);
+        throw error;
+    }
+}
+
+export async function deleteOpinion(opinionId:string){
+    try{
+        const opinion = new TQOpinion();
+        opinion.data._id = opinionId;
+        await opinion.delete();
+        return opinionId;
+    }
+    catch(error){
+        reactotron.log!(`error deleting the opinion:`,opinionId,error);
+        throw error;
+    }
+}
+
+// -------- utils------
+
+
+// const opinionMap:Record<string,string> = {};
+
+// export function saveOpinion(queryId,responseId,opinionType,opinionId){
+//     opinionMap[`${queryId};${responseId};${opinionType}`] = opinionId;
+// }
+
+export function getOpinion(opinionMap,queryId,responseId,opinionType):string{
+    return opinionMap[`${queryId};${responseId};${opinionType}`];
+}
+
 
