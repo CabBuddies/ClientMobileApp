@@ -22,7 +22,6 @@ export default function UserDetailsPreview({ user }) {
                 <Text>{name}</Text>
                 <Caption>{user.email}</Caption>
             </View>
-            {(!user.email) && <Text>Please consider signing in to take advantage of all the features</Text>}
         </View>
     );
 }

@@ -31,8 +31,12 @@ function SearchScreen({ navigation }) {
                     value={searchQuery}
                 />
             }
-            ItemSeparatorComponent={() => <Divider/>}
-            renderItem={({item}) => <SimpleCard user={item} />}
+            ItemSeparatorComponent={() => <Divider style={{ marginTop: 1, marginBottom: 1 }} />}
+            renderItem={({ item }) => <SimpleCard user={item} onPress={() => {
+                navigation.navigate('User',{
+                    user: item.data
+                })
+            }}/>}
             keyExtractor={item => (item) ? item.data.userId : `${Date.now()}`}
         />
     )
