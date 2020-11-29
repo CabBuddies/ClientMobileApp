@@ -9,22 +9,24 @@ interface ISimpleCardProps {
     title?: string;
     subTitle?: string;
     actionTitle?: string;
-    action?: () => void
+    action?: () => void;
+    onPress?: () => void;
 }
 
-const SimpleCard = ({ user, title = "Full Name", subTitle = "subtitle", actionTitle = "action", action = () => Alert.alert(`action triggered`) }: ISimpleCardProps) => {
+const SimpleCard = ({ 
+    user, title = "Full Name", subTitle = "subtitle", 
+    actionTitle = "action", action = () => Alert.alert(`action triggered`),
+    onPress=()=>Alert.alert('Card Pressed') }: ISimpleCardProps) => {
     let data;
     if (user) {
         data = user.data;
         console.log('data', data, 'title', title);
         title = data.firstName + ' ' + data.lastName;
         subTitle = data.userId;
-        actionTitle = "Follow",
-            action = () => Alert.alert(`Follow action pressed`);
     }
 
     return (
-        <Card>
+        <Card onPress={onPress} elevation={5}>
             <Card.Title
                 title={title}
                 subtitle={subTitle}
