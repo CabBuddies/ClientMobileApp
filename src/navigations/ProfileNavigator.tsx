@@ -27,10 +27,9 @@ function MyProfileStackNavigator() {
     const navigation = useNavigation();
     return (
         <MyProfileStack.Navigator initialRouteName={Screens.MY_PROFILE} >
-            <MyProfileStack.Screen name={Screens.MY_PROFILE} component={MyProfileScreen} />
-            <MyProfileStack.Screen name={Screens.USER_PROFILE} component={UserProfileScreen} options={{
+            <MyProfileStack.Screen name={Screens.MY_PROFILE} component={MyProfileScreen} options={{
                 headerLeft: () => (<HeaderBackButton onPress={() => navigation.goBack()}/>)
-            }} />
+            }}/>
             <MyProfileStack.Screen name={Screens.USER_RELATIONS} component={RelationsTopTabNavigator} />
         </MyProfileStack.Navigator>
     );
