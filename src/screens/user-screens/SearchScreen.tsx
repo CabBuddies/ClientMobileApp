@@ -6,8 +6,8 @@ import SimpleCard from '../../components/organisms/SimpleCard';
 import * as UserAPI from '../../api/user-api';
 import reactotron from '../../../dev/ReactotronConfig';
 import { Screens } from '../../definitions/screen-definitions';
-
-function SearchScreen({ navigation }) {
+import { useNavigation } from '@react-navigation/native';
+function SearchScreen() {
 
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -22,6 +22,8 @@ function SearchScreen({ navigation }) {
         })
     }, [searchQuery]);
 
+    const navigation = useNavigation();
+
     return (
         <FlatList
             data={userSuggestions}
@@ -33,12 +35,10 @@ function SearchScreen({ navigation }) {
                 />
             }
             ItemSeparatorComponent={() => <Divider style={{ marginTop: 1, marginBottom: 1 }} />}
-            renderItem={({ item }) => <SimpleCard content={item} onPress={() => {
+            renderItem={({ item }) => <SimpleCard content={item} avatarSize={40} onPress={() => {
                 navigation.navigate(Screens.PROFILE,{
-                    screen:Screens.PROFILE,
-                    params:{
-                        user:item.data
-                    }
+                    screen: Screens.USER_PROFILE,
+                    params:{user:item.data}
                 })
             }}/>}
             keyExtractor={item => (item) ? item.data.userId : `${Date.now()}`}

@@ -13,7 +13,8 @@ export default function authReducer(state: IAuthState = initialState.authState, 
                 accessToken: action.payload!.acessToken,
                 refreshToken: action.payload!.refreshToken,
                 isConfirmed: action.payload!.isConfirmed,
-                userId: action.payload!.userId
+                userId: action.payload!.userId,
+                profile: action.payload!.profile
             };
         case AuthActions.AUTH_ERROR:
             return { ...state, isSignedIn: action.isSignedIn, error: action.error! };

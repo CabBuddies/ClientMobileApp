@@ -124,7 +124,7 @@ function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQ
                 // ListHeaderComponent={() => (
                     
                 // )}
-            // refreshControl={<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)} />}
+            refreshControl={<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)} />}
             />
         </>
     )

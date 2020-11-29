@@ -1,12 +1,11 @@
-import { DOMAIN, refreshAPI } from "node-rest-objects/dist/rest/api";
+import {refreshAPI } from "node-rest-objects/dist/rest/api";
 import Constants from "expo-constants";
 
 const LOCAL_IP = Constants.manifest.extra.serverIp; // change this as required in the app.json->extra->serverIp
 const APIDefinitions = {
-    USER_MANAGEMENT_LOCAL : `http://${LOCAL_IP}:4000`,
-    QUERIES_LOCAL : `http://${LOCAL_IP}:4001`,
-    GROUPS_LOCAL : `http://${LOCAL_IP}:4002`,
-    CHATS_LOCAL : `http://${LOCAL_IP}:4003`
+    USER_MANAGEMENT : `http://${LOCAL_IP}:4000`,
+    QUERIES: `http://${LOCAL_IP}:4001`,
+    GROUPS : `http://${LOCAL_IP}:4002`,
 }
 
 export enum AppColors {
@@ -15,12 +14,9 @@ export enum AppColors {
 
 export const applyLocalDefinitions = () =>{
     
-    DOMAIN.USER_MANAGEMENT = APIDefinitions.USER_MANAGEMENT_LOCAL,
-    DOMAIN.QUERIES = APIDefinitions.QUERIES_LOCAL,
-    DOMAIN.GROUPS = APIDefinitions.GROUPS_LOCAL
-    refreshAPI();
+    refreshAPI(APIDefinitions);
 
-    console.log("Definitions RESET", DOMAIN);
+    console.log("Definitions RESET", APIDefinitions);
 }
 
 
