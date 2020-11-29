@@ -46,14 +46,8 @@ const ConfirmationView = ({ verifyEmail }: ConfirmationViewProps) => {
                 >
                     {
                         ({ values, setFieldValue, handleSubmit, isSubmitting }) => (
-                            <Grid style={{ padding: 20 }}>
-                                <Row>
-                                    <Title>
-                                        Please Confirm Email
-                            </Title>
-                                </Row>
-                                <Row>
-                                    <Col size={6}>
+                                    <>
+                                    <Title>Please Confirm Email</Title>
                                         <PaperInput
                                             label="enter confirmation code"
                                             value={values.confirmationCode}
@@ -61,15 +55,11 @@ const ConfirmationView = ({ verifyEmail }: ConfirmationViewProps) => {
                                             mode='flat'
                                             multiline={false}
                                         />
-                                    </Col>
-                                    <Col size={1}>
-                                        <IconButton icon="send"
-                                            disabled={isSubmitting || values.confirmationCode === ""} color={Colors.brown600}
+                                        <Button icon="send"
+                                            disabled={isSubmitting || values.confirmationCode === ""} color={Colors.blue700}
                                             onPress={handleSubmit}
-                                        />
-                                    </Col>
-                                </Row>
-                            </Grid>
+                                        >Verify</Button>
+                                        </>
                         )
                     }
 

@@ -3,7 +3,7 @@ import { Alert, StyleSheet, ViewStyle } from "react-native";
 import { CustomAvatar, QueryStats } from "../molecules";
 import { IQueryContent, IQueryStats } from "../../definitions/query-definitions";
 import { IUser } from "node-rest-objects/dist/data/user-management";
-import { IQuery, IResponse } from "node-rest-objects/dist/data/queries";
+import { IQuery, IResponse, Query,Response } from "node-rest-objects/dist/data/queries";
 import { Badge, Card, Chip, Colors, Paragraph, Text } from "react-native-paper"; 
 import Tags from "react-native-tags";
 import { Options } from "../atoms";
@@ -22,7 +22,7 @@ import { IAppState } from "../../redux/initialState";
 type T = any
 interface QueryViewProps{
 	type:FullViewType
-    content:RESTObject<IQuery | IResponse> ,
+    content:Query | Response,
 	style?: ViewStyle | Array<ViewStyle> | null;
 	onComment?:any,
 	commentDisabled?:any;

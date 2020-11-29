@@ -1,32 +1,51 @@
 import React,{ useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, FlatList } from 'react-native';
 import { ImagePicker } from '../../../components/organisms';
-import { Button } from 'react-native-paper';
+import { Button, Searchbar } from 'react-native-paper';
 import RichTextEditor from '../../../components/organisms/RichTextEditor';
-import SuggestionSearch from '../../../components/molecules/SuggestionSearch';
 import RealtimeDatabase from 'node-rest-objects/dist/rest/realtime.database';
-
-const options = {
-    apiKey: "AIzaSyDl4dmvk0tBIX0-BWCaOZy0MjAcTtLHo60",
-    authDomain: "cabbuddies-1562982601192.firebaseapp.com",
-    databaseURL: "https://cabbuddies-1562982601192.firebaseio.com",
-    projectId: "cabbuddies-1562982601192",
-    storageBucket: "cabbuddies-1562982601192.appspot.com",
-    messagingSenderId: "1067716858916",
-    appId: "1:1067716858916:web:298c461c0439c497d5b4b1",
-    measurementId: "G-VQLJ1DMMJ5"
-};
+import { liveQuerySuggestion } from '../../../api/query-api';
+import reactotron from '../../../../dev/ReactotronConfig';
+import SimpleCard from '../../../components/organisms/SimpleCard';
+import { getAllGroups } from '../../../api/groups-api';
 
 export default function TravelGroupScreen() {
+
+    const [searchQuery, setSearchQuery] = React.useState('');
+    const [userSuggestions, setUserSuggestions] = React.useState<any[]>([]);
+
     useEffect(() => {
-        RealtimeDatabase.observePath({options,path:'/user/karthik',callback:(val)=>{console.log(val);}});
+        getAllGroups().then( results => {
+            setUserSuggestions(results);
+        });
     },[])
+    // React.useMemo(() => {
+    //     console.log(searchQuery);
+    //     liveQuerySuggestion(searchQuery).then((result: any[]) => {
+    //         setUserSuggestions(result);
+    //     }).catch((error) => {
+    //         reactotron.log!(`Groups API error `, error);
+    //     })
+    // }, [searchQuery]);
+    const renderItem = ({item}) => (<SimpleCard content={item} avatarSize={35}/>)
     return (
-        // <View>
-        //     <Text>Travel Groups Screen.</Text>
-        //     <ImagePicker />
-            // <Button>Hello there</Button>
-            <SuggestionSearch/>
-        // </View>
+        <>
+        <Searchbar
+                placeholder="Search"
+                onChangeText={(text: string) => {
+                    setSearchQuery(text)
+                }}
+                onBlur={(e) => reactotron.log!(`on blur spacebar: `, e)}
+                value={searchQuery}
+            />
+            <FlatList data={userSuggestions} renderItem={renderItem}
+                keyExtractor={item => (item) ? item.data._id : `${Date.now()}`}
+                // ListEmptyComponent={placeholder}
+                // ListHeaderComponent={() => (
+                    
+                // )}
+            // refreshControl={<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)} />}
+            />
+        </>
     )
 }

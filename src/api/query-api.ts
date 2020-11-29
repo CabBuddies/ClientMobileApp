@@ -265,7 +265,7 @@ async function searchQuery(search:string='',attributes?:string[]) {
         sro.request.query = APIUtils.testSearchUtil(["published.title","published.body"],search);
         console.log(sro.request.query);
         sro.request.sort = {
-            "lastModifiedAt":-1
+            "published.lastModifiedAt":-1
         };
         sro.request.pageSize=10;
         if(attributes)

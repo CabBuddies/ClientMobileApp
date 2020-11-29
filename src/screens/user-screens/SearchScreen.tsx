@@ -5,6 +5,7 @@ import { Divider, Searchbar } from 'react-native-paper';
 import SimpleCard from '../../components/organisms/SimpleCard';
 import * as UserAPI from '../../api/user-api';
 import reactotron from '../../../dev/ReactotronConfig';
+import { Screens } from '../../definitions/screen-definitions';
 
 function SearchScreen({ navigation }) {
 
@@ -32,9 +33,12 @@ function SearchScreen({ navigation }) {
                 />
             }
             ItemSeparatorComponent={() => <Divider style={{ marginTop: 1, marginBottom: 1 }} />}
-            renderItem={({ item }) => <SimpleCard user={item} onPress={() => {
-                navigation.navigate('User',{
-                    user: item.data
+            renderItem={({ item }) => <SimpleCard content={item} onPress={() => {
+                navigation.navigate(Screens.PROFILE,{
+                    screen:Screens.PROFILE,
+                    params:{
+                        user:item.data
+                    }
                 })
             }}/>}
             keyExtractor={item => (item) ? item.data.userId : `${Date.now()}`}

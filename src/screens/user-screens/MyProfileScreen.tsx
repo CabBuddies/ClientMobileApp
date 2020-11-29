@@ -26,9 +26,10 @@ interface UserDetails {
     updateUserDetails: any;
     isVerified: boolean | undefined;
     userProfile: IUser | undefined;
+    route:any;
 }
 
-function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails, isVerified, userProfile }: UserDetails) {
+function MyProfileScreen({ getUserDetails, route,user, loading, updateUserDetails, isVerified, userProfile }: UserDetails) {
 
     useEffect(() => {
         getUserDetails()
@@ -38,7 +39,7 @@ function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails, isV
         user = new User();
         user.data = userProfile;
     }
-
+    reactotron.log!("route",route);
     const editProfileRef = useRef<any>();
     const snapPoints = useMemo(() => [0, '45%', '85%', '100%'], []);
     const navigation = useNavigation();
