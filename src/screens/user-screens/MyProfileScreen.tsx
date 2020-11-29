@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useLayoutEffect } from 'react';
-import { Colors, Button } from 'react-native-paper';
+import { Colors, Button, Text, Title } from 'react-native-paper';
 import { Container } from "native-base";
 import { IAppState } from '../../redux/initialState';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUser, saveUser } from "../../redux/actions/user-action";
-import { Alert, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import UserDetailsPreview from '../../components/molecules/UserDetailsPreview';
 import { useRef } from 'react';
@@ -15,7 +15,8 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import RelationsTopTabNavigator from '../../navigations/RelationsNavigator';
 import reactotron from '../../../dev/ReactotronConfig';
-import { User } from 'node-rest-objects/dist/data/user-management';
+import { IUser, User } from 'node-rest-objects/dist/data/user-management';
+import { Confirmation } from '../../components/organisms';
 
 interface UserDetails {
     navigation: any;
@@ -23,16 +24,23 @@ interface UserDetails {
     user: User | undefined;
     loading?: boolean | undefined;
     updateUserDetails: any;
+    isVerified: boolean | undefined;
+    userProfile: IUser | undefined;
 }
 
-function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails }: UserDetails) {
+function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails, isVerified, userProfile }: UserDetails) {
 
     useEffect(() => {
         getUserDetails()
     }, [])
 
+    if (!user && userProfile) {
+        user = new User();
+        user.data = userProfile;
+    }
+
     const editProfileRef = useRef<any>();
-    const snapPoints = useMemo(() => [0, '45%','85%', '100%'], []);
+    const snapPoints = useMemo(() => [0, '45%', '85%', '100%'], []);
     const navigation = useNavigation();
 
     const renderSheetHeader = () => {
@@ -78,7 +86,11 @@ function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails }: U
     return (
         <Container>
             <UserDetailsPreview user={user?.data} />
-            <RelationsTopTabNavigator />
+            {
+                isVerified ?
+                    <RelationsTopTabNavigator /> :
+                    <Confirmation />
+            }
             {
                 user?.data
                 &&
@@ -115,11 +127,14 @@ function MyProfileScreen({ getUserDetails, user, loading, updateUserDetails }: U
 
 function mapStateToProps(state: IAppState) {
     const { userState } = state;
+    const { isConfirmed, profile } = state.authState;
     return {
         user: userState.user,
         loading: userState.loading,
         error: userState.error,
-        errorType: userState.errorType
+        errorType: userState.errorType,
+        isVerified: isConfirmed,
+        userProfile: profile
     }
 }
 function mapDispatchToProps(dispatch) {
@@ -164,4 +179,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#00000040',
         marginBottom: 10,
     },
+    viewBasic: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    }
 });

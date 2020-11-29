@@ -18,5 +18,6 @@ export enum Screens{
     PACKAGE_DELIVERY = "Package Delivery",
     GUILD = "Guilds",
     FOLLOWERS = "Followers",
-    FOLLOWING = "Following"
+    FOLLOWING = "Following",
+    SEARCH = "Search"
 }

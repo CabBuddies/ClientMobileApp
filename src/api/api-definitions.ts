@@ -1,5 +1,4 @@
 import { DOMAIN, refreshAPI } from "node-rest-objects/dist/rest/api";
-import { IUser } from "node-rest-objects/dist/data/user-management";
 import Constants from "expo-constants";
 
 const LOCAL_IP = Constants.manifest.extra.serverIp; // change this as required in the app.json->extra->serverIp

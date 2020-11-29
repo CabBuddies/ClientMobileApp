@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { KeyboardAvoidingView, StyleSheet } from "react-native";
 import { CButton as Button } from "../../components/atoms";
 import { CForm, SocialLogin } from "../../components/organisms";
@@ -43,9 +43,9 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 	const signInRoutine = (values: any, actions: any) => {
 		actions.resetForm();
 		userLogin(values);
-		if(error){
-			Reactotron.error!(error,null);
-			actions.setFieldError("server",error);
+		if (error) {
+			Reactotron.error!(error, null);
+			actions.setFieldError("server", error);
 		}
 		// showToast(values);
 	};
@@ -73,38 +73,38 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 		let lastname = googleUser.familyName;
 		let password = googleUser.id;
 		let displayPicture = googleUser.photoUrl;
-		return {email, firstname, lastname, password, displayPicture};
+		return { email, firstname, lastname, password, displayPicture };
 	}
 
 	const signInWithGoogle = async () => {
 		console.log(`constants: `, Constants.manifest.extra);
 		try {
-		  const result = await Google.logInAsync({
-			iosClientId: Constants.manifest.extra.IOS_CLIENT_ID,
-			androidClientId: Constants.manifest.extra.ANDROID_CLIENT_ID,
-			scopes: ["profile", "email"]
-		  });
-	
-		  if (result.type === "success") {
-			console.log("LoginScreen.js.js 21 | ", result.user ,result.user.givenName);
-			const newgoogleUser = googleUserMapper(result.user);
-			console.log(`new google user: `,newgoogleUser);
-			userSignUp(newgoogleUser);
-			if(error) {
-				Reactotron.error!(error,null);
+			const result = await Google.logInAsync({
+				iosClientId: Constants.manifest.extra.IOS_CLIENT_ID,
+				androidClientId: Constants.manifest.extra.ANDROID_CLIENT_ID,
+				scopes: ["profile", "email"]
+			});
+
+			if (result.type === "success") {
+				console.log("LoginScreen.js.js 21 | ", result.user, result.user.givenName);
+				const newgoogleUser = googleUserMapper(result.user);
+				console.log(`new google user: `, newgoogleUser);
+				userSignUp(newgoogleUser);
+				if (error) {
+					Reactotron.error!(error, null);
+				}
+				// this.props.navigation.navigate("Profile", {
+				//   username: result.user.givenName
+				// }); //after Google login redirect to Profile
+				return result.accessToken;
+			} else {
+				return { cancelled: true };
 			}
-			// this.props.navigation.navigate("Profile", {
-			//   username: result.user.givenName
-			// }); //after Google login redirect to Profile
-			return result.accessToken;
-		  } else {
-			return { cancelled: true };
-		  }
 		} catch (e) {
-		  console.log('LoginScreen.js.js 30 | Error with login', e);
-		  return { error: true };
+			console.log('LoginScreen.js.js 30 | Error with login', e);
+			return { error: true };
 		}
-	  };
+	};
 
 	return (
 		<Container>
@@ -156,10 +156,10 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 	);
 }
 
-function mapStateToProps(state){
-	const {authState} = state;
-	return{
-		isSignedIn:authState.isSignedIn,
+function mapStateToProps(state) {
+	const { authState } = state;
+	return {
+		isSignedIn: authState.isSignedIn,
 		error: authState.error,
 	}
 }
@@ -172,7 +172,7 @@ function matchDispatchToProps(dispatch) {
 	}
 }
 
-export default connect(mapStateToProps,matchDispatchToProps)(SignInScreen);
+export default connect(mapStateToProps, matchDispatchToProps)(SignInScreen);
 
 const styles = StyleSheet.create({
 	btnContainer: {

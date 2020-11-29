@@ -11,7 +11,7 @@ export interface ApiError{
 
 export interface Common{
     loading?:boolean;
-    error?:string;
+    error?:any;
     errorType?:string;
 }
 

@@ -1,38 +1,44 @@
-import { IUser } from 'node-rest-objects/dist/data/user-management';
+import { IUser, User } from 'node-rest-objects/dist/data/user-management';
 import React from 'react'
 import { Alert, StyleSheet } from 'react-native';
-import { Card, Button as PaperButton } from 'react-native-paper';
+import { Card, Button as PaperButton, TouchableRipple } from 'react-native-paper';
 import { CustomAvatar } from '../molecules';
 
-interface ISimpleCardProps{
-    data?:IUser
-    title?:string;
-    subTitle?:string;
-    actionTitle?:string;
-    action?:() => void
+interface ISimpleCardProps {
+    user?: User;
+    title?: string;
+    subTitle?: string;
+    actionTitle?: string;
+    action?: () => void;
+    onPress?: () => void;
 }
 
-const SimpleCard = ({data,title="Full Name",subTitle="subtitle",actionTitle="action",action=() => Alert.alert(`action triggered`)}:ISimpleCardProps) => {
-    
-    if(data){
-        title=data.firstName+' '+data.lastName;
+const SimpleCard = ({
+    user, title = "Full Name", subTitle = "subtitle",
+    actionTitle = "action", action = () => Alert.alert(`action triggered`),
+    onPress = () => Alert.alert('Card Pressed') }: ISimpleCardProps) => {
+    let data;
+    if (user) {
+        data = user.data;
+        console.log('data', data, 'title', title);
+        title = data.firstName + ' ' + data.lastName;
         subTitle = data.userId;
-        actionTitle="Follow",
-        action=() => Alert.alert(`Follow action pressed`);
     }
-    
+
     return (
-        <Card>
-                <Card.Title 
-                title={title}
-                subtitle={subTitle}
-                left={() => (data && <CustomAvatar size={24} data={data}/>)}
-                right={() => <PaperButton onPress={action}>{actionTitle}</PaperButton>}
+        <TouchableRipple>
+            <Card onPress={onPress} elevation={3}>
+                <Card.Title
+                    title={title}
+                    subtitle={subTitle}
+                    left={() => (data && <CustomAvatar size={24} data={data} />)}
+                    right={() => <PaperButton onPress={action}>{actionTitle}</PaperButton>}
                 />
-        </Card>
+            </Card>
+        </TouchableRipple>
     )
-     
-    
+
+
 }
 
 export default SimpleCard;

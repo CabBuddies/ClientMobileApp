@@ -1,49 +1,16 @@
-// import React, { useState, useEffect } from 'react';
-// import { useCallback } from 'react';
-// import { View, Text } from 'react-native';
-// import { GiftedChat } from 'react-native-gifted-chat';
-
-
-// export default function DirectChatScreen() {
-
-//     const [messages, setMessages] = useState<any>([]);
-
-//     useEffect(() => {
-//         setMessages([
-//             {
-//                 _id: 1,
-//                 text: 'Hello developer',
-//                 createdAt: new Date(),
-//                 user: {
-//                     _id: 2,
-//                     name: 'React Native',
-//                     avatar: 'https://placeimg.com/140/140/any',
-//                 },
-//             },
-//         ])
-//     }, [])
-
-//     const onSend = useCallback((messages = []) => {
-//         setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-//     }, [])
-
-
-//     return (
-//         <GiftedChat
-//             messages={messages}
-//             onSend={messages => onSend(messages)}
-//             user={{
-//                 _id: 1,
-//             }}
-//         />
-//     )
-// }
 import React, { useState, useEffect, useCallback } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-community/async-storage'
 import { StyleSheet, TextInput, View, LogBox, Button } from 'react-native'
-import * as firebase from 'firebase'
-import 'firebase/firestore'
+import RealtimeDatabase from 'node-rest-objects/dist/rest/realtime.database'
+import { IAppState } from '../../../redux/initialState'
+import { connect } from 'react-redux'
+
+interface IMessage{
+    author:string,
+    text:string,
+    time:number
+}
 
 const firebaseConfig = {
     //Your firebase config here
@@ -56,47 +23,58 @@ const firebaseConfig = {
     appId: "1:1067716858916:web:298c461c0439c497d5b4b1",
     measurementId: "G-VQLJ1DMMJ5"
 }
-//@ts-ignore
-if (firebase.apps.length === 0) {
-    //@ts-ignore
-    firebase.initializeApp(firebaseConfig);
-}
 
-LogBox.ignoreLogs(['Setting a timer for a long period of time'])
-//@ts-ignore
-const db = firebase.firestore()
-const chatsRef = db.collection('chats')
+RealtimeDatabase.getApp({ options: firebaseConfig })
 
-export default function DirectChatScreen() {
+//@ts-ignore
+// if (firebase.apps.length === 0) {
+//     //@ts-ignore
+//     firebase.initializeApp(firebaseConfig);
+// }
+// LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+// //@ts-ignore
+// const db = RealtimeDatabase.getDb({options: firebaseConfig})
+// const chatsRef = db.collection('chats')
+
+
+function DirectChatScreen({ userName, _user }) {
+    userName = userName.toLowerCase();
+    const friendMap = {
+        "abhilash": "karthik",
+        "karthik": "abhilash"
+    };
     const [user, setUser] = useState<any>(null)
     const [name, setName] = useState('')
     const [messages, setMessages] = useState([])
-
-    useEffect(() => {
-        readUser()
-        const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
-            const messagesFirestore = querySnapshot
-                .docChanges()
-                .filter(({ type }) => type === 'added')
-                .map(({ doc }) => {
-                    const message = doc.data()
-                    //createdAt is firebase.firestore.Timestamp instance
-                    //https://firebase.google.com/docs/reference/js/firebase.firestore.Timestamp
-                    return { ...message, createdAt: message.createdAt.toDate() }
-                })
-                .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-            appendMessages(messagesFirestore)
-        })
-        return () => unsubscribe()
-    }, [])
-
+    // useEffect(() => {
+    //     readUser()
+    //     const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
+    //         const messagesFirestore = querySnapshot
+    //             .docChanges()
+    //             .filter(({ type }) => type === 'added')
+    //             .map(({ doc }) => {
+    //                 const message = doc.data()
+    //                 //createdAt is firebase.firestore.Timestamp instance
+    //                 //https://firebase.google.com/docs/reference/js/firebase.firestore.Timestamp
+    //                 return { ...message, createdAt: message.createdAt.toDate() }
+    //             })
+    //             .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    //         appendMessages(messagesFirestore)
+    //     })
+    //     RealtimeDatabase.observePath({path:`user/${friendMap[]}`})
+    //     return () => unsubscribe()
+    // }, [])
+    useEffect(()=>{
+        RealtimeDatabase.observePath({path:`user/${userName}`,callback:(val)=>{
+            appendMessages([val]);
+        }})
+    },[])
     const appendMessages = useCallback(
         (messages) => {
             setMessages((previousMessages) => GiftedChat.append(previousMessages, messages))
         },
         [messages]
     )
-
     async function readUser() {
         const user = await AsyncStorage.getItem('user')
         if (user) {
@@ -110,8 +88,10 @@ export default function DirectChatScreen() {
         setUser(user)
     }
     async function handleSend(messages) {
-        const writes = messages.map((m) => chatsRef.add(m))
-        await Promise.all(writes)
+        console.log(`messages: `, messages[0].text, 'username', userName,'message',messages[0]);
+        //const message:IMessage = {author:userName,text:messages[0].text,time:new Date().getTime()};
+        RealtimeDatabase.pushToPath({path:`user/${friendMap[userName]}`,value:messages[0]});
+        appendMessages(messages)
     }
 
     if (!user) {
@@ -122,8 +102,18 @@ export default function DirectChatScreen() {
             </View>
         )
     }
+
     return <GiftedChat messages={messages} user={user} onSend={handleSend} />
 }
+
+function mapStateToProps(state: IAppState) {
+    const { userState } = state;
+    return {
+        userName: userState.user?.data.firstName
+    }
+}
+
+export default connect(mapStateToProps, null)(DirectChatScreen)
 
 const styles = StyleSheet.create({
     container: {
@@ -141,4 +131,4 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderColor: 'gray',
     },
-});
+})

@@ -65,7 +65,9 @@ export enum AuthActions{
     AUTH_ERROR="auth-error",
     ANONYMOUS = "anonymous",
     REFRESH = "refresh-token",
-    LOGOUT = "logout"
+    LOGOUT = "logout",
+    CONFIRM = "confirm",
+    CONFIRM_FAILURE = "confirm-failure"
 }
 
 export enum QueryListActions{
@@ -91,6 +93,9 @@ export enum CoreActions{
     USER = "user",
     USER_FETCH = "user-fetch",
     USER_SAVE = "user-save",
+    USER_FOLLOWERS = "user-followers",
+    USER_FOLLOWING = "user-following",
+    USER_SEARCH = "user-search",
     AUTH = "auth",
     COMMENT = "comment",
     COMMENT_FETCH="comment-fetch",
@@ -115,7 +120,7 @@ export enum CoreActions{
     REQUEST_SORT="request-sort",
     REQUEST_PAGE_NUM = "request-page-num",
     REQUEST_PAGE_SIZE = "request-page-size",
-    REQUEST_QUERY = "request-query"
+    REQUEST_QUERY = "request-query",
 }
 
 export enum QueryActions{

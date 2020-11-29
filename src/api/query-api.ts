@@ -7,6 +7,7 @@ import axios from 'axios';
 import reactotron from "reactotron-react-native";
 import queryReducer from "../redux/reducers/query-reducer";
 import { OpinionType } from "../definitions/common-definitions";
+import * as APIUtils from './api-utils';
 // const draftTemplateRequest = {
 //     title:"What can I do about the BART being unavailable to San Jose",
 //     tags: ["BART","Bay Area","San Jose","Public Transport"],
@@ -257,3 +258,33 @@ export function getOpinion(opinionMap,queryId,responseId,opinionType):string{
 }
 
 
+async function searchQuery(search:string='',attributes?:string[]) {
+    try {
+        const query:Query = new Query();
+        const sro:SearchRESTObject<IQuery> = new SearchRESTObject(query);
+        sro.request.query = APIUtils.testSearchUtil(["published.title","published.body"],search);
+        console.log(sro.request.query);
+        sro.request.sort = {
+            "lastModifiedAt":-1
+        };
+        sro.request.pageSize=10;
+        if(attributes)
+            sro.request.attributes=attributes;
+        await sro.search();
+        sro.response.result.forEach((u)=>console.log(u.data.published.title));
+        return sro.response.result;
+    } catch (error) {
+        console.error(error);
+    }
+    return []
+}
+
+export async function liveQuerySuggestion(search:string):Promise<any[]>{
+    try {
+        const sro = await searchQuery(search,['createdAt', 'published.title','published.tags','author','stats']);
+        return sro
+    } catch (error) {
+        console.error(error);
+    }
+    return [];
+}
