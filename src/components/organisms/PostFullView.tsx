@@ -15,6 +15,7 @@ import { Screens } from "../../definitions/screen-definitions";
 import { bindActionCreators } from "redux";
 import { editQuery, editResponse, removeQuery, removeResponse } from "../../redux/actions/query-actions";
 import { connect } from "react-redux";
+import { timeSince } from "../../utils/Helpers";
 
 type T = any
 interface QueryViewProps{
@@ -52,7 +53,7 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 	const navigation = useNavigation();
 	const data:IQuery|IResponse = content.data;
 	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats}= data;
-	const date = createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5);
+	const date:string = timeSince(new Date(createdAt))||(createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5));
 	let responseCount;
 	const generateTags = () => {
 		switch(type){

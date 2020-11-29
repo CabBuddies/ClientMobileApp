@@ -11,18 +11,19 @@ interface ISimpleCardProps {
     actionTitle?: string;
     action?: () => void;
     onPress?: () => void;
+    avatarSize?: number;
 }
 
 const SimpleCard = ({
     user, title = "Full Name", subTitle = "subtitle",
-    actionTitle = "action", action = () => Alert.alert(`action triggered`),
+    actionTitle = "action", action, avatarSize=24,
     onPress = () => Alert.alert('Card Pressed') }: ISimpleCardProps) => {
     let data;
     if (user) {
         data = user.data;
         console.log('data', data, 'title', title);
         title = data.firstName + ' ' + data.lastName;
-        subTitle = data.userId;
+        subTitle = data.email;
     }
 
     return (
@@ -31,8 +32,8 @@ const SimpleCard = ({
                 <Card.Title
                     title={title}
                     subtitle={subTitle}
-                    left={() => (data && <CustomAvatar size={24} data={data} />)}
-                    right={() => <PaperButton onPress={action}>{actionTitle}</PaperButton>}
+                    left={() => (data && <CustomAvatar size={avatarSize} data={data} />)}
+                    right={() => ( action && <PaperButton onPress={action}>{actionTitle}</PaperButton> )}
                 />
             </Card>
         </TouchableRipple>

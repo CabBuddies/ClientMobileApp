@@ -5,8 +5,10 @@ import { Divider, Searchbar } from 'react-native-paper';
 import SimpleCard from '../../components/organisms/SimpleCard';
 import * as UserAPI from '../../api/user-api';
 import reactotron from '../../../dev/ReactotronConfig';
-
-function SearchScreen({ navigation }) {
+import { Screens } from '../../definitions/screen-definitions';
+import { useNavigation } from '@react-navigation/native';
+import factory from 'node-rest-objects/dist/utils/factory';
+function SearchScreen() {
 
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -21,6 +23,8 @@ function SearchScreen({ navigation }) {
         })
     }, [searchQuery]);
 
+    const navigation = useNavigation();
+
     return (
         <FlatList
             data={userSuggestions}
@@ -32,9 +36,10 @@ function SearchScreen({ navigation }) {
                 />
             }
             ItemSeparatorComponent={() => <Divider style={{ marginTop: 1, marginBottom: 1 }} />}
-            renderItem={({ item }) => <SimpleCard user={item} onPress={() => {
-                navigation.navigate('User',{
-                    user: item.data
+            renderItem={({ item }) => <SimpleCard user={item} avatarSize={40} onPress={() => {
+                navigation.navigate(Screens.PROFILE,{
+                    screen: Screens.USER_PROFILE,
+                    params:{user:item.data}
                 })
             }}/>}
             keyExtractor={item => (item) ? item.data.userId : `${Date.now()}`}

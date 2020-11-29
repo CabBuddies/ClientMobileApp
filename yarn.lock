@@ -5167,7 +5167,7 @@ node-releases@^1.1.60:
 
 node-rest-objects@CabBuddies/Node-REST-Objects#master:
   version "1.0.0"
-  resolved "https://codeload.github.com/CabBuddies/Node-REST-Objects/tar.gz/c515c93e7f66d3c129314eb7e5033f2f89116296"
+  resolved "https://codeload.github.com/CabBuddies/Node-REST-Objects/tar.gz/d53c933c0956afc285a967e69763d3d80f0c57b9"
   dependencies:
     "@types/axios" "^0.14.0"
     "@types/chai" "^4.2.13"

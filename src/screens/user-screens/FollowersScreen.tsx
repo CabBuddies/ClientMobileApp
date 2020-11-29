@@ -2,8 +2,10 @@ import { Container } from 'native-base'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { FlatList } from 'react-native'
+import { Button } from 'react-native-paper'
+import { Screens } from '../../definitions/screen-definitions'
 
-const FollowersScreen = () => {
+const FollowersScreen = ({navigation}) => {
     return (
         <Container>
             {/* <FlatList data={cards?.result} renderItem={renderItem}
@@ -17,6 +19,16 @@ const FollowersScreen = () => {
                 extraData={cards}
                 refreshControl={<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)} />}
             /> */}
+            <Button onPress={()=>{
+                navigation.navigate(Screens.PROFILE,{
+                    VALUE:'GOOD'
+                })
+            }}>Good</Button>
+            <Button onPress={()=>{
+                navigation.navigate(Screens.PROFILE,{
+                    VALUE:'Bad'
+                })
+            }}>Bad</Button>
         </Container>
     )
 }

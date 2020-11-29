@@ -11,11 +11,12 @@ import { logOut, signOut } from '../redux/actions/auth-action';
 import { bindActionCreators } from 'redux';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
-import EditMyProfileScreen from '../screens/user-screens/EditMyProfileScreen';
 import { getUser } from '../redux/actions/user-action';
 import { useEffect } from 'react';
 import { IAppState } from '../redux/initialState';
-import SearchScreen from '../screens/user-screens/SearchScreen';
+import RelationsTopTabNavigator from './RelationsNavigator';
+import UserProfileScreen from '../screens/user-screens/UserProfileScreen';
+
 
 const MyProfileStack = createStackNavigator();
 
@@ -25,11 +26,12 @@ const MyProfileStack = createStackNavigator();
 function MyProfileStackNavigator() {
     const navigation = useNavigation();
     return (
-        <MyProfileStack.Navigator initialRouteName={Screens.PROFILE} mode="modal" >
-            <MyProfileStack.Screen name={Screens.PROFILE} component={MyProfileScreen} options={{
-                headerLeft: () => <HeaderBackButton onPress={() => navigation.goBack()} />
+        <MyProfileStack.Navigator initialRouteName={Screens.MY_PROFILE} >
+            <MyProfileStack.Screen name={Screens.MY_PROFILE} component={MyProfileScreen} />
+            <MyProfileStack.Screen name={Screens.USER_PROFILE} component={UserProfileScreen} options={{
+                headerLeft: () => (<HeaderBackButton onPress={() => navigation.goBack()}/>)
             }} />
-            <MyProfileStack.Screen name={Screens.EDIT_PROFILE} component={EditMyProfileScreen} />
+            <MyProfileStack.Screen name={Screens.USER_RELATIONS} component={RelationsTopTabNavigator} />
         </MyProfileStack.Navigator>
     );
 }
