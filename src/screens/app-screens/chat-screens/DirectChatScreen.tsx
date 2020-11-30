@@ -11,7 +11,7 @@ interface IMessage{
     text:string,
     time:number
 }
-
+LogBox.ignoreAllLogs();
 const firebaseConfig = {
     //Your firebase config here
     apiKey: "AIzaSyDl4dmvk0tBIX0-BWCaOZy0MjAcTtLHo60",

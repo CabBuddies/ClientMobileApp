@@ -75,7 +75,7 @@ function MyProfileScreen({ getUserDetails, route, userId, loading, updateUserDet
 
     const saveUserDetails = (values) => {
         reactotron.log!(`SAVING USER DETAILS`, values);
-        updateUserDetails(user, values);
+        updateUserDetails(values);
     }
 
     let firstName = "";
