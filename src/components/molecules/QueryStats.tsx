@@ -21,9 +21,9 @@ export function QueryStats({stats, onComment, onDownVote, onUpVote, scoreOnly=fa
         <Grid >
             <Row style = {{alignItems: 'center'}}>
             
-                <VotesAtom scoreOnly={scoreOnly} voteCount = {stats.score} onUpVote={onUpVote} onDownVote={onDownVote}/>
+                <VotesAtom scoreOnly={scoreOnly} voteCount={stats.score} onUpVote={onUpVote} onDownVote={onDownVote}/>
             
-                <CommentsAtom commentCount = {stats.commentCount} onCommentPress={onComment} commentDisabled={commentDisabled}/>
+                <CommentsAtom commentCount = {stats.responseCount} onCommentPress={onComment} commentDisabled={commentDisabled}/>
             
                 <ViewsAtom views = {stats.viewCount}/>
             

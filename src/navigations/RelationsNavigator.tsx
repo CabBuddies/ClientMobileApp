@@ -9,7 +9,7 @@ const RelationsNavigator = createMaterialTopTabNavigator();
 export default function RelationsTopTabNavigator() {
     return (
         <>
-            <RelationsNavigator.Navigator initialRouteName={Screens.FOLLOWERS}>
+            <RelationsNavigator.Navigator initialRouteName={Screens.FOLLOWERS} >
                 <RelationsNavigator.Screen name={Screens.FOLLOWERS} component={FollowersScreen} />
                 <RelationsNavigator.Screen name={Screens.FOLLOWING} component={FollowingScreen} />
             </RelationsNavigator.Navigator>

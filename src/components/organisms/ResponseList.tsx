@@ -94,7 +94,7 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
         <FlatList data={responses} renderItem={memoizedRender}
             keyExtractor = {item => (item)?item.data._id:`${Date.now()}`}
             ListEmptyComponent={renderEmptyComponent}
-            ListHeaderComponent={headerComponent}
+            // ListHeaderComponent={headerComponent}
             ItemSeparatorComponent={() => <Divider />}
             extraData={responses}
         />
@@ -129,9 +129,8 @@ export default connector(ResponseList);
 const styles = StyleSheet.create({
     errorContainer:{
         flex:1,
-        justifyContent:"center",
-        alignContent:"center",
-        alignItems:"center"
+        alignItems:"center",
+        padding: 20,
     },
     errorText:{
         color:Colors.red300,

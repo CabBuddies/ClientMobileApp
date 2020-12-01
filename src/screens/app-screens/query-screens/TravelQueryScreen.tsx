@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
-import { FlatList, Alert, RefreshControl } from 'react-native'
+import { FlatList, Alert, RefreshControl, View } from 'react-native'
 import { Container, Content, Item, List, Text, Button } from 'native-base';
 import { CButton } from '../../../components/atoms'
 import { QueryPreview } from '../../../components/organisms'
@@ -12,7 +12,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchQuery } from '../../../redux/actions/query-actions';
 import { IQueryListResponse } from '../../../definitions/query-definitions';
-import { Searchbar } from 'react-native-paper';
+import { Colors, Searchbar } from 'react-native-paper';
 import { ContentLoading } from '../../../components/molecules';
 import { PlaceholderSize } from '../../../definitions/common-definitions';
 import { liveQuerySuggestion } from '../../../api/query-api';
@@ -104,12 +104,17 @@ function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQ
 
     const renderItem = ({ item }) => {
         reactotron.log!(`106.TQS `, searchBar);
-        return <QueryPreview query={item} itemNav={() => nav(item)} />
+        return <View style={{margin: 5}}><QueryPreview query={item} itemNav={() => nav(item)} /></View>
     }
 
     return (
         <>
             <Searchbar
+                style={{
+                    margin: 5,
+                    borderStyle: "solid",
+                    borderColor: Colors.black
+                }}
                 ref={(el) => { searchBar = el }}
                 placeholder="Search"
                 onChangeText={(text: string) => {
@@ -122,9 +127,9 @@ function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQ
                 keyExtractor={item => (item) ? item.data._id : `${Date.now()}`}
                 // ListEmptyComponent={placeholder}
                 // ListHeaderComponent={() => (
-                    
+
                 // )}
-            refreshControl={<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)} />}
+                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)} />}
             />
         </>
     )

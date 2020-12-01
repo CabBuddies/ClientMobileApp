@@ -98,7 +98,7 @@ export default function VotesAtom({voteCount = 0,scoreOnly=false, onUpVote, onDo
                 />   
             }
                  
-                <Text> {text+votesState.votes} </Text> 
+                <Text> {text+voteCount} </Text> 
            {
                !scoreOnly && 
                <CButton

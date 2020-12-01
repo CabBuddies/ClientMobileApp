@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { FlatList } from 'react-native';
-import { Divider, Searchbar } from 'react-native-paper';
+import { Colors, Divider, Searchbar } from 'react-native-paper';
 import SimpleCard from '../../components/organisms/SimpleCard';
 import * as UserAPI from '../../api/user-api';
 import reactotron from '../../../dev/ReactotronConfig';
@@ -32,19 +32,34 @@ function SearchScreen() {
                     placeholder="Search"
                     onChangeText={(text: string) => { setSearchQuery(text) }}
                     value={searchQuery}
+                    style={styles.searchbar}
                 />
             }
             ItemSeparatorComponent={() => <Divider style={{ marginTop: 1, marginBottom: 1 }} />}
-            renderItem={({ item }) => <SimpleCard content={item} avatarSize={40} onPress={() => {
-                navigation.navigate(Screens.USER_PROFILE,{
-                    user:item.data
-                })
-            }}/>}
+            renderItem={({ item }) => (
+                <View style={styles.userCard}>
+                    <SimpleCard content={item} avatarSize={40} onPress={() => {
+                    navigation.navigate(Screens.USER_PROFILE,{
+                        user:item.data
+                    })
+                }}/>
+                </View>
+            )}
             keyExtractor={item => (item) ? item.data.userId : `${Date.now()}`}
         />
     )
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    searchbar: {
+        margin: 5,
+        borderStyle: "solid",
+        borderColor: Colors.black
+    },
+    userCard:{
+        margin: 2
+    }
+
+});
 
 export default SearchScreen;

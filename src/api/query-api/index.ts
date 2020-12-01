@@ -1,13 +1,14 @@
 import { Comment, IQuery, IResponse, Query, Response, TQOpinion } from "node-rest-objects/dist/data/queries";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import SearchRESTObject from "node-rest-objects/dist/rest/search.rest.object";
-import Reactotron from "../../dev/ReactotronConfig";
-import { QueryStatus } from "../redux/initialState";
+import Reactotron from "../../../dev/ReactotronConfig";
+import { QueryStatus } from "../../redux/initialState";
 import axios from 'axios';
 import reactotron from "reactotron-react-native";
-import queryReducer from "../redux/reducers/query-reducer";
-import { OpinionType } from "../definitions/common-definitions";
-import * as APIUtils from './api-utils';
+import queryReducer from "../../redux/reducers/query-reducer";
+import { OpinionType } from "../../definitions/common-definitions";
+import * as APIUtils from './../api-utils';
+import safePromise from 'node-rest-objects/dist/rest/safe.promise';
 // const draftTemplateRequest = {
 //     title:"What can I do about the BART being unavailable to San Jose",
 //     tags: ["BART","Bay Area","San Jose","Public Transport"],
@@ -15,8 +16,8 @@ import * as APIUtils from './api-utils';
 //     but the stations are still not open, what can I do about this? ",
 // }
 const defaultSearchRequest = {
-    sort:{
-        "createdAt":-1
+    sort: {
+        "createdAt": -1
     }
 }
 // async function getDataSendRequestTest(){
@@ -32,191 +33,191 @@ const defaultSearchRequest = {
 //     })
 // }
 // ------------------------------- FETCH APIs ------------------------------------------------
-export async function getAllQueries(request = defaultSearchRequest){
-    try{
+export async function getAllQueries(request = defaultSearchRequest) {
+    try {
         // getDataSendRequestTest();
-        const query:Query = new Query();       
-        const querySro= new SearchRESTObject(query);
+        const query: Query = new Query();
+        const querySro = new SearchRESTObject(query);
         querySro.setRequest(request);
-        Reactotron.log!("query-search-request",querySro.request);
+        Reactotron.log!("query-search-request", querySro.request);
         await querySro.search();
-        Reactotron.log!("query-search-response",querySro.response);
+        Reactotron.log!("query-search-response", querySro.response);
         return querySro.response;
     }
-    catch(error){
-        Reactotron.log!("Query-API: Error in query-search",error);
+    catch (error) {
+        Reactotron.log!("Query-API: Error in query-search", error);
         throw error;
     }
 }
-export async function getAllResponses(query:Query,request){
+export async function getAllResponses(query: Query, request) {
     try {
-        const answer:Response =  new Response();
+        const answer: Response = new Response();
         answer.setQueryId(query.data._id);
         const searchRestObject = new SearchRESTObject(answer);
         searchRestObject.setRequest(request);
         await searchRestObject.search();
         const preRead = searchRestObject.response.result;
         const answers = await Promise.all(preRead.map(responseReader));
-        Reactotron.log!("answers",answers);
+        Reactotron.log!("answers", answers);
         return answers;
     } catch (error) {
-        Reactotron.log!(`Query-API: Error getting responses queryId:${query.data._id}`,error);
+        Reactotron.log!(`Query-API: Error getting responses queryId:${query.data._id}`, error);
         throw error;
     }
 }
-async function responseReader(resp){
+async function responseReader(resp) {
     const answer = <Response>resp;
     await answer.read();
     return answer;
 }
-async function commentReader(cmnt){
+async function commentReader(cmnt) {
     const comment = <Comment>cmnt;
     await comment.read();
     return comment;
 }
 
-export async function getAllComments(restObj:RESTObject<IQuery | IResponse>,request){
-    try{
+export async function getAllComments(restObj: RESTObject<IQuery | IResponse>, request) {
+    try {
         Reactotron.log!("GETTING ALL COMMENTS.......");
-        let comment:Comment = new Comment();
+        let comment: Comment = new Comment();
         comment.data.queryId = restObj.data._id;
         const searchComment = new SearchRESTObject(comment);
         searchComment.setRequest(request);
         await searchComment.search();
         const cmnts = searchComment.response.result;
         const comments = await Promise.all(cmnts.map(commentReader));
-        Reactotron.log!("comments",comments);
+        Reactotron.log!("comments", comments);
         return comments;
     }
-    catch(error){
-        reactotron.log!("Query-API: comment fetch api error",error);
+    catch (error) {
+        reactotron.log!("Query-API: comment fetch api error", error);
         throw error;
-    }  
+    }
 }
 
 // ------------------------------- CREATE APIs ------------------------------------------------
-export async function createQuery(request){
+export async function createQuery(request) {
     try {
-        const query:Query = new Query();
+        const query: Query = new Query();
         // query.setDraft(request);
         query.setPublished(request);
         query.setStatus("published");
         await query.create();
         // Reactotron.log!("query: ",query);
-        return query;    
+        return query;
     } catch (error) {
-        Reactotron.log!(`Query-API: error creating the query`,error);
+        Reactotron.log!(`Query-API: error creating the query`, error);
         throw error;
     }
 }
 
-export async function createComment(query:RESTObject<IQuery | IResponse>,request){
+export async function createComment(query: RESTObject<IQuery | IResponse>, request) {
     try {
-        let comment:Comment = new Comment();
+        let comment: Comment = new Comment();
         comment.data.body = request;
-        comment.data.queryId=query.data._id;
+        comment.data.queryId = query.data._id;
         await comment.create();
-        Reactotron.log!("comment-api-response",comment.data);
+        Reactotron.log!("comment-api-response", comment.data);
         return comment;
     } catch (error) {
-        Reactotron.log!("Query-API: Error creating comment",error);
+        Reactotron.log!("Query-API: Error creating comment", error);
         throw error;
-    }   
+    }
 }
 
-export async function createResponse(query:Query,request){
+export async function createResponse(query: Query, request) {
     try {
-        const response:Response = new Response();
+        const response: Response = new Response();
         response.setQueryId(query.data._id);
         response.setPublished(request);
         response.setStatus("published");
         await response.create();
         // Reactotron.log!("response: ",response);
-        return response;    
+        return response;
     } catch (error) {
-        Reactotron.log!(`Query-API: error creating the response`,error);
+        Reactotron.log!(`Query-API: error creating the response`, error);
         throw error;
     }
 }
 // ------------------------------- UPDATE APIs ------------------------------------------------
-export async function updateQuery(query:Query,request){
+export async function updateQuery(query: Query, request) {
     try {
         query.setPublished(request);
         query.setStatus("published");
         await query.update();
         // Reactotron.log!("query: ",query);
-        return query;    
+        return query;
     } catch (error) {
-        Reactotron.log!(`Query-API: error updating the query`,error);
+        Reactotron.log!(`Query-API: error updating the query`, error);
         throw error;
     }
 }
-export async function updateResponse(response:Response,request){
+export async function updateResponse(response: Response, request) {
     try {
         response.setPublished(request);
         response.setStatus("published");
         await response.update();
         // Reactotron.log!("response: ",response);
-        return response;    
+        return response;
     } catch (error) {
-        Reactotron.log!(`Query-API: error updating the response`,error);
+        Reactotron.log!(`Query-API: error updating the response`, error);
         throw error;
     }
 }
-export async function updateComment(comment:Comment,request){
+export async function updateComment(comment: Comment, request) {
     try {
         comment.data.body = request;
         await comment.update();
-        Reactotron.log!("comment-api-response",comment.data);
+        Reactotron.log!("comment-api-response", comment.data);
         return comment;
     } catch (error) {
-        Reactotron.log!("Query-API: Error updating comment",error);
+        Reactotron.log!("Query-API: Error updating comment", error);
         throw error;
-    }   
+    }
 }
 // ------------------------------ DELETE APIs -------------------------------------------------------
-export async function deleteQuery(query:Query){
+export async function deleteQuery(query: Query) {
     try {
         await query.delete();
         return query;
     } catch (error) {
-        Reactotron.log!(`Query-API: error deleting the query`,error);
+        Reactotron.log!(`Query-API: error deleting the query`, error);
         throw error;
     }
 }
-export async function deleteResponse(response:Response){
+export async function deleteResponse(response: Response) {
     try {
         await response.delete();
-        Reactotron.log!("deleted response",response);
+        Reactotron.log!("deleted response", response);
         return response;
     } catch (error) {
-        Reactotron.log!(`Query-API: error creating the query`,error);
+        Reactotron.log!(`Query-API: error creating the query`, error);
         throw error;
     }
 }
-export async function deleteComment(comment:Comment){
+export async function deleteComment(comment: Comment) {
     try {
         await comment.delete();
         return comment;
     } catch (error) {
-        Reactotron.log!(`Query-API: error creating the query`,error);
+        Reactotron.log!(`Query-API: error creating the query`, error);
         throw error;
     }
 }
 // -------------------------------------------- Opinion ---------------------------------------------------
-export async function createOpinion(restObj:RESTObject<IQuery | IResponse>,type:OpinionType){
-    try{
+export async function createOpinion(restObj: RESTObject<IQuery | IResponse>, type: OpinionType) {
+    try {
         let queryId;
-        let responseId='';
+        let responseId = '';
         const opinion = new TQOpinion();
         opinion.data.opinionType = type;
-        if(restObj instanceof Response){
+        if (restObj instanceof Response) {
             queryId = restObj.data.queryId;
             responseId = restObj.data._id;
             opinion.data.queryId = queryId;
             opinion.data.responseId = responseId;
         }
-        else{
+        else {
             queryId = restObj.data._id;
             opinion.data.queryId = queryId;
         }
@@ -225,21 +226,21 @@ export async function createOpinion(restObj:RESTObject<IQuery | IResponse>,type:
         opinionMap[`${queryId};${responseId};${type}`] = opinion.data._id;
         return opinionMap;
     }
-    catch(error){
-        reactotron.log!(`error creating the opinion`,error);
+    catch (error) {
+        reactotron.log!(`error creating the opinion`, error);
         throw error;
     }
 }
 
-export async function deleteOpinion(opinionId:string){
-    try{
+export async function deleteOpinion(opinionId: string) {
+    try {
         const opinion = new TQOpinion();
         opinion.data._id = opinionId;
         await opinion.delete();
         return opinionId;
     }
-    catch(error){
-        reactotron.log!(`error deleting the opinion:`,opinionId,error);
+    catch (error) {
+        reactotron.log!(`error deleting the opinion:`, opinionId, error);
         throw error;
     }
 }
@@ -254,25 +255,25 @@ export async function deleteOpinion(opinionId:string){
 //     opinionMap[`${queryId};${responseId};${opinionType}`] = opinionId;
 // }
 
-export function getOpinion(opinionMap,queryId,responseId,opinionType):string{
+export function getOpinion(opinionMap, queryId, responseId, opinionType): string {
     return opinionMap[`${queryId};${responseId};${opinionType}`];
 }
 
 
-async function searchQuery(search:string='',attributes?:string[]) {
+async function searchQuery(search: string = '', attributes?: string[]) {
     try {
-        const query:Query = new Query();
-        const sro:SearchRESTObject<IQuery> = new SearchRESTObject(query);
-        sro.request.query = APIUtils.testSearchUtil(["published.title","published.body"],search);
+        const query: Query = new Query();
+        const sro: SearchRESTObject<IQuery> = new SearchRESTObject(query);
+        sro.request.query = APIUtils.testSearchUtil(["published.title", "published.body"], search);
         console.log(sro.request.query);
         sro.request.sort = {
-            "published.lastModifiedAt":-1
+            "published.lastModifiedAt": -1
         };
-        sro.request.pageSize=10;
-        if(attributes)
-            sro.request.attributes=attributes;
-        await sro.search();
-        sro.response.result.forEach((u)=>console.log(u.data.published.title));
+        sro.request.pageSize = 10;
+        if (attributes)
+            sro.request.attributes = attributes;
+        await safePromise(sro.search());
+        sro.response.result.forEach((u) => console.log(u.data.published.title));
         return sro.response.result;
     } catch (error) {
         console.error(error);
@@ -280,9 +281,9 @@ async function searchQuery(search:string='',attributes?:string[]) {
     return []
 }
 
-export async function liveQuerySuggestion(search:string):Promise<any[]>{
+export async function liveQuerySuggestion(search: string): Promise<any[]> {
     try {
-        const sro = await searchQuery(search,['createdAt', 'published.title','published.tags','author','stats']);
+        const sro = await searchQuery(search, ['createdAt', 'published.title', 'published.tags', 'author', 'stats']);
         return sro
     } catch (error) {
         console.error(error);

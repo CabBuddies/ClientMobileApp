@@ -149,15 +149,12 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 	}
     return (
         <Card style={styles.card}>
-			{ 	
-				type==="query" &&
-				<Badge visible size={25} style={[styles.badge,styles[type]]}>{responseCount}</Badge>
-			}
 			<Badge visible size={25} style={[styles.badge,styles[type]]}>{type.toUpperCase()}</Badge>
 			<Card.Title title={published?.title} 
 				right={(props) => <Options {...props} mode={MenuModes.CRUD} onDelete={onDelete} onEdit={onUpdate}/>}
 			/>
 			<Card.Content>
+				<Text style={{fontSize:20}}>{published?.body}</Text>
 				<Tags
 					initialTags = {tags}
 					readonly
@@ -172,7 +169,6 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 						</Chip>
 					  )}
                 />
-				<Paragraph>{published?.body}</Paragraph>
 			</Card.Content>
 				<Card.Title title={author?.firstName +' '+ author?.lastName} subtitle={date} left={(props) => renderAvatar(props)}/>
 			<Card.Actions style={styles.actions}>
@@ -216,6 +212,7 @@ const styles = StyleSheet.create({
 		borderColor:Colors.black
 	},
 	tagContainer:{
+		paddingTop: 15,
 		justifyContent:"space-evenly",
 		padding:2
 	},

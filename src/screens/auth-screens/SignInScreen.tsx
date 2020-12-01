@@ -20,6 +20,8 @@ import { Screens } from "../../definitions/screen-definitions";
 import * as Google from "expo-google-app-auth";
 import Constants from "expo-constants";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Headline, Title } from "react-native-paper";
+import { Colors } from "react-native-paper";
 
 type AuthNavigation = StackNavigationProp<RootStackParamList>;
 
@@ -63,8 +65,8 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 	};
 
 	const initialValues = {
-		email: "karthik.munipalle21@cabbuddies.com",
-		password: "edokati",
+		email: "abhivadnala@gmail.com",
+		password: "123456",
 	};
 
 	const googleUserMapper = (googleUser) => {
@@ -109,9 +111,10 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 	return (
 		<Container>
 			<KeyboardAwareScrollView>
-				<Grid>
+				<Grid >
 					<Row style={{ justifyContent: "center" }}>
-						<Thumbnail source={phi} style={{ marginTop: 20 }} />
+						{/* <Thumbnail source={phi} style={{ marginTop: 20 }} /> */}
+						<Headline style={{paddingTop:60, paddingBottom:35, color: 'rgb(20,95,255)',fontWeight:'bold', fontSize:70, fontFamily: "Signatra" }}>Travel Buff</Headline>
 					</Row>
 					<Row>
 						<SocialLogin google={signInWithGoogle} />
@@ -132,7 +135,7 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 							hasText
 							transparent
 							onPress={nav}
-							title=" New to CabBuddies? SignUp "
+							title=" New to TravelBuff? SignUp "
 							container={{ flex: 1, justifyContent: "center" }}
 						/>
 					</Row>

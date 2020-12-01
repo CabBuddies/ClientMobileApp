@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useLayoutEffect } from 'react';
+import React, { useEffect, useMemo, useLayoutEffect, useState } from 'react';
 import { Colors, Button } from 'react-native-paper';
 import { Container } from "native-base";
 import { IAppState } from '../../redux/initialState';
@@ -7,7 +7,6 @@ import { bindActionCreators } from 'redux';
 import { getUser, saveUser } from "../../redux/actions/user-action";
 import { StyleSheet, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
-import UserDetailsPreview from '../../components/molecules/UserDetailsPreview';
 import { useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import UserDetailsEdit from '../../components/molecules/UserDetailsEdit';
@@ -15,8 +14,6 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import reactotron from '../../../dev/ReactotronConfig';
 import { IUser, User } from 'node-rest-objects/dist/data/user-management';
-import { Confirmation } from '../../components/organisms';
-import UserActivityNavigator from '../../navigations/UserActivityNavigator';
 import UserProfileView from './UserProfileView';
 
 interface UserDetails {
@@ -24,6 +21,7 @@ interface UserDetails {
     getUserDetails: any;
     loading?: boolean | undefined;
     updateUserDetails: any;
+    updatedUser: User | undefined;
     isVerified: boolean | undefined;
     userProfile: IUser | undefined;
     route: any;
@@ -31,17 +29,13 @@ interface UserDetails {
     isAnonymous: boolean;
 }
 
-function MyProfileScreen({ getUserDetails, route, userId, loading, updateUserDetails, isVerified, userProfile }: UserDetails) {
+function MyProfileScreen({ getUserDetails, route, userId, loading, updatedUser, updateUserDetails, isVerified, userProfile }: UserDetails) {
 
-    // FIXISSUE
     useEffect(() => {
-        getUserDetails()
-    }, [])
+        setUser(updatedUser?.data);
+    },[updatedUser])
 
-    //isSelf is true
-    const isSelf = true;
-
-    let user = userProfile;//new User();
+    const [user,setUser] = useState(userProfile);//new User();
 
     const editProfileRef = useRef<any>();
     const snapPoints = useMemo(() => [0, '45%', '85%', '100%'], []);
@@ -62,12 +56,6 @@ function MyProfileScreen({ getUserDetails, route, userId, loading, updateUserDet
             editProfileRef.current.snapTo(2);
     };
 
-    // useLayoutEffect(() => {
-    //     navigation.setOptions({
-    //         headerRight: () => <Button mode="text" compact uppercase={false} onPress={() => }>Edit</Button>
-    //     })
-    // });
-
     const userEditValidationSchema = yup.object({
         firstName: yup.string().required('Firstname is required'),
         lastName: yup.string().required('Lastname is required')
@@ -75,7 +63,13 @@ function MyProfileScreen({ getUserDetails, route, userId, loading, updateUserDet
 
     const saveUserDetails = (values) => {
         reactotron.log!(`SAVING USER DETAILS`, values);
-        updateUserDetails(user, values);
+        updateUserDetails(values).then(() => {
+            getUserDetails().then(()=>{
+                reactotron.log!(`success refetching user`);
+            }).catch((err) => {
+                reactotron.log!(`error refetching user`, err);
+            })
+        });
     }
 
     let firstName = "";
@@ -129,6 +123,7 @@ function mapStateToProps(state: IAppState) {
     const { userState } = state;
     const { isConfirmed, profile, userId, anonymous } = state.authState;
     return {
+        updatedUser:userState.user,
         loading: userState.loading,
         error: userState.error,
         errorType: userState.errorType,
@@ -141,7 +136,7 @@ function mapStateToProps(state: IAppState) {
 function mapDispatchToProps(dispatch) {
     return {
         getUserDetails: bindActionCreators(getUser, dispatch),
-        updateUserDetails: bindActionCreators(saveUser, dispatch)
+        updateUserDetails: bindActionCreators(saveUser, dispatch),
     }
 }
 const connector = connect(mapStateToProps, mapDispatchToProps);

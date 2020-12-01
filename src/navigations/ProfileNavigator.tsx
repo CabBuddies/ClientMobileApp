@@ -28,9 +28,11 @@ function MyProfileStackNavigator() {
     return (
         <MyProfileStack.Navigator initialRouteName={Screens.MY_PROFILE} >
             <MyProfileStack.Screen name={Screens.MY_PROFILE} component={MyProfileScreen} options={{
-                headerLeft: () => (<HeaderBackButton onPress={() => navigation.goBack()}/>)
-            }}/>
-            <MyProfileStack.Screen name={Screens.USER_RELATIONS} component={RelationsTopTabNavigator} />
+                headerLeft: () => (<HeaderBackButton onPress={() => navigation.goBack()} />)
+            }} />
+            <MyProfileStack.Screen name={Screens.USER_RELATIONS} component={RelationsTopTabNavigator} options={{
+                headerLeft: () => (<HeaderBackButton onPress={() => navigation.goBack()} />)
+            }} />
         </MyProfileStack.Navigator>
     );
 }

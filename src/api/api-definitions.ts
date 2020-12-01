@@ -1,22 +1,35 @@
-import {refreshAPI } from "node-rest-objects/dist/rest/api";
+import { refreshAPI } from "node-rest-objects/dist/rest/api";
+import { setHandlers } from 'node-rest-objects/dist/rest/safe.promise';
 import Constants from "expo-constants";
 
 const LOCAL_IP = Constants.manifest.extra.serverIp; // change this as required in the app.json->extra->serverIp
 const APIDefinitions = {
-    USER_MANAGEMENT : `http://${LOCAL_IP}:4000`,
+    USER_MANAGEMENT: `http://${LOCAL_IP}:4000`,
     QUERIES: `http://${LOCAL_IP}:4001`,
-    GROUPS : `http://${LOCAL_IP}:4002`,
+    GROUPS: `http://${LOCAL_IP}:4002`,
 }
 
 export enum AppColors {
     PRIMARY = "#3F51B5",
 }
 
-export const applyLocalDefinitions = () =>{
-    
+export const applyLocalDefinitions = () => {
+
     refreshAPI(APIDefinitions);
 
     console.log("Definitions RESET", APIDefinitions);
+
+    setHandlers({
+        handleEmptyToken: () => {
+            console.log('React-Native', 'Empty Token', 'Acknowledged', 'Sorry, the operation you are trying to perform is an auth required operation');
+        },
+        handleExpiredRefreshToken: () => {
+            console.log('React-Native', 'Expired Refresh Token', 'Acknowledged', 'Sorry, your refresh token has expired please sign in again.');
+        },
+        handleNetworkError: () => {
+            console.log('React-Native', 'Network Error', 'Acknowledged', 'Oops, something went wrong please try again later');
+        }
+    });
 }
 
 

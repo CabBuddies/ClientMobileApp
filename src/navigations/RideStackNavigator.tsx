@@ -5,6 +5,7 @@ import { Screens } from '../definitions/screen-definitions';
 import { TouchableOpacity } from 'react-native';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { Icon } from 'native-base';
+import TravelGroupScreen from '../screens/app-screens/group-screens/TravelGroupScreen';
 
 const RideNavigator = createStackNavigator();
 
@@ -19,6 +20,7 @@ export default function RideStackNavigator() {
             )
         }}>
             <RideNavigator.Screen name={Screens.RIDE} component={RideScreen} />
+            <RideNavigator.Screen name={Screens.GROUPS_SCREEN} component={TravelGroupScreen} />
         </RideNavigator.Navigator>
     )
 }

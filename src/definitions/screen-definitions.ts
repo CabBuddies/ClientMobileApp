@@ -1,5 +1,5 @@
 
-export enum Screens{
+export enum Screens {
     ROOT = "App Root",
     AUTH = "Welcome",
     SIGN_IN = "SignIn",
@@ -17,13 +17,18 @@ export enum Screens{
     USER_QUERIES = "Queries",
     USER_GROUPS = "Groups",
     USER_RELATIONS = "Relations",
+    FOLLOWERS = "Followers",
+    FOLLOWING = "Following",
     RIDE = "Find a ride",
     CHATS = "Chats",
+    CHAT_DIRECT_LIST = "Direct Chat List",
     CHAT_GROUP = "Group",
     CHAT_DIRECT = "Direct",
     PACKAGE_DELIVERY = "Package Delivery",
     GUILD = "Guilds",
-    FOLLOWERS = "Followers",
-    FOLLOWING = "Following",
-    SEARCH = "Search"
+    SEARCH = "Search",
+    USER_DIRECT_CHAT = "DIRECT CHATS",
+    CHAT_GROUP_LIST = "CHAT_GROUP_LIST",
+    CHAT_LIST_SCREEN = "CHAT_LIST_SCREEN",
+    GROUPS_SCREEN = "Guilds"
 }
