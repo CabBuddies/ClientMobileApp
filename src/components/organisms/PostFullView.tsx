@@ -149,10 +149,6 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 	}
     return (
         <Card style={styles.card}>
-			{ 	
-				type==="query" &&
-				<Badge visible size={25} style={[styles.badge,styles[type]]}>{responseCount}</Badge>
-			}
 			<Badge visible size={25} style={[styles.badge,styles[type]]}>{type.toUpperCase()}</Badge>
 			<Card.Title title={published?.title} 
 				right={(props) => <Options {...props} mode={MenuModes.CRUD} onDelete={onDelete} onEdit={onUpdate}/>}

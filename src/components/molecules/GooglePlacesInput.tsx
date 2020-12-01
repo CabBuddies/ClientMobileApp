@@ -17,6 +17,15 @@ const GooglePlacesInput = ({placeholder = "search"}) => {
       textInputProps={{
         InputComp: TextInput
       }}
+      styles={{
+        textInput:{
+          elevation:2
+        },
+        listView:{
+          elevation:1,
+          position:"absolute"
+        }
+      }}
     />
   );
 };

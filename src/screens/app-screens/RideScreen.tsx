@@ -40,20 +40,23 @@ export default function RideScreen({ navigation }) {
         setMode('datetime');
     }
     return (
-        <Container>
-            
+        <Container>    
                 <MapView style={styles.mapStyle} 
-                    showsUserLocation
-                    followsUserLocation
+                    initialRegion={{
+                        latitude: 37.78825,
+                        longitude: -122.4324,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                      }}
                 />
                 <View style={styles.overlayContainer}>
-                    <GooglePlacesInput placeholder="to"/>
+                    {/* <GooglePlacesInput placeholder="to"/> */}
                     <GooglePlacesInput placeholder="from" />
                     <Row style={styles.btnContainer}>
                         <Button mode="contained" color={Colors.green700} style={styles.button}>Now</Button>
                         <Button mode="contained" onPress={showPicker} color={Colors.blue700} style={styles.button}>Later</Button>
                     </Row>
-                    <Title style={{color:"black",backgroundColor:"white"}}>Current Date:{date.toDateString()}</Title>
+                    {/* <Title style={{color:"black",backgroundColor:"white"}}>Current Date:{date.toDateString()}</Title> */}
                     {/* <Title style={{color:"black",backgroundColor:"white"}}>Current Location:{JSON.stringify(location?.coords)}</Title> */}
                 </View>
                 {show && (
@@ -93,7 +96,8 @@ const styles = StyleSheet.create({
     },
     button:{
         borderColor:Colors.green700,
-        borderRadius:20
+        borderRadius:20,
+        elevation:0
     },
     input:{
         backgroundColor:"white",

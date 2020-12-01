@@ -48,35 +48,35 @@ function QueryForm({formik,mode}:QueryFormProps){
                         style = {styles.tagsField}
                     />
                 );
-            case QueryFormType.RESPONSE:
-                return (
-                <Tags
-                    initialTags = {formik.values.tags}
-                    containerStyle={styles.tagContainer}
-                    tagTextStyle = {styles.textStyle}
-                    renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
-                        <Chip key={`${tag}-${index}`} onPress={onPress} 
-                            style={[styles.tag,styles.responseTag]} 
-                            textStyle={styles.tagText}
-                        >
-                          {tag}
-                        </Chip>
-                      )}
-                    readonly
-                />
-                )
+            // case QueryFormType.RESPONSE:
+            //     return (
+            //     <Tags
+            //         initialTags = {formik.values.tags}
+            //         containerStyle={styles.tagContainer}
+            //         tagTextStyle = {styles.textStyle}
+            //         renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
+            //             <Chip key={`${tag}-${index}`} onPress={onPress} 
+            //                 style={[styles.tag,styles.responseTag]} 
+            //                 textStyle={styles.tagText}
+            //             >
+            //               {tag}
+            //             </Chip>
+            //           )}
+            //         readonly
+            //     />
+            //     )
         }
     }
     return (
         <Form style={{flex:1,paddingHorizontal:10}}>
-            <FormField
+            { mode===QueryFormType.QUERY && <FormField
                 label = "Title"
                 itemProps = {{floatingLabel:true, error:(formik.errors.title)?true:false,regular:true}}
                 inputProps = {{maxLength:100,style:styles.textStyle}}
                 changeHandler = {formik.handleChange('title')}
                 blurHandler = {formik.handleBlur('title')}
                 value = {formik.values.title}
-            />
+            />}
             {
                 formik.touched.title && formik.errors.title && <Text style = {{marginLeft:10,fontSize:20,color:"red"}}>{formik.errors.title}</Text>
             }
