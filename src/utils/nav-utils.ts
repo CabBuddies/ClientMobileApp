@@ -18,7 +18,7 @@ export function showUserProfile(navigation:typeNav, userData:IUser) {
 }
 
 export function showUserFollowers() {
-
+    
 }
 
 export function showUserFollowing() {
