@@ -264,8 +264,14 @@ async function searchQuery(search: string = '', attributes?: string[]) {
     try {
         const query: Query = new Query();
         const sro: SearchRESTObject<IQuery> = new SearchRESTObject(query);
-        sro.request.query = APIUtils.testSearchUtil(["published.title", "published.body"], search);
         console.log(sro.request.query);
+        sro.request.query={
+           $and:[
+               { "status":"published"},
+               APIUtils.testSearchUtil(["published.title", "published.body"], search)
+               // TODO - Add Tag Search
+           ]
+        };
         sro.request.sort = {
             "published.lastModifiedAt": -1
         };
