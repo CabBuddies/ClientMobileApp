@@ -12,7 +12,7 @@ import { LocationObject } from 'expo-location';
 import GooglePlacesInput from '../../components/molecules/GooglePlacesInput';
 import { Screens } from '../../definitions/screen-definitions';
 type PickerMode = "date" | "time" | "datetime" | "countdown" | undefined;
-export default function RideScreen({ navigation }) {
+export default function RideScreen({ navigation }:{navigation?:any}) {
     const [location, setLocation] = useState<LocationObject | null>(null);
     const [errorMsg, setErrorMsg] = useState('');
     const [date, setDate] = useState(new Date());
@@ -40,11 +40,18 @@ export default function RideScreen({ navigation }) {
 
     //const [showTo,setShowTo] = React.useState(true);
 
+    const [renderMap,setRenderMap]=React.useState(true);
 
+    // React.useEffect(()=>{
+    //     setTimeout(()=>{
+    //         setRenderMap(true);
+    //     },5000);
+    // },[]);
 
     return (
-        <Container>
-            <MapView style={styles.mapStyle}
+        <View>
+            { renderMap && <MapView style={styles.mapStyle}
+                provider="google"
                 initialRegion={{
                     latitude: 37.2857,
                     longitude: -121.8278,
@@ -57,8 +64,7 @@ export default function RideScreen({ navigation }) {
                         longitude: -121.8278
                     }}
                 />
-                {/* 37.2857° N, 121.8278 */}
-            </MapView>
+            </MapView> }
 
             <View style={styles.overlayContainer}>
                 <GooglePlacesInput placeholder="from" 
@@ -71,6 +77,8 @@ export default function RideScreen({ navigation }) {
                 <GooglePlacesInput placeholder="to" allSet={()=>{
                     navigation.navigate(Screens.GROUPS_SCREEN);
                 }}/>
+
+                <Button onPress={()=>{setRenderMap(true)}}>Show Map</Button>
 
                 {/* <Row style={styles.btnContainer}>
                         <Button mode="contained" color={Colors.green700} style={styles.button}>Now</Button>
@@ -88,7 +96,7 @@ export default function RideScreen({ navigation }) {
                     onChange={onChange}
                 />
             )}
-        </Container>
+        </View>
     )
 }
 const styles = StyleSheet.create({

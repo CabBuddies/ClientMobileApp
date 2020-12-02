@@ -6,7 +6,7 @@ import axios from 'axios';
 import Constants from "expo-constants";
 import { View } from 'react-native';
 
-export default function ImagePickerContainer({ props, imageCB }) {
+export default function ImagePickerContainer({ props, imageCB,allowEditing=true }) {
   const [image, setImage] = useState<any>('');
   const [uploading, toggleUploading] = useState(false);
   const [error, setError] = useState({error: false, message: ''});
@@ -23,13 +23,20 @@ export default function ImagePickerContainer({ props, imageCB }) {
     })();
   }, []);
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    let properties:{
+      base64:boolean,
+      [key:string]:any
+    } = {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
+      allowsEditing: allowEditing,
       aspect: [4, 3],
       quality: 1,
       base64: true
-    });
+    };
+    if(!allowEditing){
+      delete properties['aspect'];
+    }
+    let result = await ImagePicker.launchImageLibraryAsync(properties);
 
     if (!result.cancelled) {
       toggleUploading(true);

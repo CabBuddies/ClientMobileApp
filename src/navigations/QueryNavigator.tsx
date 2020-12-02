@@ -15,13 +15,15 @@ export type QueryStackParamList = {
 export default function QueryNavigatorScreen(props: any) {
     const navigation = useNavigation();
     return (
-        <QueryNavigator.Navigator initialRouteName={Screens.GUIDE_ME} screenOptions={{
-            headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-                    <Icon name="menu" type="MaterialCommunityIcons" />
-                </TouchableOpacity>
-            )
-        }}>
+        <QueryNavigator.Navigator initialRouteName={Screens.GUIDE_ME} 
+        // screenOptions={{
+        //     headerLeft: () => (
+        //         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+        //             <Icon name="menu" type="MaterialCommunityIcons" />
+        //         </TouchableOpacity>
+        //     )
+        // }}
+        >
             <QueryNavigator.Screen name={Screens.GUIDE_ME} component={TravelQueryScreen} />
             <QueryNavigator.Screen name={Screens.QUERY_CREATE} component={CreateQueryScreen} />
             <QueryNavigator.Screen name={Screens.QUERY_VIEW} component={QueryViewScreen}

@@ -12,13 +12,15 @@ const RideNavigator = createStackNavigator();
 export default function RideStackNavigator() {
     const navigation = useNavigation();
     return (
-        <RideNavigator.Navigator screenOptions={{
-            headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-                    <Icon name="menu" type="MaterialCommunityIcons" />
-                </TouchableOpacity>
-            )
-        }}>
+        <RideNavigator.Navigator 
+        // screenOptions={{
+        //     headerLeft: () => (
+        //         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+        //             <Icon name="menu" type="MaterialCommunityIcons" />
+        //         </TouchableOpacity>
+        //     )
+        // }}
+        >
             <RideNavigator.Screen name={Screens.RIDE} component={RideScreen} />
             <RideNavigator.Screen name={Screens.GROUPS_SCREEN} component={TravelGroupScreen} />
         </RideNavigator.Navigator>

@@ -10,14 +10,7 @@ const PDNavigator = createStackNavigator();
 export default function PDStackNavigator() {
     const navigation = useNavigation();
     return (
-        <PDNavigator.Navigator screenOptions={{
-            title: 'Delivery',
-            headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-                    <Icon name="menu" type="MaterialCommunityIcons" />
-                </TouchableOpacity>
-            )
-        }}>
+        <PDNavigator.Navigator>
             <PDNavigator.Screen name="Delivery" component={PackageDeliveryScreen} />
         </PDNavigator.Navigator>
     )

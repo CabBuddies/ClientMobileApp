@@ -1668,6 +1668,11 @@
     color "^3.1.2"
     react-native-iphone-x-helper "^1.2.1"
 
+"@react-navigation/material-bottom-tabs@^5.3.10":
+  version "5.3.10"
+  resolved "https://registry.yarnpkg.com/@react-navigation/material-bottom-tabs/-/material-bottom-tabs-5.3.10.tgz#046b6aecd18c4b71114148afbfc9a5a9ac264275"
+  integrity sha512-XngPas8XAjR2QuFzzED1qoaxAM69gLPqC69xTkqSWeUYbsorX+kgl7z3AZocDglp4bLylYIVOa+fBHhfhUjqqQ==
+
 "@react-navigation/material-top-tabs@^5.2.16":
   version "5.2.18"
   resolved "https://registry.yarnpkg.com/@react-navigation/material-top-tabs/-/material-top-tabs-5.2.18.tgz#0af1717a40307b661c24acbf0b9d7f08e4e2dd00"
@@ -5239,7 +5244,7 @@ node-releases@^1.1.60:
 
 node-rest-objects@CabBuddies/Node-REST-Objects#master:
   version "1.0.0"
-  resolved "https://codeload.github.com/CabBuddies/Node-REST-Objects/tar.gz/39421ba52ee4edaf9629d8e542a792f70be78dbe"
+  resolved "https://codeload.github.com/CabBuddies/Node-REST-Objects/tar.gz/43dcea9dcbcd60f14d5996d5b6ea9819f823c004"
   dependencies:
     "@types/axios" "^0.14.0"
     "@types/chai" "^4.2.13"

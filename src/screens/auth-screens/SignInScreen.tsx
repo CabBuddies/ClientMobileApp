@@ -108,6 +108,24 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 		}
 	};
 
+
+
+
+
+	//TODO - remove this
+	userLogin(initialValues);
+
+
+
+
+
+
+
+
+
+
+
+
 	return (
 		<Container>
 			<KeyboardAwareScrollView>

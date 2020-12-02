@@ -46,16 +46,6 @@ export default function UserDetailsPreview({ user, isSelf, onEdit, isVerified })
                 <RelationButton user={user} isSelf={isSelf} onEdit={onEdit} />
                 <View style={styles.row}>
                     <TouchableOpacity onPress={() => {
-                        navigation.navigate(Screens.USER_RELATIONS, { screen: Screens.FOLLOWING })
-                    }}>
-                        <View style={styles.section}>
-                            <Paragraph style={[styles.paragraph, styles.caption]}>
-                                {count.followingCount}
-                        </Paragraph>
-                            <Caption style={styles.caption}>Following</Caption>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
                         navigation.navigate(Screens.USER_RELATIONS, {screen: Screens.FOLLOWERS})
                     }}>
                         <View style={styles.section}>
@@ -63,6 +53,16 @@ export default function UserDetailsPreview({ user, isSelf, onEdit, isVerified })
                                 {count.followersCount}
                         </Paragraph>
                             <Caption style={styles.caption}>Followers</Caption>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate(Screens.USER_RELATIONS, { screen: Screens.FOLLOWING })
+                    }}>
+                        <View style={styles.section}>
+                            <Paragraph style={[styles.paragraph, styles.caption]}>
+                                {count.followingCount}
+                        </Paragraph>
+                            <Caption style={styles.caption}>Following</Caption>
                         </View>
                     </TouchableOpacity>
                 </View>

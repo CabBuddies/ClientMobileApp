@@ -10,7 +10,7 @@ const UserActivityNavigator = () => {
     return (
         <>
             <UserActivityTopTabsNavigator.Navigator initialRouteName={Screens.USER_GROUPS}>
-                <UserActivityTopTabsNavigator.Screen name={Screens.USER_GROUPS} component={UserQueriesScreen} />
+                <UserActivityTopTabsNavigator.Screen name={Screens.USER_GROUPS} component={UserGroupsScreen} />
                 <UserActivityTopTabsNavigator.Screen name={Screens.USER_QUERIES} component={UserQueriesScreen} />
             </UserActivityTopTabsNavigator.Navigator>
         </>

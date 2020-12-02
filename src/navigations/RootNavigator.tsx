@@ -1,37 +1,38 @@
 /**
  * RootNavigator - holds the entire navigation for the app.
  */
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { AuthContext } from "./AuthContext";
-import ProfileDrawerNavigator from "./ProfileNavigator";
+import ProfileDrawerNavigator from "./MyProfileStackNavigator";
 import AuthNavigator from "./AuthNavigator";
-import Reactotron from 'reactotron-react-native';
-import { signInApp, signUpApp } from '../api/auth-api';
 import { connect } from "react-redux";
-import { Screens } from "../definitions/screen-definitions";
+import { Navs, Screens } from "../definitions/screen-definitions";
+import reactotron from "reactotron-react-native";
+import HomeNavigator from "./HomeNavigator";
 
 export type RootStackParamList = {
-  [val:string]:any
+  [val: string]: any
 }
 const RootNavigator = createStackNavigator<RootStackParamList>();
-
 
 /**
  * root for the entire application tree.
  */
-function RootStackNavigator({isSignedIn}) {
+function RootStackNavigator({ isSignedIn }) {
+  useEffect(() => {
+    reactotron.log!(`rootstacknavigator fully loaded`)
+  }, [isSignedIn]);
   // Reactotron.log!("sign-in-redux-state",isSignedIn);
   return (
     // <AuthContext.Provider value = {authContext}>
     <NavigationContainer>
       <RootNavigator.Navigator headerMode="none">
         {isSignedIn ? (
-          <RootNavigator.Screen name={Screens.ROOT} component={ProfileDrawerNavigator} />
+          <RootNavigator.Screen name={Navs.APP} component={HomeNavigator} />
         ) : (
-          <RootNavigator.Screen name={Screens.AUTH} component={AuthNavigator} />
-        )}
+            <RootNavigator.Screen name={Navs.AUTH} component={AuthNavigator} />
+          )}
       </RootNavigator.Navigator>
     </NavigationContainer>
     // </AuthContext.Provider>
@@ -40,8 +41,8 @@ function RootStackNavigator({isSignedIn}) {
 function mapStateToProps(state) {
   const { authState } = state;
   return {
-        isSignedIn: authState.isSignedIn
-    };
+    isSignedIn: authState.isSignedIn
+  };
 }
 
 export default connect(mapStateToProps)(RootStackNavigator);
@@ -55,7 +56,7 @@ export default connect(mapStateToProps)(RootStackNavigator);
   //     signIn: async (data:any) => {
   //       Reactotron.log!(`user signed in`);
   //       Reactotron.log!(data);
-        
+
   //       try{
   //         const response:any = await signInApp(data);
   //         // console.log("response in signIn", response);
@@ -73,7 +74,7 @@ export default connect(mapStateToProps)(RootStackNavigator);
   //         }
   //         throw err;
   //       }
-        
+
   //     },
   //     signOut: async () => {
   //       Reactotron.log!(`signed out`);

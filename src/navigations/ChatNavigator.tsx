@@ -38,16 +38,18 @@ const ChatStackNavigator = createStackNavigator();
 //     )
 // }
 
-export default function ChatTopTabStackNavigator() {
+export default function ChatNavigator() {
     const navigation = useNavigation();
     return (
-        <ChatStackNavigator.Navigator initialRouteName={Screens.CHAT_LIST_SCREEN} screenOptions={{
-            headerLeft: () => (
-                <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-                    <Icon name="menu" type="MaterialCommunityIcons" />
-                </TouchableOpacity>
-            )
-        }}>
+        <ChatStackNavigator.Navigator initialRouteName={Screens.CHAT_LIST_SCREEN} 
+        // screenOptions={{
+        //     headerLeft: () => (
+        //         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+        //             <Icon name="menu" type="MaterialCommunityIcons" />
+        //         </TouchableOpacity>
+        //     )
+        // }}
+        >
             <ChatStackNavigator.Screen name={Screens.CHAT_DIRECT} component={DirectChatScreen} />
             <ChatStackNavigator.Screen name={Screens.CHAT_GROUP} component={GroupChatScreen} />
             <ChatStackNavigator.Screen name={Screens.CHAT_LIST_SCREEN} component={ChatListScreen} />

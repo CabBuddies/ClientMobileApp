@@ -67,7 +67,7 @@ export async function getAllResponses(query: Query, request) {
 }
 async function responseReader(resp) {
     const answer = <Response>resp;
-    await answer.read();
+    await answer.read(true);
     return answer;
 }
 async function commentReader(cmnt) {

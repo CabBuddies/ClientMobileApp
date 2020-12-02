@@ -7,11 +7,13 @@ import * as UserAPI from '../../api/user-api';
 import reactotron from '../../../dev/ReactotronConfig';
 import { Screens } from '../../definitions/screen-definitions';
 import { useNavigation } from '@react-navigation/native';
+import * as NavUtils from '../../utils/nav-utils';
+import { User } from 'node-rest-objects/dist/data/user-management';
 function SearchScreen() {
 
     const [searchQuery, setSearchQuery] = React.useState('');
 
-    const [userSuggestions, setUserSuggestions] = React.useState<any[]>([]);
+    const [userSuggestions, setUserSuggestions] = React.useState<User[]>([]);
 
     React.useMemo(() => {
         console.log(searchQuery);
@@ -39,9 +41,10 @@ function SearchScreen() {
             renderItem={({ item }) => (
                 <View style={styles.userCard}>
                     <SimpleCard content={item} avatarSize={40} onPress={() => {
-                    navigation.navigate(Screens.USER_PROFILE,{
-                        user:item.data
-                    })
+                    // navigation.navigate(Screens.USER_PROFILE,{
+                    //     user:item.data
+                    // })
+                        NavUtils.showUserProfile(navigation,item.data);
                 }}/>
                 </View>
             )}
