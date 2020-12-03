@@ -264,10 +264,10 @@ export function getOpinion(opinionMap, queryId, responseId, opinionType): string
 }
 
 
-async function searchQuery(search: string = '', attributes?: string[]) {
+async function searchQuery(sro:SearchRESTObject<IQuery>,search: string = '', attributes?: string[]) {
     try {
-        const query: Query = new Query();
-        const sro: SearchRESTObject<IQuery> = new SearchRESTObject(query);
+        // const query: Query = new Query();
+        // const sro: SearchRESTObject<IQuery> = new SearchRESTObject(query);
         console.log(sro.request.query);
         sro.request.query={
            $and:[
@@ -279,7 +279,7 @@ async function searchQuery(search: string = '', attributes?: string[]) {
         sro.request.sort = {
             "published.lastModifiedAt": -1
         };
-        sro.request.pageSize = 10;
+        sro.request.pageSize = 5;
         if (attributes)
             sro.request.attributes = attributes;
         await safePromise(sro.search());
@@ -291,10 +291,9 @@ async function searchQuery(search: string = '', attributes?: string[]) {
     return []
 }
 
-export async function liveQuerySuggestion(search: string): Promise<any[]> {
+export async function liveQuerySuggestion(sro:SearchRESTObject<IQuery>,search: string): Promise<any[]> {
     try {
-        const sro = await searchQuery(search, ['createdAt', 'published.title', 'published.tags', 'author', 'stats']);
-        return sro
+        return await searchQuery(sro,search, ['createdAt', 'published.title', 'published.tags', 'author', 'stats']);
     } catch (error) {
         console.error(error);
     }

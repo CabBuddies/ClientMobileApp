@@ -28,7 +28,7 @@ function QueryCUForm({formik,mode}:QueryFormProps){
                 label="Title"
                 value={formik.values.title}
                 onChangeText={(text) => formik.setFieldValue('title',text)}
-                error={formik.touched.body && formik.errors.body}
+                error={formik.touched.title && formik.errors.title}
             />
             <HelperText style={styles.errorText} type="error" visible={formik.touched.title && formik.errors.title}>{formik.errors.title}</HelperText>
             <PaperInput 

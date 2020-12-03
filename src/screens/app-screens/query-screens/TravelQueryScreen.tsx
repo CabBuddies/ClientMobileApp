@@ -18,6 +18,8 @@ import { PlaceholderSize } from '../../../definitions/common-definitions';
 import { liveQuerySuggestion } from '../../../api/query-api';
 import reactotron from '../../../../dev/ReactotronConfig';
 import { useFocusEffect } from '@react-navigation/native';
+import SearchRESTObject from 'node-rest-objects/dist/rest/search.rest.object';
+import { IQuery, Query } from 'node-rest-objects/dist/data/queries';
 
 interface QueryRequest {
     query?: any
@@ -50,39 +52,54 @@ const defaultSearchRequest: QueryRequest = {
     pageNum: 1
 }
 
-function TravelQueryScreen({ navigation,getQueries, getQuery, queryData }: TravelQueryScreenProps) {
+function TravelQueryScreen({ navigation, getQueries, getQuery, queryData }: TravelQueryScreenProps) {
 
     let searchBar;
 
-    const [searchQuery, setSearchQuery] = React.useState('');
-    const [userSuggestions, setUserSuggestions] = React.useState<any[]>([]);
-    const [loading,setLoading] = React.useState<boolean>(true);
-    const [refreshing,setRefreshing] = React.useState(false);
+    const [searchRestObject,setSRO] = React.useState(new SearchRESTObject(new Query()));
+// 
+    //let searchRestObject: SearchRESTObject<IQuery>;
 
-    useFocusEffect(
-        useCallback(() => {
-            liveQuerySuggestion("").then((result: any[]) => {
-            setUserSuggestions(result);
-        }).catch((error) => {
-            reactotron.log!(`Query API error `, error);
-        })
-        },[])
-    )
+    React.useEffect(() => {
+        //searchRestObject = new SearchRESTObject(new Query());
+        fetchQueries();
+    }, [])
+
+    const [searchQuery, setSearchQuery] = React.useState('');
+    const [userSuggestions, setUserSuggestions] = React.useState<IQuery[]>([]);
+    const [loading, setLoading] = React.useState<boolean>(true);
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         reactotron.log!(`nkLog pre`, searchRestObject);
+    //         liveQuerySuggestion(searchRestObject, "").then((result: any[]) => {
+    //             reactotron.log!(`nkLog post`, searchRestObject);
+    //             setUserSuggestions(searchRestObject.response.result.map(q => q.data));
+    //         }).catch((error) => {
+    //             reactotron.log!(`Query API error `, error);
+    //         })
+    //     }, [])
+    // )
+
+    
 
     const fetchQueries = () => {
         setLoading(true);
-        liveQuerySuggestion(searchQuery).then((result: any[]) => {
-            setUserSuggestions(result);
+        reactotron.log!(`nkLog pre fetchQueries`, searchRestObject);
+        liveQuerySuggestion(searchRestObject, searchQuery).then((result: any[]) => {
+            reactotron.log!(`nkLog post fetchQueries`, searchRestObject);
+            setUserSuggestions(searchRestObject.response.result.map(q => q.data));
             setLoading(false)
         }).catch((error) => {
             reactotron.log!(`Query API error `, error);
         })
     }
 
-    React.useMemo(() => {
-        console.log(searchQuery);
-        fetchQueries();
-    }, [searchQuery,navigation]);
+    // React.useMemo(() => {
+    //     console.log(searchQuery);
+    //     fetchQueries();
+    // }, [searchQuery, navigation]);
 
     // useEffect(() => {
     //     getQueries(defaultSearchRequest);
@@ -109,14 +126,14 @@ function TravelQueryScreen({ navigation,getQueries, getQuery, queryData }: Trave
     const placeholder = () => {
         const x = new Array(10).fill({});
         let components;
-       
-        if(loading) {
+
+        if (loading) {
             components = x.map((e, i) => <ContentLoading key={e + '' + i} size={PlaceholderSize.MEDIUM} />)
         }
-        else{
+        else {
             components = (
                 <View>
-                <Text style={{fontSize:30}}> No Queries Found </Text>
+                    <Text style={{ fontSize: 30 }}> No Queries Found </Text>
                 </View>
             )
         }
@@ -124,9 +141,8 @@ function TravelQueryScreen({ navigation,getQueries, getQuery, queryData }: Trave
     }
 
     const renderItem = ({ item }) => {
-        return <View style={{margin: 5}}><QueryPreview query={item} itemNav={() => nav(item)} /></View>
+        return <View style={{ margin: 5 }}><QueryPreview query={item} itemNav={() => nav(item)} /></View>
     }
-
     return (
         <>
             <Searchbar
@@ -144,12 +160,22 @@ function TravelQueryScreen({ navigation,getQueries, getQuery, queryData }: Trave
                 value={searchQuery}
             />
             <FlatList data={userSuggestions} renderItem={renderItem}
-                keyExtractor={item => (item) ? item.data._id : `${Date.now()}`}
+                keyExtractor={item => (item) ? item._id : `${Date.now()}`}
                 ListEmptyComponent={placeholder}
-                contentContainerStyle={{backgroundColor:"white"}}
+                contentContainerStyle={{ backgroundColor: "white" }}
                 // ListHeaderComponent={() => (
 
                 // )}
+                onScrollEndDrag={() => {
+                    reactotron.log!(`nkLog pre onScrollEndDrag`, searchRestObject);
+                    if (searchRestObject.hasNextPage()) {
+                        reactotron.log!(`nkLog post onScrollEndDrag`, searchRestObject);
+                        searchRestObject.loadNextPage().then(() => {
+                            setUserSuggestions(prevState => [...prevState, ...searchRestObject.response.result.map(q => q.data)])
+                        })
+                    }
+
+                }}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => {
                     setRefreshing(true);
                     fetchQueries();

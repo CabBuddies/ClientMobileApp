@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, View, Image, Alert } from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Text, View, Image, Alert, Platform } from 'react-native';
+import { GooglePlacesAutocomplete, Styles } from 'react-native-google-places-autocomplete';
 import { TextInput } from 'react-native-paper';
+import reactotron from '../../../dev/ReactotronConfig';
 import { dw } from '../../utils/rn-utils';
 const GOOGLE_PLACES_API_KEY = 'AIzaSyDl4dmvk0tBIX0-BWCaOZy0MjAcTtLHo60';
 const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, allSet = () => { }, onFocus = () => { }, onBlur = () => { }, hide = false, elevation = 0, top = 0, onSuggestionsShowing = (b: boolean) => { }, onLocationChanged = (data: { lat: number, lng: number, raw: any }) => { } }) => {
@@ -13,6 +14,7 @@ const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, al
   React.useEffect(() => {
     onSuggestionsShowing(isFound);
   }, [isFound])
+
   return (
     <GooglePlacesAutocomplete
       query={{
@@ -47,7 +49,7 @@ const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, al
         onLocationChanged({
           lat: geometry!.location.lat,
           lng: geometry!.location.lng,
-          raw: { data, details }
+          raw: { data, details, address: details?.formatted_address}
         })
       }}
       textInputHide={hide}
@@ -65,16 +67,10 @@ const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, al
       }}
       styles={{
         textInputContainer:{
-          position:"absolute",
-          top,
-          // zIndex:elevation,
           width:dw(0.9),
           marginHorizontal:dw(0.05)
         },
         listView:{
-          // position:"absolute",
-          // marginTop:top+55,
-          zIndex:elevation+100000,
           width:dw(0.9),
           marginHorizontal:dw(0.05)
         }
@@ -82,4 +78,7 @@ const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, al
     />
   );
 };
+
+
+
 export default GooglePlacesInput;
