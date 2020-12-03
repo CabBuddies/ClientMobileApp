@@ -5,7 +5,6 @@ import { IQueryContent, IQueryStats } from "../../definitions/query-definitions"
 import { IUser } from "node-rest-objects/dist/data/user-management";
 import { IQuery, IResponse, Query,Response } from "node-rest-objects/dist/data/queries";
 import { Badge, Card, Chip, Colors, Paragraph, Text } from "react-native-paper"; 
-import Tags from "react-native-tags";
 import { Options } from "../atoms";
 import reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
@@ -19,6 +18,8 @@ import { createOpinion, getOpinion } from "../../api/query-api";
 import { createOpinionThunk, deleteOpinionThunk } from "../../redux/actions/opinion-action";
 import { IAppState } from "../../redux/initialState";
 import { timeSince } from "../../utils/Helpers";
+import TagView from "../molecules/TagView";
+import ImageSelectionContainer from "./ImageSelectionContainer";
 
 type T = any
 interface QueryViewProps{
@@ -47,48 +48,11 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 	addOpinion,removeOpinion, opinions}: QueryViewProps
 	) => {
 
-	if(!content.data){
-		return (
-			<Card>
-				<Card.Content>
-					<Text>No Content here</Text>
-				</Card.Content>
-			</Card>
-		)
-	}
-	let currentOpinions = {
-		[OpinionType.UPVOTE]:'',
-		[OpinionType.DOWNVOTE]:'',
-		[OpinionType.FOLLOW]:'',
-		[OpinionType.REPORT]:'',
-	};
-
-	useEffect(() => {
-		reactotron.log!("current-opinions",currentOpinions);
-		getCurrentOpinion();
-	},[opinions])
-	
 	const navigation = useNavigation();
 	const data:IQuery|IResponse = content.data;
 	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats}= data;
 	const date:string = timeSince(new Date(createdAt))||(createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5));
 	let responseCount;
-	
-	
-	const getCurrentOpinion = () => {
-		Object.keys(currentOpinions).map(opinionType => {
-			switch(type){
-				case FullViewType.QUERY:
-					currentOpinions[opinionType] = getOpinion(opinions,content.data._id,'',opinionType) || '';
-					break;
-				case FullViewType.RESPONSE:
-					currentOpinions[opinionType] = getOpinion(opinions,content.data.queryId,content.data._id,opinionType) || '';
-					break;
-			}
-		})
-		
-		
-	}
 	const generateTags = () => {
 		switch(type){
 			case FullViewType.QUERY:
@@ -102,26 +66,26 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 	const renderAvatar = (props) => {
 		return <CustomAvatar size={24} {...props} data={author}/>
 	} 
-	const onUpvote = () => {
-		if(currentOpinions[OpinionType.UPVOTE]===''){
-			addOpinion(content,OpinionType.UPVOTE).then(() => {
-				// TODO: need to refetch opinions
-			});
-		}
-		else{
-			removeOpinion(currentOpinions[OpinionType.UPVOTE]);
-		}
-	}
-	const onDownVote = () => {
-		if(currentOpinions[OpinionType.DOWNVOTE]===''){
-			addOpinion(content,OpinionType.DOWNVOTE).then(() => {
-				//TODO: need to refetch opinions
-			});
-		}
-		else{
-			removeOpinion(currentOpinions[OpinionType.DOWNVOTE]);
-		}
-	}
+	// const onUpvote = () => {
+	// 	if(currentOpinions[OpinionType.UPVOTE]===''){
+	// 		addOpinion(content,OpinionType.UPVOTE).then(() => {
+	// 			// TODO: need to refetch opinions
+	// 		});
+	// 	}
+	// 	else{
+	// 		removeOpinion(currentOpinions[OpinionType.UPVOTE]);
+	// 	}
+	// }
+	// const onDownVote = () => {
+	// 	if(currentOpinions[OpinionType.DOWNVOTE]===''){
+	// 		addOpinion(content,OpinionType.DOWNVOTE).then(() => {
+	// 			//TODO: need to refetch opinions
+	// 		});
+	// 	}
+	// 	else{
+	// 		removeOpinion(currentOpinions[OpinionType.DOWNVOTE]);
+	// 	}
+	// }
 	const onDelete = () => {
 		switch(type){
 			case FullViewType.QUERY:
@@ -140,7 +104,9 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 	const onUpdate = () => {
 		switch(type){
 			case FullViewType.QUERY:
-				Alert.alert(`this will update the query ${content.data._id}`);
+				navigation.navigate(Screens.QUERY_CREATE,{
+					formValues:content.data.published
+				})
 				break;
 			case FullViewType.RESPONSE:
 				Alert.alert(`this will update the Response ${content.data._id}`);
@@ -155,27 +121,14 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 			/>
 			<Card.Content>
 				<Text style={{fontSize:20}}>{published?.body}</Text>
-				<Tags
-					initialTags = {tags}
-					readonly
-					containerStyle={styles.tagContainer}
-					onTagPress={(index,tagLabel) => reactotron.log!(`${tagLabel} pressed`)}
-					renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
-						<Chip key={`${tag}-${index}`} onPress={onPress} 
-							style={[styles.tag, (type!==FullViewType.QUERY)?styles.responseTag:styles.queryTag]} 
-							textStyle={styles.tagText}
-						>
-						  {tag}
-						</Chip>
-					  )}
-                />
+				<ImageSelectionContainer defaultValue={published?.media as string[]} readOnly />
+				<TagView tags={published?.tags}/>
 			</Card.Content>
 				<Card.Title title={author?.firstName +' '+ author?.lastName} subtitle={date} left={(props) => renderAvatar(props)}/>
 			<Card.Actions style={styles.actions}>
 				<QueryStats 
 				stats={stats} onComment = {onComment} 
 				commentDisabled={commentDisabled} 
-				onUpVote={onUpvote} onDownVote={onDownVote}
 				/>
 			</Card.Actions>
 		</Card>
@@ -183,7 +136,7 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 }
 
 function mapStateToProps(state:IAppState){
-	const { queryOpinionState } = state; 
+	const { queryOpinionState } = state;
 	return {
 		opinions:queryOpinionState.opinionList
 	}
@@ -211,24 +164,7 @@ const styles = StyleSheet.create({
 		borderWidth:0.5,
 		borderColor:Colors.black
 	},
-	tagContainer:{
-		paddingTop: 15,
-		justifyContent:"space-evenly",
-		padding:2
-	},
-	tag:{
-		justifyContent:"center",
-	},
-	queryTag:{
-		backgroundColor:Colors.blueA700,
-	},
-	responseTag:{
-		backgroundColor:Colors.green600,
-	},
-	tagText:{
-		fontSize:12,
-		color:Colors.white
-	},
+	
 	badge:{
 		borderRadius:0,
 		backgroundColor:Colors.amber900

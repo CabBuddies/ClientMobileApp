@@ -100,7 +100,7 @@ export async function createQuery(request) {
     try {
         const query: Query = new Query();
         // query.setDraft(request);
-        query.setPublished(request);
+        query.data.published = request;
         query.setStatus("published");
         await query.create();
         // Reactotron.log!("query: ",query);
@@ -140,12 +140,16 @@ export async function createResponse(query: Query, request) {
     }
 }
 // ------------------------------- UPDATE APIs ------------------------------------------------
-export async function updateQuery(query: Query, request) {
+export async function updateQuery(queryId:string, request) {
     try {
-        query.setPublished(request);
+        Reactotron.log!("update-query-input-args",queryId,request);
+        const query =  new Query();
+        query.data._id = queryId;
+        query.data.published = request;
         query.setStatus("published");
+        Reactotron.log!("update-query-pre-obj",query);
         await query.update();
-        // Reactotron.log!("query: ",query);
+        Reactotron.log!("update-query-post-obj",query);
         return query;
     } catch (error) {
         Reactotron.log!(`Query-API: error updating the query`, error);

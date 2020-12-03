@@ -20,6 +20,7 @@ import { FullViewType, PlaceholderSize } from '../../../definitions/common-defin
 import ResponseList from '../../../components/organisms/ResponseList';
 import { Colors } from 'react-native-paper';
 import { VirtualizedContent } from '../../../components/organisms';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type QueryViewScreenNav = StackNavigationProp<QueryStackParamList>;
 interface QueryViewScreenProps{
@@ -30,6 +31,7 @@ interface QueryViewScreenProps{
     newComment?:any;
     getComments?:any;
     loading:boolean;
+    route?:any;
 }
 
 const defaultRequest = {
@@ -90,7 +92,8 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
                     {
                         (loading && !queryData)?
                         (<ContentLoading size={PlaceholderSize.MEDIUM}/>)
-                        : <PostFullView type={FullViewType.QUERY} content={queryData} onComment={getCommentFunc} commentDisabled={loading} />
+                        : 
+                        <PostFullView key={queryData.data._id} type={FullViewType.QUERY} content={queryData} onComment={getCommentFunc} commentDisabled={loading} />
                     }
                     <ResponseList />
                 </VirtualizedContent>

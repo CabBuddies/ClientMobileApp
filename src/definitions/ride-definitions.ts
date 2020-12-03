@@ -1,0 +1,1 @@
+export type loc = { lat: number | null, lng: number | null, raw: any };

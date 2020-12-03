@@ -65,8 +65,8 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 	};
 
 	const initialValues = {
-		email: "abhivadnala@gmail.com",
-		password: "123456",
+		email: "karthik.munipalle21@cabbuddies.com",
+		password: "edokati",
 	};
 
 	const googleUserMapper = (googleUser) => {
@@ -132,7 +132,7 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 				<Grid >
 					<Row style={{ justifyContent: "center" }}>
 						{/* <Thumbnail source={phi} style={{ marginTop: 20 }} /> */}
-						<Headline style={{paddingTop:60, paddingBottom:35, color: 'rgb(20,95,255)',fontWeight:'bold', fontSize:70, fontFamily: "Signatra" }}>Travel Buff</Headline>
+						<Headline style={{paddingTop:60, paddingBottom:35, color: 'rgb(20,95,255)', fontSize:70, fontFamily: "Signatra" }}>Travel Buff</Headline>
 					</Row>
 					<Row>
 						<SocialLogin google={signInWithGoogle} />

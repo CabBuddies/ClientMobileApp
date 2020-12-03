@@ -6,12 +6,12 @@ import axios from 'axios';
 import Constants from "expo-constants";
 import { View } from 'react-native';
 
+
 export default function ImagePickerContainer({ props, imageCB,allowEditing=true }) {
   const [image, setImage] = useState<any>('');
   const [uploading, toggleUploading] = useState(false);
   const [error, setError] = useState({error: false, message: ''});
   const [success, setSuccess] = useState(false);
-
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -37,13 +37,11 @@ export default function ImagePickerContainer({ props, imageCB,allowEditing=true 
       delete properties['aspect'];
     }
     let result = await ImagePicker.launchImageLibraryAsync(properties);
-
     if (!result.cancelled) {
       toggleUploading(true);
       await uploadImage(result.base64 || '');
     }
   };
-
   async function uploadImage(base64: string) {
     let body = new FormData();
     body.append("image", base64);
@@ -66,7 +64,6 @@ export default function ImagePickerContainer({ props, imageCB,allowEditing=true 
       });
     });
   }
-
   return (
     <View style={{justifyContent: 'center'}} >
       <Button onPress={pickImage} icon={props.icon} loading={uploading} >{props.title}</Button>

@@ -1,7 +1,7 @@
-import React,{ useRef, useMemo } from 'react'
+import React,{ useRef, useMemo, useState } from 'react'
 import { StyleSheet, FlatList, View} from 'react-native'
-import { FullViewType, PlaceholderSize, QueryFormType } from '../../definitions/common-definitions';
-import {Colors, Text, Title, Button as PaperButton, Divider, Card } from 'react-native-paper';
+import { FullViewType, PlaceholderSize } from '../../definitions/common-definitions';
+import {Colors, Text, Title, Button as PaperButton, Divider, Card, TextInput,List} from 'react-native-paper';
 import PostFullView from './PostFullView';
 import { ContentLoading } from '../molecules';
 import { connect } from 'react-redux';
@@ -10,7 +10,6 @@ import { IQuery, IResponse } from 'node-rest-objects/dist/data/queries';
 import reactotron from 'reactotron-react-native';
 import { Formik } from 'formik';
 import * as yup from "yup";
-import QueryForm from './QueryForm';
 import { bindActionCreators } from 'redux';
 import { loadComments, writeComment, writeResponse } from '../../redux/actions/query-actions';
 
@@ -27,6 +26,7 @@ interface IResponseListProps{
 }
 const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:IResponseListProps) => {
     
+    const [showForm,toggleShowForm] = useState(false);
     const formRef:any = useRef();
     const responseInitialValues = {
         title:"",
@@ -49,25 +49,23 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
     }
     const headerComponent = () => (
         <View>
-            <Card>
-            <Card.Title title="Add Response"/>
-            <Card.Actions>
-            <Formik
-                    innerRef={formRef}
-                    initialValues = {responseInitialValues}
-                    validationSchema={querySchema}
-                    onSubmit = {(values,actions) => {
-                        // reactotron.log!(values);
-                        newResponse(queryData,values).then(() => {
-                        });
-                        actions.resetForm();
-                    }}
-                >
-                    {(props) => <QueryForm mode={QueryFormType.RESPONSE} formik={props}/>}
-            </Formik>
-            <PaperButton disabled ={loading} mode="text" onPress={submit} compact={true}>Post</PaperButton>
-            </Card.Actions>
-            </Card>
+            <List.Accordion title="Add Response" expanded={showForm} onPress={() => toggleShowForm(!showForm)}>
+                <Formik
+                        innerRef={formRef}
+                        initialValues = {responseInitialValues}
+                        validationSchema={querySchema}
+                        onSubmit = {(values,actions) => {
+                            // reactotron.log!(values);
+                            newResponse(queryData,values).then(() => {
+                            });
+                            actions.resetForm();
+                            toggleShowForm(!showForm)
+                        }}
+                    >
+                        {(props) =>  <TextInput onChangeText={(text) => props.setFieldValue('body',text) } multiline placeholder="enter your response here" mode="flat"/>}
+                </Formik>
+                <PaperButton disabled ={loading} mode="text" onPress={submit} compact={true}>Post</PaperButton>
+            </List.Accordion>
             <Title style={styles.title}>RESPONSES</Title>
         </View>
     )
@@ -85,7 +83,7 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
         else{
             return (
                 <View style={styles.errorContainer}>
-                    <Text style={styles.emptyText}>No Responses Yet! for this query, mind creating one?😃</Text>
+                    <Text style={styles.emptyText}>No Responses Yet!!!</Text>
                 </View>
             )
         }
@@ -94,7 +92,7 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
         <FlatList data={responses} renderItem={memoizedRender}
             keyExtractor = {item => (item)?item.data._id:`${Date.now()}`}
             ListEmptyComponent={renderEmptyComponent}
-            // ListHeaderComponent={headerComponent}
+            ListHeaderComponent={headerComponent}
             ItemSeparatorComponent={() => <Divider />}
             extraData={responses}
         />

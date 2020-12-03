@@ -65,15 +65,15 @@ const GooglePlacesInput = ({placeholder = "search",currentLocation = false, allS
       }}
       styles={{
         textInputContainer:{
-          position:"absolute",
-          top,
-          zIndex:elevation,
+          // position:"absolute",
+          // top,
+          // zIndex:elevation,
           width:dw(0.9),
           marginHorizontal:dw(0.05)
         },
         listView:{
-          position:"absolute",
-          marginTop:top+55,
+          // position:"absolute",
+          // marginTop:top+55,
           zIndex:elevation+100000,
           width:dw(0.9),
           marginHorizontal:dw(0.05)

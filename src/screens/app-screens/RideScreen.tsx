@@ -140,7 +140,7 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                 provider="google"
                 initialRegion={centerLocation}
                 region={centerLocation}
-                zoomControlEnabled
+                // zoomControlEnabled
                 showsMyLocationButton
                 showsUserLocation followsUserLocation>
                 {
@@ -163,10 +163,10 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                     polyData.show && <Polyline
                         geodesic
                         coordinates={polyData.gpsLocations}
-                        lineDashPattern={[500,500]}
-                        
-                        strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-                        strokeWidth={6}
+                        lineDashPattern={[50,25]}
+                        lineCap="square"
+                        strokeColor="rgba(0,0,55,0.7)" // fallback for when `strokeColors` is not supported by the map-provider
+                        strokeWidth={4}
                     />
                 }
             </MapView>}

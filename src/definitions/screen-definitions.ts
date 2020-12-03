@@ -1,9 +1,6 @@
-
 export enum Screens {
-
     SIGN_IN = "Sign In",
     SIGN_UP = "Sign Up",
-
     ACCOUNT = "Account",
     USER_PROFILE = "User Profile",
     USER_SEARCH = "Find people",
@@ -14,24 +11,20 @@ export enum Screens {
     USER_RELATIONS = "Relations",
     FOLLOWERS = "Followers",
     FOLLOWING = "Following",
-    
     GUIDE_ME = "Guide Me",
     QUERY_VIEW = "QueryView",
     QUERY_CREATE = "New Query",
-
     RIDE = "Find a ride",
-
+    CREATE_GROUP = "Plan Ride",
     CHATS = "Chats",
     CHAT_GROUP = "Group",
     CHAT_DIRECT = "Direct",
     USER_DIRECT_CHAT = "DIRECT CHATS",
     CHAT_GROUP_LIST = "CHAT_GROUP_LIST",
     CHAT_LIST_SCREEN = "Chats",
-
     PACKAGE_DELIVERY = "Package Delivery",
     GROUPS_SCREEN = "Guilds",
 }
-
 export enum Navs {
     AUTH = "Welcome",
     ROOT = "App Root",

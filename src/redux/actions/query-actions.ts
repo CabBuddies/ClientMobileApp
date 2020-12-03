@@ -94,10 +94,10 @@ export function editQuery(query,data){
         dispatch(queryUpdateActions.createLoadingAction())
         updateQuery(query,data)
         .then(response => {
-            Reactotron.log!("query-create-response",response);
+            Reactotron.log!("query-update-response",response);
             dispatch(queryUpdateActions.createSuccessAction(response))
         }).catch(error => {
-            Reactotron.log!("query-creation-failure",error);
+            Reactotron.log!("query-updation-failure",error);
             dispatch(queryUpdateActions.createFailureAction(error))
         })
     }

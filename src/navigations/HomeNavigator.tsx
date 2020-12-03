@@ -131,7 +131,7 @@ function HomeNavigator({ signOut, userFetch, isAnonymous, anonymousRedirect }: a
         >
             {
                 Object.keys(tabMap).map((k) =>
-                    <AppNavigator.Screen {...tabMap[k].props} />
+                    <AppNavigator.Screen key={Date.now().toString()} {...tabMap[k].props} />
                 )
             }
 

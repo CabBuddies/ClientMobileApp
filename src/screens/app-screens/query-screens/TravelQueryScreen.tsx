@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect, useCallback } from 'react'
 import { FlatList, Alert, RefreshControl, View } from 'react-native'
 import { Container, Content, Item, List, Text, Button } from 'native-base';
 import { CButton } from '../../../components/atoms'
@@ -17,6 +17,7 @@ import { ContentLoading } from '../../../components/molecules';
 import { PlaceholderSize } from '../../../definitions/common-definitions';
 import { liveQuerySuggestion } from '../../../api/query-api';
 import reactotron from '../../../../dev/ReactotronConfig';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface QueryRequest {
     query?: any
@@ -49,21 +50,39 @@ const defaultSearchRequest: QueryRequest = {
     pageNum: 1
 }
 
-function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQuery, queryData }: TravelQueryScreenProps) {
+function TravelQueryScreen({ navigation,getQueries, getQuery, queryData }: TravelQueryScreenProps) {
 
     let searchBar;
 
     const [searchQuery, setSearchQuery] = React.useState('');
     const [userSuggestions, setUserSuggestions] = React.useState<any[]>([]);
+    const [loading,setLoading] = React.useState<boolean>(true);
+    const [refreshing,setRefreshing] = React.useState(false);
 
-    React.useMemo(() => {
-        console.log(searchQuery);
-        liveQuerySuggestion(searchQuery).then((result: any[]) => {
+    useFocusEffect(
+        useCallback(() => {
+            liveQuerySuggestion("").then((result: any[]) => {
             setUserSuggestions(result);
         }).catch((error) => {
             reactotron.log!(`Query API error `, error);
         })
-    }, [searchQuery]);
+        },[])
+    )
+
+    const fetchQueries = () => {
+        setLoading(true);
+        liveQuerySuggestion(searchQuery).then((result: any[]) => {
+            setUserSuggestions(result);
+            setLoading(false)
+        }).catch((error) => {
+            reactotron.log!(`Query API error `, error);
+        })
+    }
+
+    React.useMemo(() => {
+        console.log(searchQuery);
+        fetchQueries();
+    }, [searchQuery,navigation]);
 
     // useEffect(() => {
     //     getQueries(defaultSearchRequest);
@@ -87,23 +106,24 @@ function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQ
         navigation.navigate(Screens.QUERY_CREATE);
     }
 
-    // const placeholder = () => {
-    //     const x = new Array(10).fill({});
-    //     let components;
-    //     if (error) {
-    //         components =
-    //             (<Content>
-    //                 <Text style={{ fontSize: 30, color: "red" }}>Oops!Error fetching queries!</Text>
-    //             </Content>)
-    //     }
-    //     else {
-    //         components = x.map((e, i) => <ContentLoading key={e + '' + i} size={PlaceholderSize.MEDIUM} />)
-    //     }
-    //     return (<>{components}</>);
-    // }
+    const placeholder = () => {
+        const x = new Array(10).fill({});
+        let components;
+       
+        if(loading) {
+            components = x.map((e, i) => <ContentLoading key={e + '' + i} size={PlaceholderSize.MEDIUM} />)
+        }
+        else{
+            components = (
+                <View>
+                <Text style={{fontSize:30}}> No Queries Found </Text>
+                </View>
+            )
+        }
+        return (<>{components}</>);
+    }
 
     const renderItem = ({ item }) => {
-        reactotron.log!(`106.TQS `, searchBar);
         return <View style={{margin: 5}}><QueryPreview query={item} itemNav={() => nav(item)} /></View>
     }
 
@@ -125,11 +145,16 @@ function TravelQueryScreen({ navigation, cards, loading, error, getQueries, getQ
             />
             <FlatList data={userSuggestions} renderItem={renderItem}
                 keyExtractor={item => (item) ? item.data._id : `${Date.now()}`}
-                // ListEmptyComponent={placeholder}
+                ListEmptyComponent={placeholder}
+                contentContainerStyle={{backgroundColor:"white"}}
                 // ListHeaderComponent={() => (
 
                 // )}
-                refreshControl={<RefreshControl refreshing={loading} onRefresh={() => getQueries(defaultSearchRequest)} />}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => {
+                    setRefreshing(true);
+                    fetchQueries();
+                    setRefreshing(false);
+                }} />}
             />
         </>
     )
