@@ -2,7 +2,7 @@ import { IQuery, ITQOpinion } from "node-rest-objects/dist/data/queries";
 import { IUser, User } from "node-rest-objects/dist/data/user-management";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import { defaultRequest, IQueryStats, IRequest } from "../definitions/query-definitions";
-import { Screens } from "../definitions/screen-definitions";
+import { Navs, Screens } from "../definitions/screen-definitions";
 import { CoreActions } from "./actions/action-types";
 
 export enum ErrorType {
@@ -43,7 +43,7 @@ export interface IAuthState extends CommonStates {
 
 export interface IUserState extends CommonStates {
     user: User | undefined;
-    currentScreen?: Screens;
+    currentScreen?: Navs;
     followers?: User[];
     following?: User[];
 }
@@ -90,7 +90,7 @@ const defaultQueryListState: IQueryListState = {
 const defaultUserState: IUserState = {
     user: undefined,
     loading: false,
-    currentScreen: Screens.APP
+    currentScreen: Navs.APP
 }
 const defaultQueryState: IQueryState = {
     query: undefined

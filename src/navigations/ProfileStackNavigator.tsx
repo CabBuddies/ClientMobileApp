@@ -15,23 +15,27 @@ import { getUser } from '../redux/actions/user-action';
 import { useEffect } from 'react';
 import { IAppState } from '../redux/initialState';
 import RelationsTopTabNavigator from './RelationsNavigator';
+import UserSearchScreen from '../screens/user-screens/UserSearchScreen';
+import UserProfileScreen from '../screens/user-screens/UserProfileScreen';
 
 const MyProfileStack = createStackNavigator();
 
 /**
  * Just a wrapper for My Profile Screens
  */
-function MyProfileStackNavigator() {
+function ProfileStackNavigator() {
     const navigation = useNavigation();
     return (
         <MyProfileStack.Navigator initialRouteName={Screens.MY_PROFILE} >
             <MyProfileStack.Screen name={Screens.MY_PROFILE} component={MyProfileScreen} />
+            <MyProfileStack.Screen name={Screens.USER_SEARCH} component={UserSearchScreen} />
+            <MyProfileStack.Screen name={Screens.USER_PROFILE} component={UserProfileScreen} />
             <MyProfileStack.Screen name={Screens.USER_RELATIONS} component={RelationsTopTabNavigator} />
         </MyProfileStack.Navigator>
     );
 }
 
-export default MyProfileStackNavigator;
+export default ProfileStackNavigator;
 
 // const ProfileDrawer = createDrawerNavigator();
 
@@ -54,7 +58,7 @@ export default MyProfileStackNavigator;
 //     return (
 //         <ProfileDrawer.Navigator
 //             drawerType="slide"
-//             initialRouteName={Screens.APP}
+//             initialRouteName={Navs.APP}
 //             drawerContent={
 //                 (props) => {
 //                     return (

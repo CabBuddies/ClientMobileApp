@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useLayoutEffect, useState } from 'react';
-import { Colors, Button } from 'react-native-paper';
+import { Colors, Button, IconButton } from 'react-native-paper';
 import { Container } from "native-base";
 import { IAppState } from '../../redux/initialState';
 import { connect } from 'react-redux';
@@ -15,6 +15,7 @@ import * as yup from 'yup';
 import reactotron from '../../../dev/ReactotronConfig';
 import { IUser, User } from 'node-rest-objects/dist/data/user-management';
 import UserProfileView from './UserProfileView';
+import { Screens } from '../../definitions/screen-definitions';
 
 interface UserDetails {
     navigation: any;
@@ -35,11 +36,22 @@ function MyProfileScreen({ getUserDetails, route, userId, loading, updatedUser, 
         setUser(updatedUser?.data);
     },[updatedUser])
 
+    const navigation = useNavigation();
+
+    useLayoutEffect(()=>{
+        navigation.setOptions({
+            headerRight: () => (
+                <IconButton icon="account-search" onPress={()=>{
+                    navigation.navigate(Screens.USER_SEARCH);
+                }} />
+            )
+        })
+    })
+
     const [user,setUser] = useState(userProfile);//new User();
 
     const editProfileRef = useRef<any>();
     const snapPoints = useMemo(() => [0, '45%', '85%', '100%'], []);
-    const navigation = useNavigation();
 
     const renderSheetHeader = () => {
         return (

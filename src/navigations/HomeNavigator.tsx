@@ -13,7 +13,7 @@ import PDStackNavigator from './PDStackNavigator';
 import { FunctionComponent } from 'react';
 import { ComponentClass } from 'react';
 import reactotron from 'reactotron-react-native';
-import MyProfileStackNavigator from './MyProfileStackNavigator';
+import MyProfileStackNavigator from './ProfileStackNavigator';
 import { bindActionCreators } from 'redux';
 import { logOut, signOut } from '../redux/actions/auth-action';
 import { getUser } from '../redux/actions/user-action';
@@ -33,7 +33,7 @@ function HomeNavigator({ signOut, userFetch, isAnonymous, anonymousRedirect }: a
         props: {
             options: {
                 title: string,
-                tabBarLabel: string,
+                tabBarLabel?: string,
             },
             name: string,
             component: ComponentClass<any, any> | FunctionComponent<any>,
@@ -104,8 +104,8 @@ function HomeNavigator({ signOut, userFetch, isAnonymous, anonymousRedirect }: a
         [Navs.PROFILE]: {
             props: {
                 options: {
-                    title: Screens.PROFILE,
-                    tabBarLabel: Screens.PROFILE,
+                    title: Screens.ACCOUNT,
+                    // tabBarLabel: Screens.ACCOUNT,
                 },
                 name: Navs.PROFILE,
                 component: MyProfileStackNavigator,

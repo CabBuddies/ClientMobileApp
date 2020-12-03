@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-community/async-storage'
 import { StyleSheet, TextInput, View, LogBox, Button } from 'react-native'
@@ -9,6 +9,8 @@ import reactotron from '../../../../dev/ReactotronConfig'
 import { IUser } from 'node-rest-objects/dist/data/user-management'
 
 import * as NROMessage from 'node-rest-objects/dist/data/messages';
+import { Colors } from 'react-native-paper'
+import { useNavigation } from '@react-navigation/native'
 
 interface IMessage {
     author: string,
@@ -47,7 +49,6 @@ function nkLog(a?,b?,c?,d?,e?) {
     reactotron.log!('nk-log', a,b,c,d,e);
 }
 
-
 let lastTS ="";
 
 function DirectChatScreen(
@@ -62,10 +63,19 @@ function DirectChatScreen(
     nkLog(`you are  :`, ownUserProfile,ownUserId);
     nkLog(`user to chat with :`, route.params.user);
 
+    const navigation = useNavigation();
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            title: friend.firstName
+        })
+    }, [])
+
     useEffect(()=>{
         if(extras.message!=='')
         appendMessages([extras.message]);
     },[extras])
+
 
     useEffect(() => {
         nkLog(`main effect  :`, ownUserProfile,ownUserId);
@@ -127,7 +137,7 @@ function DirectChatScreen(
     nkLog('pre-render',messages,gUser,handleSend);
 
     return (
-    <View style={{backgroundColor:"#aaa",flex:1}}>
+    <View style={{backgroundColor: Colors.white, flex:1}}>
         <GiftedChat
         messages={messages} 
         user={gUser} 

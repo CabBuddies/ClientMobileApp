@@ -9,7 +9,8 @@ import { Screens } from '../../definitions/screen-definitions';
 import { useNavigation } from '@react-navigation/native';
 import * as NavUtils from '../../utils/nav-utils';
 import { User } from 'node-rest-objects/dist/data/user-management';
-function SearchScreen() {
+
+function UserSearchScreen() {
 
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -65,4 +66,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default SearchScreen;
+export default UserSearchScreen;

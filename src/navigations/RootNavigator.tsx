@@ -4,7 +4,7 @@
 import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import ProfileDrawerNavigator from "./MyProfileStackNavigator";
+import ProfileDrawerNavigator from "./ProfileStackNavigator";
 import AuthNavigator from "./AuthNavigator";
 import { connect } from "react-redux";
 import { Navs, Screens } from "../definitions/screen-definitions";
