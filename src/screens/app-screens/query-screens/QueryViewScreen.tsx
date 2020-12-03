@@ -21,6 +21,8 @@ import ResponseList from '../../../components/organisms/ResponseList';
 import { Colors } from 'react-native-paper';
 import { VirtualizedContent } from '../../../components/organisms';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { openResponseForm } from '../../../utils/nav-utils';
+import { FlatList } from 'react-native-gesture-handler';
 
 type QueryViewScreenNav = StackNavigationProp<QueryStackParamList>;
 interface QueryViewScreenProps{
@@ -64,7 +66,6 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
         getComments(queryData,defaultRequest)
         .then(() => {
             if(commentRef.current){
-                reactotron.log!("commentRef",commentRef);
                 commentRef.current.snapTo(1);
             }
         })
@@ -81,22 +82,29 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
         navigation.setOptions({
             headerLeft:() => <HeaderBackButton onPress={cancelNav}/>,
             headerRight:() => (
-                <CButton transparent title="Respond" container={{flex:0}} onPress={() => Alert.alert(`this will trigger response`)} />
+                <CButton transparent title="Respond" container={{flex:0}} onPress={() => openResponseForm(navigation)} />
             )
         });
     },[navigation])
 
     return (
         <Container>
-                <VirtualizedContent>
-                    {
-                        (loading && !queryData)?
-                        (<ContentLoading size={PlaceholderSize.MEDIUM}/>)
-                        : 
-                        <PostFullView key={queryData.data._id} type={FullViewType.QUERY} content={queryData} onComment={getCommentFunc} commentDisabled={loading} />
-                    }
-                    <ResponseList />
-                </VirtualizedContent>
+                <FlatList
+                    ListHeaderComponent = {() => (
+                            (loading && !queryData)?
+                            (<ContentLoading size={PlaceholderSize.MEDIUM}/>)
+                            : 
+                            <PostFullView key={queryData.data._id} type={FullViewType.QUERY} content={queryData} onComment={getCommentFunc} commentDisabled={loading} />
+                        
+                    )}
+                    data={[]}
+                    renderItem={null}
+                    ListFooterComponent={() =>  <ResponseList sheetRef={commentRef}/>}
+                    onRefresh={() => {
+                        getResponses(queryData,defaultRequest)
+                    }}
+                />
+                
                 <BottomSheet
                     ref={commentRef}
                     snapPoints = {snapPoints}

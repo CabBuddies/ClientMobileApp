@@ -2,7 +2,7 @@ import { Icon } from 'native-base';
 import React from 'react';
 import { View, Text, FlatList, ImageBackground, TouchableHighlight, Image } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
-import { ImagePicker } from '../../components/organisms';
+import ImagePicker from './ImagePicker';
 import { dh, dw } from '../../utils/rn-utils';
 
 function ImageContainer({ src, deletable, onDelete, onClick }) {
@@ -52,10 +52,11 @@ function ImageSelectionContainer({ defaultValue = [], onChange = () => { }, read
             </Portal>
             <FlatList
                 data={values}
-                listKey="Image-Container-key"
+                listKey={`ImageKey-${Date.now()}`}
                 renderItem={({ item, index }) => (
-                    <ImageContainer key={index.toString()} src={item} deletable={!readOnly} onDelete={imageDeleted} onClick={imageClicked} />
+                    <ImageContainer src={item} deletable={!readOnly} onDelete={imageDeleted} onClick={imageClicked} />
                 )}
+                keyExtractor = {(item,index) => index.toString()}
                 numColumns={4}
                 columnWrapperStyle={{
                     flex: 1,

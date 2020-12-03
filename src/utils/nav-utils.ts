@@ -1,5 +1,5 @@
 import { NavigationProp } from "@react-navigation/native";
-import { Query } from "node-rest-objects/dist/data/queries";
+import { IResponse, Query } from "node-rest-objects/dist/data/queries";
 import { IUser } from "node-rest-objects/dist/data/user-management";
 import { loc } from "../definitions/ride-definitions";
 import { Navs, Screens } from "../definitions/screen-definitions";
@@ -43,11 +43,40 @@ export function createTravelGroup(navigation: typeNav, fromLocation: loc, toLoca
         }
     })
 }
-export function openResponseForm(navigation:typeNav,updateData?:any){
+export function openResponseForm(navigation:typeNav,updateData?:IResponse){
+    if(!updateData){
+        navigation.navigate(Navs.APP, {
+            screen: Navs.GUIDE_ME,
+            params: {
+                screen: Screens.RESPONSE_CREATE,
+            }
+        })
+    }
+    else{
+        navigation.navigate(Navs.APP, {
+            screen: Navs.GUIDE_ME,
+            params: {
+                screen: Screens.RESPONSE_CREATE,
+                params:{
+                    formData:updateData
+                }
+            }
+        })
+    }
+}
+export function goToQueryView(navigation:typeNav){
     navigation.navigate(Navs.APP, {
         screen: Navs.GUIDE_ME,
         params: {
-            screen: Screens.RESPONSE_CREATE,
+            screen: Screens.QUERY_VIEW,
+        }
+    })
+}
+export function goToQueryListScreen(navigation:typeNav){
+    navigation.navigate(Navs.APP, {
+        screen: Navs.GUIDE_ME,
+        params: {
+            screen: Screens.GUIDE_ME,
         }
     })
 }

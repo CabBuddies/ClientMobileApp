@@ -10,8 +10,8 @@ import { IQueryStats } from '../../definitions/query-definitions';
 interface QueryStatsProps{
     stats: IQueryStats;
     onComment?: () => void;
-    onDownVote?: () => void;
-    onUpVote?: () => void;
+    onDownVote?: (val:boolean) => void;
+    onUpVote?: (val:boolean) => void;
     scoreOnly?:boolean;
     commentDisabled?:boolean
 }

@@ -6,7 +6,6 @@ import { Alert } from "react-native"
 
 export default function CommentsAtom({commentCount= 0, onCommentPress = () => Alert.alert(`happy commenting`),commentDisabled=false}) {
     const comments =commentCount;
-    
     return (
         <>
             <Col>

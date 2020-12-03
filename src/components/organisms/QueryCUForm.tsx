@@ -24,30 +24,39 @@ function QueryCUForm({formik,mode}:QueryFormProps){
         <Form style={{flex:1,padding:10}}>
             <PaperInput 
                 style={styles.textStyle}
-                mode="flat" 
+                mode="outlined" 
                 label="Title"
                 value={formik.values.title}
                 onChangeText={(text) => formik.setFieldValue('title',text)}
                 error={formik.touched.title && formik.errors.title}
             />
-            <HelperText style={styles.errorText} type="error" visible={formik.touched.title && formik.errors.title}>{formik.errors.title}</HelperText>
+            {
+               formik.touched.title && formik.errors.title && <HelperText style={styles.errorText} type="error" visible={formik.touched.title && formik.errors.title}>{formik.errors.title}</HelperText>
+            }
             <PaperInput 
                 style={styles.textStyle}
-                mode="flat"
-                multiline numberOfLines={3} 
+                mode="outlined"
+                multiline numberOfLines={10} 
                 label="Description"
                 value={formik.values.body}
                 onChangeText={(text) => formik.setFieldValue('body',text)}
-                onBlur={formik.handleBlur('body')}
+                onBlur={() => formik.handleBlur('body')}
                 error={formik.touched.body && formik.errors.body}
             />
-           <HelperText style={styles.errorText} type="error" visible={formik.touched.body && formik.errors.body}>{formik.errors.body}</HelperText>
+            {
+                formik.touched.body && formik.errors.body && <HelperText style={styles.errorText} type="error" visible={formik.touched.body && formik.errors.body}>{formik.errors.body}</HelperText>
+            }
+           
            <ImageSelectionContainer defaultValue={formik.values.media} onChange={(values) => {formik.setFieldValue('media',values)} }/>
             
             <TagInput tags={formik.values.tags} onTagChange={formik.setFieldValue}/>
-            <HelperText style={styles.errorText} type="error" visible={formik.touched.tags && formik.errors.tags}>{formik.errors.tags}</HelperText>
-
-           <HelperText style={styles.errorText} type="error" visible={formik.errors.server}>{formik.errors.server}</HelperText>
+            {
+               formik.touched.tags && formik.errors.tags && <HelperText style={styles.errorText} type="error" visible={formik.touched.tags && formik.errors.tags}>{formik.errors.tags}</HelperText>
+            }
+            {
+               formik.errors.server && <HelperText style={styles.errorText} type="error" visible={formik.errors.server}>{formik.errors.server}</HelperText>
+            }
+           
         </Form>
     )
 }

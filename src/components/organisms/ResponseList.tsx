@@ -11,6 +11,8 @@ import reactotron from 'reactotron-react-native';
 
 import { bindActionCreators } from 'redux';
 import { loadComments, writeComment, writeResponse } from '../../redux/actions/query-actions';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { defaultRequest } from '../../definitions/query-definitions';
 
 // type ResponseListProps = ReduxProps
 interface IResponseListProps{
@@ -21,17 +23,26 @@ interface IResponseListProps{
     errorType?:string;
     newComments?:any;
     getComments?:any;
-    newResponse?:any
+    newResponse?:any;
+    sheetRef?:any;
 }
-const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:IResponseListProps) => {
+const ResponseList = ({responses,loading,error,errorType,queryData,newResponse,getComments,sheetRef}:IResponseListProps) => {
     
     const [answers,setAnswers] = useState<RESTObject<IResponse>[]>([]);
     useEffect(() => {
         setAnswers(responses!);
     },[responses])
 
+    const getCommentFunc = (item) => {
+        getComments(item,defaultRequest)
+        .then(() => {
+            if(sheetRef.current){
+                sheetRef.current.snapTo(1);
+            }
+        })
+    }
     const renderResponse=({item}) => {
-        return <PostFullView type={FullViewType.RESPONSE} content={item} />
+        return <PostFullView type={FullViewType.RESPONSE} onComment={() => getCommentFunc(item)} content={item} />
     }
 
     const memoizedRender = useMemo(() => renderResponse,[responses]);

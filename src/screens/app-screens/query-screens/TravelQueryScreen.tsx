@@ -163,9 +163,6 @@ function TravelQueryScreen({ navigation, getQueries, getQuery, queryData }: Trav
                 keyExtractor={item => (item) ? item._id : `${Date.now()}`}
                 ListEmptyComponent={placeholder}
                 contentContainerStyle={{ backgroundColor: "white" }}
-                // ListHeaderComponent={() => (
-
-                // )}
                 onScrollEndDrag={() => {
                     reactotron.log!(`nkLog pre onScrollEndDrag`, searchRestObject);
                     if (searchRestObject.hasNextPage()) {

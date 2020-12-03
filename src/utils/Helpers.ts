@@ -1,3 +1,5 @@
+import { Toast } from "native-base";
+
 export const filterPassword = (key:string,value:any) => {
     if(key === "password" || key === "confirmPassword"){
         return undefined;
@@ -47,4 +49,11 @@ export const timeSince = (date:Date)=> {
     }
     
     return val(Math.floor(seconds),'second');
+  }
+
+  export function showToast(val:string){
+      Toast.show({
+          text:val,
+          duration:3000
+      });
   }

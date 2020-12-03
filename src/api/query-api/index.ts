@@ -142,7 +142,7 @@ export async function createResponse(query: Query, request) {
     try {
         const response: Response = new Response();
         response.setQueryId(query.data._id);
-        response.setPublished(request);
+        response.data.published= request;
         response.setStatus("published");
         await response.create();
         // Reactotron.log!("response: ",response);
@@ -169,9 +169,12 @@ export async function updateQuery(queryId:string, request) {
         throw error;
     }
 }
-export async function updateResponse(response: Response, request) {
+export async function updateResponse(responseData:IResponse, request) {
     try {
-        response.setPublished(request);
+        const response =  new Response();
+        response.data.queryId = responseData.queryId;
+        response.data._id = responseData._id;
+        response.data.published = request;
         response.setStatus("published");
         await response.update();
         // Reactotron.log!("response: ",response);
@@ -239,9 +242,7 @@ export async function createOpinion(restObj: RESTObject<IQuery | IResponse>, typ
             opinion.data.queryId = queryId;
         }
         await opinion.create();
-        const opinionMap = {};
-        opinionMap[`${queryId};${responseId};${type}`] = opinion.data._id;
-        return opinionMap;
+        return opinion;
     }
     catch (error) {
         reactotron.log!(`error creating the opinion`, error);
@@ -249,15 +250,27 @@ export async function createOpinion(restObj: RESTObject<IQuery | IResponse>, typ
     }
 }
 
-export async function deleteOpinion(opinionId: string) {
+export async function deleteOpinion(restObj: RESTObject<IQuery | IResponse>,type:OpinionType) {
     try {
+        let queryId;
+        let responseId = '';
         const opinion = new TQOpinion();
-        opinion.data._id = opinionId;
+        opinion.data.opinionType = type;
+        if (restObj instanceof Response) {
+            queryId = restObj.data.queryId;
+            responseId = restObj.data._id;
+            opinion.data.queryId = queryId;
+            opinion.data.responseId = responseId;
+        }
+        else {
+            queryId = restObj.data._id;
+            opinion.data.queryId = queryId;
+        }
         await opinion.delete();
-        return opinionId;
+        return opinion;
     }
     catch (error) {
-        reactotron.log!(`error deleting the opinion:`, opinionId, error);
+        reactotron.log!(`error deleting the opinion:`, error);
         throw error;
     }
 }

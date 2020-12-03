@@ -17,6 +17,8 @@ import { QueryFormType } from '../../../definitions/common-definitions';
 import { IQuery, Query } from 'node-rest-objects/dist/data/queries';
 import { updateQuery } from '../../../api/query-api';
 import reactotron from '../../../../dev/ReactotronConfig';
+import { goToQueryListScreen } from '../../../utils/nav-utils';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type CreateQueryScreenNav = StackNavigationProp<QueryStackParamList>;
 
@@ -75,6 +77,7 @@ const CreateQueryScreen = ({navigation, createQuery,queryData,loading,error,rout
     },[navigation])
     return (
         <Container>
+            <KeyboardAwareScrollView>
                 <Formik
                     innerRef = {formRef}
                     initialValues = {formValues}
@@ -93,6 +96,7 @@ const CreateQueryScreen = ({navigation, createQuery,queryData,loading,error,rout
                                 reactotron.log!("CreateQueryScreen Pre Update",queryData._id,values);
                                 updateQuery(queryData._id,values).then(resp => {
                                     reactotron.log!("post-update-query",resp,values);
+                                    goToQueryListScreen(navigation);
                                 }).catch(error => {
                                     reactotron.log!("post-update-query-error",error);
                                 })
@@ -107,6 +111,7 @@ const CreateQueryScreen = ({navigation, createQuery,queryData,loading,error,rout
                 >
                     {(props) => <QueryForm mode={QueryFormType.QUERY} formik={props}/>}
                 </Formik>
+                </KeyboardAwareScrollView>
         </Container>
     )
 }
