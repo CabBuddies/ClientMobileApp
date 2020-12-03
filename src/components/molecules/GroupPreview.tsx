@@ -4,26 +4,32 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Caption, Colors, Paragraph, Title } from 'react-native-paper'
 import { showToast } from '../../utils/Helpers';
+import GroupJoinButton from '../atoms/GroupJoinButton';
 import CustomAvatar from './CustomAvatar';
 
 
 interface IGroupPreviewProps{
     group:IGroup;
+    userId: string;
+    isVerified: boolean;
 }
-const GroupViewScreen = ({group}:IGroupPreviewProps) => {
+const GroupViewScreen = ({group, userId, isVerified}:IGroupPreviewProps) => {
+    group.displayPicture=group.displayPicture || "https://p1.pxfuel.com/preview/608/208/981/road-road-trip-trip.jpg";
     return (
         <View>
             <View style={styles.avatar} >
                 {<CustomAvatar data={group} size={100} />}
                 <Title style={styles.title}>{group.title}</Title>
                 {group.description!=="" && <Caption>{group.description}</Caption>}
+                <GroupJoinButton groupId={group._id} groupAuthorId={group.author.userId} userId={userId} isVerified={isVerified} />
+                {/* TODO -  to and from and times */}
                 <View style={styles.row}>
                     <TouchableOpacity onPress={() => {
                         showToast("members pressed");
                     }}>
                         <View style={styles.section}>
                             <Paragraph style={[styles.paragraph, styles.caption]}>
-                                {group.stats.followCount || 0}
+                                {group.stats.memberCount+1}
                         </Paragraph>
                             <Icon type="MaterialCommunityIcons" name="account-group" />
                         </View>

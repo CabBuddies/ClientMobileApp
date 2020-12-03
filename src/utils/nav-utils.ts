@@ -92,14 +92,20 @@ export function showGroupView(navigation:typeNav,groupData:IGroup){
         }
     })
 }   
+export function goToGroups(navigation) {
+    navigation.navigate(Navs.APP, {
+        screen: Navs.RIDE,
+        params: {
+            screen: Screens.GROUP_VIEW
+        }
+    })
+}
 
 export function showUserFollowers() {
 }
 export function showUserFollowing() {
 }
 export function openPostFullView() {
-}
-export function goToGroups() {
 }
 export function openDirectChat() {
 }

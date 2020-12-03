@@ -9,10 +9,11 @@ import reactotron from 'reactotron-react-native';
 import { Button, TextInput as PaperInput } from 'react-native-paper';
 import MyDatePicker from '../../../components/atoms/MyDatePicker';
 import * as GroupUtils from '../../../api/groups-api';
+import { goToGroups } from '../../../utils/nav-utils';
 
 type PickerMode = "date" | "time" | "datetime" | "countdown" | undefined;
 
-const CreateGroupScreen = ({ route }) => {
+const CreateGroupScreen = ({ route, navigation }) => {
 
     // TODO - use these locations and let user plan a trip
     let fromLoc;
@@ -52,13 +53,18 @@ const CreateGroupScreen = ({ route }) => {
                 onSubmit={(values, actions) => {
                     reactotron.log!("submiting create group", values);
                     actions.resetForm();
-                    const {planDestinationTime,planOriginPlace,title,planDestinationPlace,planOriginTime} = values;
-                    GroupUtils.createGroup(title,new Date(planOriginTime),planOriginPlace,new Date(planDestinationTime),planDestinationPlace)
-                    .then((result)=>{
-                        reactotron.log!(`creating group: `,result);
-                    }).catch((err)=>{
-                        reactotron.log!(`error creating group: `,err);
-                    });
+                    const { planDestinationTime, planOriginPlace, title, planDestinationPlace, planOriginTime } = values;
+                    GroupUtils.createGroup(title, new Date(planOriginTime), planOriginPlace, new Date(planDestinationTime), planDestinationPlace)
+                        .then((result) => {
+                            reactotron.log!(`creating group: `, result);
+                            const groupData= {
+                                title,
+                                
+                            }
+                            goToGroups(navigation);
+                        }).catch((err) => {
+                            reactotron.log!(`error creating group: `, err);
+                        });
                 }}
             >
                 {(props) => {
@@ -66,31 +72,22 @@ const CreateGroupScreen = ({ route }) => {
 
 
                         <PaperInput
-                            style={styles.textStyle}
-                            mode="flat"
-                            label="Title"
+                            style={[styles.textStyle, styles.inputField]}
+                            mode="outlined"
+                            label="Give a title to your trip"
+                            multiline numberOfLines={3}
                             value={props.values.title}
                             onChangeText={(text) => props.setFieldValue('title', text)}
                         />
                         <PaperInput
+                            style={styles.inputField}
                             disabled
                             mode="outlined"
                             label="Starting from"
                             value={props.values.planOriginPlace.raw.address}
                         />
-                        {/* <DateTimePicker
-                            value={new Date(props.values.planOriginTime)}
-                            mode={'datetime'}
-                            display="default"
-                            onChange={(event, date) => {
-                                if (date) {
-                                    reactotron.log!(date);
-                                    props.setFieldValue('planOriginTime', date.getTime());
-                                }
-                            }}
-                        /> */}
                         <MyDatePicker
-                            label='Select starting time'
+                            label='Start Time'
                             defaultValue={new Date(props.values.planOriginTime)}
                             onChange={(date) => {
 
@@ -105,13 +102,13 @@ const CreateGroupScreen = ({ route }) => {
                         />
 
                         <MyDatePicker
-                            label='Select reach-by time'
+                            label='Arrival Time'
                             defaultValue={new Date(props.values.planDestinationTime)}
                             onChange={(date) => {
                                 props.setFieldValue('planDestinationTime', date);
-
-                            }} />
-                        <Button onPress={props.handleSubmit}>
+                            }}
+                        />
+                        <Button onPress={props.handleSubmit} mode="contained" style={styles.submit}>
                             Submit
                         </Button>
                     </Form>
@@ -152,6 +149,15 @@ const styles = StyleSheet.create({
     },
     errorText: {
         fontSize: 18
+    },
+    inputField: {
+        marginBottom: 10
+    },
+    dtp: {
+        flex: 1,
+        flexDirection: "row"
+    },
+    submit: {
+        margin: 10
     }
-
 })

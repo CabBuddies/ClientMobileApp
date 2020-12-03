@@ -5,13 +5,16 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler';
 import { Title } from 'react-native-paper';
+import { connect } from 'react-redux';
 import { GroupPreview } from '../../../components/molecules';
+import { IAppState } from '../../../redux/initialState';
 
 interface IGroupViewScreenProps{
     route:any;
+    userId: string;
 }
 
-const GroupViewScreen = ({route}:IGroupViewScreenProps) => {
+const GroupViewScreen = ({route,userId,isVerified}) => {
 
     let groupData:IGroup|null = null;
     if(route && route.params && route.params.groupData){
@@ -28,7 +31,8 @@ const GroupViewScreen = ({route}:IGroupViewScreenProps) => {
     }
     return (
        <Container>
-          <GroupPreview group={groupData}/>
+          <GroupPreview group={groupData} userId={userId} isVerified={isVerified} />
+
           <FlatList
             data={[]}
             renderItem={({item,index}) => <Text>{item}</Text>}
@@ -48,6 +52,15 @@ const GroupViewScreen = ({route}:IGroupViewScreenProps) => {
     )
 }
 
-export default GroupViewScreen
+function mapStateToProps(state: IAppState) {
+    const { isConfirmed, userId,anonymous } = state.authState;
+    return {
+        isVerified: isConfirmed,
+        userId: userId,
+        isAnonymous:anonymous
+    }
+}
+const connector = connect(mapStateToProps);
+export default connector(GroupViewScreen);
 
 const styles = StyleSheet.create({})

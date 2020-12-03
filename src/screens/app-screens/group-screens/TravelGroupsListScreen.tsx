@@ -30,7 +30,11 @@ export default function TravelGroupsListScreen({ route }) {
     }
 
     useEffect(() => {
-        getAllGroups({}).then(results => {
+        getAllGroups({
+            sort:{
+                "createdAt":-1
+            }
+        }).then(results => {
             setUserSuggestions(results);
         });
     }, []);
