@@ -29,7 +29,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "serverIp": "10.0.0.3",
+      "serverIp": "192.168.0.14",
       "imgbbKey": "424c8a8ae8d2631b1135558543f56763",
       "IOS_CLIENT_ID":"1067716858916-mfm74qsnfas48kvfokh20nksscjmit36.apps.googleusercontent.com",
       "ANDROID_CLIENT_ID":"1067716858916-g7ep4dem93p8c1890ui4ukhg47m2l10c.apps.googleusercontent.com" 

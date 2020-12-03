@@ -64,8 +64,8 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 	};
 
 	const initialValues = {
-		email: "karthik.munipalle21@cabbuddies.com",
-		password: "edokati",
+		email: "abhivadnala@gmail.com",
+		password: "123456",  
 	};
 
 	const googleUserMapper = (googleUser) => {
@@ -112,7 +112,7 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 
 
 	//FIXME
-	userLogin(initialValues);
+	// userLogin(initialValues);
 
 
 

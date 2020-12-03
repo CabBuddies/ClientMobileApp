@@ -4,7 +4,7 @@ import SearchRESTObject from 'node-rest-objects/dist/rest/search.rest.object';
 import Reactotron from '../../dev/ReactotronConfig';
 import { defaultRequest } from '../definitions/query-definitions';
 import { loc } from '../definitions/ride-definitions';
-
+import {TGAccess} from 'node-rest-objects/dist/data/groups/tg.access';
 export async function getAllGroups(request = defaultRequest) {
     try {
         const group: Group = new Group();
@@ -36,7 +36,7 @@ function buildPlanPlace(inp,loc:loc){
         {lat:lat!-LOCATION_DELTA,lng:lng!+LOCATION_DELTA},
         {lat:lat!-LOCATION_DELTA,lng:lng!-LOCATION_DELTA},
     ];
-    const addresss:any={};
+    inp.address.raw = loc.raw.address;
     inp.gps={lat,lng};
     inp.isFlexible=true;
     inp.flexibility={bounds};
@@ -72,6 +72,8 @@ export async function createGroup(
         buildPlanPlace(group.data.plan.origin.place,planOriginPlace);
         buildPlanPlace(group.data.plan.destination.place,planDestinationPlace);
         
+        group.data.preferences.automaticMembership = true;
+
         await safePromise(group.create());
         // Reactotron.log!("group: ",group);
         return group;
@@ -99,4 +101,80 @@ export async function getAllPosts(group:IGroup){
     const post:Post =  new Post();
     post.data.groupId = group._id;
     const sro = new SearchRESTObject(post);
+}
+
+export async function becomeGroupMember(groupId:string,userId:string){
+    try {
+        const tgAccess = new TGAccess();
+        tgAccess.data.groupId=groupId;
+        tgAccess.data.userId.userId=userId;
+        await safePromise(tgAccess.create());
+        return tgAccess;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function isGroupMember(groupId:string,userId:string){
+    try {
+        const tgAccess = new TGAccess();
+        tgAccess.data.groupId=groupId;
+        const sro = new SearchRESTObject(tgAccess);
+        sro.request.query={
+            "userId":userId,
+            "status":"accepted"
+        };
+        await safePromise(sro.search());
+        return sro.response.resultSize === 0 ? false : sro.response.result[0];
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function groupMemberList(groupId:string){
+    try {
+        const tgAccess = new TGAccess();
+        tgAccess.data.groupId=groupId;
+        const sro = new SearchRESTObject(tgAccess);
+        sro.request.query={
+            "status":"accepted"
+        };
+        await safePromise(sro.search());
+        return sro.response.result;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function memberGroupList(userId:string){
+    try {
+        const tgAccess = new TGAccess();
+        const sro = new SearchRESTObject(tgAccess);
+        sro.request.query={
+            "status":"accepted",
+            "userId":userId
+        };
+        sro.request.pageSize=1000;
+        await safePromise(sro.search());
+        const groupIdList = sro.response.result.map((tga)=>tga.data.groupId);
+        const group = new Group();
+        const sroG = new SearchRESTObject(group);
+        sroG.request.query={
+            "$or":[
+                {
+                    "_id":{
+                        "$in":groupIdList
+                    }
+                },
+                {
+                    "author":userId
+                }
+            ]
+        };
+        sroG.request.pageSize=1000;
+        await safePromise(sroG.search());
+        return sroG.response.result;
+    } catch (error) {
+        console.error(error);
+    }
 }

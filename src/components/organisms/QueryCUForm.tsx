@@ -7,6 +7,7 @@ import { QueryFormType } from '../../definitions/common-definitions';
 import { Chip, Colors, HelperText, TextInput as PaperInput } from 'react-native-paper';
 import TagInput from '../molecules/TagInput';
 import ImageSelectionContainer from './ImageSelectionContainer';
+import { dh } from '../../utils/rn-utils';
 
 interface QFormValues{
     title:string;
@@ -34,7 +35,7 @@ function QueryCUForm({formik,mode}:QueryFormProps){
                formik.touched.title && formik.errors.title && <HelperText style={styles.errorText} type="error" visible={formik.touched.title && formik.errors.title}>{formik.errors.title}</HelperText>
             }
             <PaperInput 
-                style={styles.textStyle}
+                style={[styles.textStyle,styles.description]}
                 mode="outlined"
                 multiline numberOfLines={10} 
                 label="Description"
@@ -78,10 +79,12 @@ const styles = StyleSheet.create({
     },
     textStyle:{
         fontSize:20,
-        backgroundColor:"rgba(245,255,240,0.1)",
+        backgroundColor:"rgba(245,255,240,0.1)"
     },
     errorText:{
         fontSize:18
+    },
+    description: {
+        height: dh(0.2)
     }
-    
 })

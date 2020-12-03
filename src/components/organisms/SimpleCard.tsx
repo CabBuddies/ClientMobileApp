@@ -6,6 +6,8 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { Card, Button as PaperButton, TouchableRipple, Headline, Avatar, Text, IconButton } from 'react-native-paper';
 import { CustomAvatar } from '../molecules';
 import { Row, Col, Grid } from 'react-native-easy-grid';
+import * as HelperUtils from '../../utils/Helpers';
+
 
 interface ISimpleCardProps {
     content?: User | Group;
@@ -39,13 +41,16 @@ const SimpleCard = ({
 
         return (
             <Card onPress={onPress} elevation={3} style={{ margin: 10 }} >
-                <Card.Cover source={{ uri: data.displayPicture }} />
+                <Card.Cover source={{ uri: data.displayPicture || 'https://p1.pxfuel.com/preview/608/208/981/road-road-trip-trip.jpg' }} />
                 <Card.Content>
                     <Headline style={{fontWeight:'bold',justifyContent:'center',textAlign:'center'}}>{title}</Headline>
                     <View style={styles.cityContainer}>
-                        <Text style={styles.text}>{data.plan.origin.place.address.city}</Text>
-                        <Icon type="MaterialCommunityIcons" name="ray-start-arrow" style={styles.icon} />
-                        <Text style={styles.text}>{data.plan.destination.place.address.city}</Text>
+                         <Icon type="MaterialIcons" name="location-searching" style={styles.icon} />
+                        <Text style={styles.text}>{data.plan.origin.place.address.city || data.plan.origin.place.address.raw}</Text>
+                    </View>
+                    <View style={styles.cityContainer}>
+                        <Icon type="MaterialIcons" name="my-location" style={styles.icon} />
+                        <Text style={styles.text}>{data.plan.destination.place.address.city || data.plan.destination.place.address.raw}</Text>
                     </View>
                     <View>
                         <Row>
@@ -55,13 +60,15 @@ const SimpleCard = ({
                                         <Icon type="MaterialCommunityIcons" name="calendar-clock" />
                                     {/* </Col>
                                     <Col> */}
-                                        <Text style={styles.stext}>{si}</Text>
+                                        <Text style={styles.stext}>{
+                                            HelperUtils.timeSince(new Date(data.plan.destination.time.timestamp))
+                                        }</Text>
                                 </Row>
                             </Col>
                             <Col >
                                 <Row style={{alignItems:'center',justifyContent:'flex-end'}} >
                                     {/* <Col> */}
-                                        <Text style={styles.stext}>{m}</Text>
+                                        <Text style={styles.stext}>{(data.stats.memberCount)+1}</Text>
                                     {/* </Col>
                                     <Col> */}
                                         <Icon type="MaterialCommunityIcons" name="account-group" />
@@ -97,10 +104,10 @@ const styles = StyleSheet.create({
     cityContainer: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
         marginVertical:10
     },
-    icon: { backgroundColor: 'transparent' },
+    icon: { backgroundColor: 'transparent',
+    marginRight: 10 },
     text: {
         fontSize: 20,
     },
