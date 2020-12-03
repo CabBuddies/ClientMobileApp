@@ -104,7 +104,7 @@ function HomeNavigator({ signOut, userFetch, isAnonymous, anonymousRedirect }: a
         [Navs.PROFILE]: {
             props: {
                 options: {
-                    title: Screens.ACCOUNT,
+                    title: Screens.ACCOUNT, // ONLYFOR - tab title purpose
                     // tabBarLabel: Screens.ACCOUNT,
                 },
                 name: Navs.PROFILE,

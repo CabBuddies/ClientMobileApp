@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import React, { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StatusBar, StyleSheet } from "react-native";
 import RootStackNavigator from "./src/navigations/RootNavigator";
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Root } from "native-base";
@@ -14,7 +14,7 @@ if (__DEV__) {
 import Reactotron from 'reactotron-react-native';
 import { applyLocalDefinitions } from "./src/api/api-definitions";
 import { LogBox } from "react-native";
-import RideScreen from "./src/screens/app-screens/RideScreen";
+import RideScreen from "./src/screens/app-screens/group-screens/RideScreen";
 
 Reactotron.log!("Hello there!")
 
@@ -56,6 +56,7 @@ export default function App() {
           {/* <RideScreen /> */}
           <ReduxProvider store={store}>
             <PaperProvider theme={theme}>
+              {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
               <RootStackNavigator />
             </PaperProvider>
           </ReduxProvider>

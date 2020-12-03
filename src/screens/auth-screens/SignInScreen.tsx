@@ -21,7 +21,6 @@ import * as Google from "expo-google-app-auth";
 import Constants from "expo-constants";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Headline, Title } from "react-native-paper";
-import { Colors } from "react-native-paper";
 
 type AuthNavigation = StackNavigationProp<RootStackParamList>;
 
@@ -65,8 +64,8 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 	};
 
 	const initialValues = {
-		email: "karthik.munipalle21@cabbuddies.com",
-		password: "edokati",
+		email: "abhivadnala@gmail.com",
+		password: "123456",
 	};
 
 	const googleUserMapper = (googleUser) => {
@@ -112,14 +111,8 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 
 
 
-	//TODO - remove this
+	//FIXME
 	userLogin(initialValues);
-
-
-
-
-
-
 
 
 

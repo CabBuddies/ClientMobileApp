@@ -3,8 +3,8 @@ import { IUser } from "node-rest-objects/dist/data/user-management";
 import { loc } from "../definitions/ride-definitions";
 import { Navs, Screens } from "../definitions/screen-definitions";
 
-
 type typeNav = NavigationProp<Record<string, object | undefined>, string, any, {}, {}>;
+
 export function showUserProfile(navigation: typeNav, userData: IUser) {
     navigation.navigate(Navs.APP, {
         screen: Navs.PROFILE,
@@ -16,6 +16,7 @@ export function showUserProfile(navigation: typeNav, userData: IUser) {
         }
     });
 }
+
 export function showRidesNow(navigation: typeNav, fromLocation: loc, toLocation: loc) {
     navigation.navigate(Navs.APP, {
         screen: Navs.RIDE,
@@ -28,6 +29,7 @@ export function showRidesNow(navigation: typeNav, fromLocation: loc, toLocation:
         }
     })
 }
+
 export function createTravelGroup(navigation: typeNav, fromLocation: loc, toLocation: loc) {
     navigation.navigate(Navs.APP, {
         screen: Navs.RIDE,

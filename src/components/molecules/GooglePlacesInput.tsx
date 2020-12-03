@@ -4,16 +4,16 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { TextInput } from 'react-native-paper';
 import { dw } from '../../utils/rn-utils';
 const GOOGLE_PLACES_API_KEY = 'AIzaSyDl4dmvk0tBIX0-BWCaOZy0MjAcTtLHo60';
-const GooglePlacesInput = ({placeholder = "search",currentLocation = false, allSet = ()=>{}, onFocus = ()=>{}, onBlur = ()=>{},hide=false,elevation=0,top=0,onSuggestionsShowing=(b:boolean)=>{},onLocationChanged=(data:{lat:number,lng:number,raw:any})=>{}}) => {
-    // let value:any=undefined;
-    // if(placeholder==='from'){
-    //     value="505 Hassinger Road, San Jose";
-    // }
-    const [isFound,setFound] = React.useState(false);
-    React.useEffect(()=>{
-      onSuggestionsShowing(isFound);
-    },[isFound])
-    return (
+const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, allSet = () => { }, onFocus = () => { }, onBlur = () => { }, hide = false, elevation = 0, top = 0, onSuggestionsShowing = (b: boolean) => { }, onLocationChanged = (data: { lat: number, lng: number, raw: any }) => { } }) => {
+  // let value:any=undefined;
+  // if(placeholder==='from'){
+  //     value="505 Hassinger Road, San Jose";
+  // }
+  const [isFound, setFound] = React.useState(false);
+  React.useEffect(() => {
+    onSuggestionsShowing(isFound);
+  }, [isFound])
+  return (
     <GooglePlacesAutocomplete
       query={{
         key: GOOGLE_PLACES_API_KEY,
@@ -21,33 +21,33 @@ const GooglePlacesInput = ({placeholder = "search",currentLocation = false, allS
       }}
       placeholder={placeholder}
       currentLocation={currentLocation}
-      autoFillOnNotFound={(()=>{
+      autoFillOnNotFound={(() => {
 
         return false;
       })()}
-      onNotFound={()=>{
+      onNotFound={() => {
         setFound(false);
       }}
-      renderRow={(item)=>{
-        if(!isFound){
+      renderRow={(item) => {
+        if (!isFound) {
           setFound(true);
         }
-      return <Text style={{color:'red'}}>{item.description}</Text>
+        return <Text style={{ color: 'red' }}>{item.description}</Text>
       }}
       fetchDetails
-      
+
       onPress={(data, details) => {
-        console.log(data, details); 
-        
+        console.log(data, details);
+
         allSet();
         setFound(false);
 
         const geometry = details?.geometry;
-        
+
         onLocationChanged({
-          lat:geometry!.location.lat,
-          lng:geometry!.location.lng,
-          raw:{data,details}
+          lat: geometry!.location.lat,
+          lng: geometry!.location.lng,
+          raw: { data, details }
         })
       }}
       textInputHide={hide}
@@ -56,8 +56,8 @@ const GooglePlacesInput = ({placeholder = "search",currentLocation = false, allS
         InputComp: TextInput,
         onFocus,
         onBlur,
-        onChangeText:(text)=>{
-          if(text==='')
+        onChangeText: (text) => {
+          if (text === '')
             setFound(false);
         },
         //clearButtonMode:'never'
@@ -65,8 +65,8 @@ const GooglePlacesInput = ({placeholder = "search",currentLocation = false, allS
       }}
       styles={{
         textInputContainer:{
-          // position:"absolute",
-          // top,
+          position:"absolute",
+          top,
           // zIndex:elevation,
           width:dw(0.9),
           marginHorizontal:dw(0.05)

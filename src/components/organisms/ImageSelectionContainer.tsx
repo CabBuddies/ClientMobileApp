@@ -1,10 +1,12 @@
 import { Icon } from 'native-base';
 import React from 'react';
-import { View, Text, FlatList, ImageBackground, TouchableHighlight, Image, Alert } from 'react-native';
+import { View, Text, FlatList, ImageBackground, TouchableHighlight, Image } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
-import ImagePicker from './ImagePicker';
+import { ImagePicker } from '../../components/organisms';
 import { dh, dw } from '../../utils/rn-utils';
+
 function ImageContainer({ src, deletable, onDelete, onClick }) {
+
     return (
         <TouchableHighlight
             onPress={() => onClick(src)}>

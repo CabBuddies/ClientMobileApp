@@ -10,10 +10,19 @@ import SimpleCard from '../../../components/organisms/SimpleCard';
 import { getAllGroups } from '../../../api/groups-api';
 import { Icon, Row } from 'native-base';
 
-export default function TravelGroupScreen() {
+export default function TravelGroupsListScreen({ route }) {
 
     const [searchQuery, setSearchQuery] = React.useState('');
     const [userSuggestions, setUserSuggestions] = React.useState<any[]>([]);
+
+    // FIXME - if no from and to, show all rides available now from users location
+    // TODO - use these coordinates and give user rides matching them
+    let fromLoc;
+    let toLoc;
+    if(route) {
+        fromLoc = route.params.fromLocation;
+        toLoc = route.params.toLocation;
+    }
 
     useEffect(() => {
         getAllGroups({}).then(results => {
@@ -47,6 +56,7 @@ export default function TravelGroupScreen() {
                 keyExtractor={item => (item) ? item.data._id : `${Date.now()}`}
                 // ListEmptyComponent={placeholder}
                 ListHeaderComponent={() => (
+                    //TODO - IMPLEMENT FILTERS
                     <Row style={{
                         marginHorizontal: 10, marginTop: 10
                     }}>
