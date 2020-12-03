@@ -11,9 +11,10 @@ interface IUserProfileViewProps{
     isSelf:boolean;
     onEdit?:Function;
     isVerified:boolean;
+    signOut?:Function;
 }
 
-const UserProfileView = ({userData,userId,isSelf,onEdit,isVerified}:IUserProfileViewProps) => {
+const UserProfileView = ({userData,userId,isSelf,onEdit,isVerified, signOut=()=>{}}:IUserProfileViewProps) => {
     return (
         <>
             <UserDetailsPreview 

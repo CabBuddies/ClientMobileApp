@@ -16,6 +16,7 @@ import reactotron from '../../../dev/ReactotronConfig';
 import { IUser, User } from 'node-rest-objects/dist/data/user-management';
 import UserProfileView from './UserProfileView';
 import { Screens } from '../../definitions/screen-definitions';
+import { logOut, signOut } from '../../redux/actions/auth-action';
 
 interface UserDetails {
     navigation: any;
@@ -28,9 +29,10 @@ interface UserDetails {
     route: any;
     userId: string | undefined;
     isAnonymous: boolean;
+    signOut: Function;
 }
 
-function MyProfileScreen({ getUserDetails, route, userId, loading, updatedUser, updateUserDetails, isVerified, userProfile }: UserDetails) {
+function MyProfileScreen({ getUserDetails, route, userId, loading, updatedUser, updateUserDetails, isVerified, userProfile, signOut }: UserDetails) {
 
     useEffect(() => {
         setUser(updatedUser?.data);
@@ -99,7 +101,7 @@ function MyProfileScreen({ getUserDetails, route, userId, loading, updatedUser, 
 
     return (
         <Container>
-            <UserProfileView userData={user!} userId={userId} isSelf={true} isVerified={isVerified || false} onEdit={onEdit} />
+            <UserProfileView userData={user!} userId={userId} isSelf={true} isVerified={isVerified || false} onEdit={onEdit} signOut={signOut} />
             {console.log(`user: `, user)}
             <BottomSheet
                 ref={editProfileRef}
@@ -149,8 +151,10 @@ function mapDispatchToProps(dispatch) {
     return {
         getUserDetails: bindActionCreators(getUser, dispatch),
         updateUserDetails: bindActionCreators(saveUser, dispatch),
+        signOut: bindActionCreators(signOut, dispatch)
     }
 }
+
 const connector = connect(mapStateToProps, mapDispatchToProps);
 export default connector(MyProfileScreen);
 
