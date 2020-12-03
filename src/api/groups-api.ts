@@ -1,4 +1,4 @@
-import { Group } from 'node-rest-objects/dist/data/groups';
+import { Group, IGroup, Post } from 'node-rest-objects/dist/data/groups';
 import safePromise from 'node-rest-objects/dist/rest/safe.promise';
 import SearchRESTObject from 'node-rest-objects/dist/rest/search.rest.object';
 import Reactotron from '../../dev/ReactotronConfig';
@@ -79,4 +79,24 @@ export async function createGroup(
         Reactotron.log!(`Group-API: error creating the group`, error);
         throw error;
     }
+}
+
+export async function createPost(group: IGroup, request) {
+    try {
+        const post:Post =  new Post();
+        post.data.groupId = group._id;
+        post.data.title = request.title;
+        post.data.body = request.body;
+        await post.create();
+        return post;
+    } catch (error) {
+        Reactotron.log!(`Query-API: error creating the response`, error);
+        throw error;
+    }
+}
+
+export async function getAllPosts(group:IGroup){
+    const post:Post =  new Post();
+    post.data.groupId = group._id;
+    const sro = new SearchRESTObject(post);
 }

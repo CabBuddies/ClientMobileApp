@@ -9,23 +9,27 @@ interface OptionProps{
     onDelete?: () => void;
     onEdit?: () => void;
     onReport?:() => void;
+    editable?:boolean;
+    deletable?:boolean;
 }
 
-const createCrudItems =(onDelete,onEdit,onReport) =>{
+const createCrudItems =(onDelete,onEdit,onReport,editable=true,deletable=true) =>{
 
     return [
         {
             key:"1234ABC",
             icon: "pencil",
             title:"edit",
-            onPress:onEdit
+            onPress:onEdit,
+            disabled:editable
     
         },
         {
             key:"1234BCA",
             icon:"delete",
             title:"delete",
-            onPress: onDelete
+            onPress: onDelete,
+            disabled:deletable,
         },
         {
             key:"1234bcB",
@@ -42,7 +46,9 @@ const Options = ({mode=MenuModes.CRUD,
     optionsArray=[],
     onDelete = () => {Alert.alert('delete pressed')},
     onEdit = () => {Alert.alert('edit pressed')},
-    onReport = () => {Alert.alert('report pressed')}
+    onReport = () => {Alert.alert('report pressed')},
+    editable = true,
+    deletable=true
     }:OptionProps
 ) => {
     const [isVisible,setVisible] = useState(false);
@@ -51,7 +57,7 @@ const Options = ({mode=MenuModes.CRUD,
     if(optionsArray.length === 0){
         switch(mode){
             case MenuModes.CRUD: 
-                optionsArray = createCrudItems(onDelete,onEdit,onReport);
+                optionsArray = createCrudItems(onDelete,onEdit,onReport,editable,deletable);
                 break;
             case MenuModes.TEXT:
                 optionsArray = ["copy","paste"];

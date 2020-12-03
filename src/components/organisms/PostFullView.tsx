@@ -30,6 +30,7 @@ interface QueryViewProps{
 	style?: ViewStyle | Array<ViewStyle> | null;
 	onComment?:any,
 	commentDisabled?:any;
+	ownUserId:string | undefined;
 	changeQuery?:any;
 	deleteQuery?:any;
 	changeResponse?:any;
@@ -46,12 +47,18 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 	commentDisabled=false,
 	headerNav = () => Alert.alert(`header clicked`),
 	itemNav = () => Alert.alert(`this will trigger an update`),
+	ownUserId,
 	deleteQuery,deleteResponse}: QueryViewProps
 	) => {
-
+	const [isCurrentUSer,setIsCurrentUser] = useState(false);
 	const navigation = useNavigation();
 	const data:IQuery|IResponse = content.data;
 	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats}= data;
+	
+	useEffect(() => {
+		setIsCurrentUser(data.author.userId === ownUserId!);
+	},[content])
+
 	const date:string = timeSince(new Date(createdAt))||(createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5));
 	let responseCount;
 	const generateTags = () => {
@@ -64,6 +71,8 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 		}
 	}
 	let tags = generateTags();
+
+	
 	const renderAvatar = (props) => {
 		return <CustomAvatar size={24} {...props} data={author}/>
 	} 
@@ -130,7 +139,7 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
         <Card style={styles.card}>
 			<Badge visible size={25} style={[styles.badge,styles[type]]}>{type.toUpperCase()}</Badge>
 			<Card.Title title={published?.title} 
-				right={(props) => <Options {...props} mode={MenuModes.CRUD} onDelete={onDelete} onEdit={onUpdate}/>}
+				right={(props) => <Options {...props} mode={MenuModes.CRUD} deletable={!isCurrentUSer} editable={!isCurrentUSer} onDelete={onDelete} onEdit={onUpdate}/>}
 				style={{margin:0}}
 			/>
 			<Card.Content>
@@ -159,9 +168,10 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 }
 
 function mapStateToProps(state:IAppState){
-	const { queryOpinionState } = state;
+	const { queryOpinionState,authState } = state;
 	return {
-		opinions:queryOpinionState.opinionList
+		opinions:queryOpinionState.opinionList,
+		ownUserId:authState.userId,
 	}
 }
 function mapDispatchToProps(dispatch){
