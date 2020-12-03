@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text,Platform } from 'react-native';
+import { Text, View, Image, Alert, Platform } from 'react-native';
 import { GooglePlacesAutocomplete, Styles } from 'react-native-google-places-autocomplete';
 import { TextInput } from 'react-native-paper';
+import reactotron from '../../../dev/ReactotronConfig';
 import { dw } from '../../utils/rn-utils';
 const GOOGLE_PLACES_API_KEY = 'AIzaSyDl4dmvk0tBIX0-BWCaOZy0MjAcTtLHo60';
 
@@ -29,6 +30,7 @@ const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, al
   React.useEffect(() => {
     onSuggestionsShowing(isFound);
   }, [isFound])
+
   return (
     <GooglePlacesAutocomplete
       query={{
@@ -63,7 +65,7 @@ const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, al
         onLocationChanged({
           lat: geometry!.location.lat,
           lng: geometry!.location.lng,
-          raw: { data, details }
+          raw: { data, details, address: details?.formatted_address}
         })
       }}
       textInputHide={hide}
@@ -83,7 +85,6 @@ const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, al
           marginHorizontal:dw(0.05)
         },
         listView:{
-          zIndex:elevation+100000,
           width:dw(0.9),
           marginHorizontal:dw(0.05)
         }
@@ -91,4 +92,7 @@ const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, al
     />
   );
 };
+
+
+
 export default GooglePlacesInput;

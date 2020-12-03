@@ -126,8 +126,8 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
             setPolyData({ show: false, gpsLocations: [] })
         }
 
-        if(fromLocation!==null && fromLocation!==undefined) {
-            if(toLocation!==null && toLocation!==undefined) {
+        if (fromLocation !== null && fromLocation !== undefined) {
+            if (toLocation !== null && toLocation !== undefined) {
                 setDisable(false);
             }
         }
@@ -163,7 +163,7 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                     polyData.show && <Polyline
                         geodesic
                         coordinates={polyData.gpsLocations}
-                        lineDashPattern={[50,25]}
+                        lineDashPattern={[50, 25]}
                         lineCap="square"
                         strokeColor="rgba(0,0,55,0.7)" // fallback for when `strokeColors` is not supported by the map-provider
                         strokeWidth={4}
@@ -192,10 +192,10 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                 </View>
 
                 {/* TODO - we have to disable the buttons until user enters from and to */}
-                    <Row style={styles.btnContainer}>
-                        <Button mode="contained" disabled={disable} onPress={() => showRidesNow(navigation, fromLocation, toLocation)} color={Colors.green700} style={styles.button}>Find Rides</Button>
-                        <Button mode="contained" disabled={disable} onPress={() => createTravelGroup(navigation, fromLocation, toLocation)} color={Colors.blue700} style={styles.button}>Plan Ride</Button>
-                    </Row>
+                <Row style={styles.btnContainer}>
+                    <Button mode="contained" disabled={disable} onPress={() => showRidesNow(navigation, fromLocation, toLocation)} color={Colors.green700} style={styles.button}>Find Rides</Button>
+                    <Button mode="contained" disabled={disable} onPress={() => createTravelGroup(navigation, fromLocation, toLocation)} color={Colors.blue700} style={styles.button}>Plan Ride</Button>
+                </Row>
             </View>
         </View>
     )
