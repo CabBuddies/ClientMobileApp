@@ -1,4 +1,5 @@
 import { NavigationProp } from "@react-navigation/native";
+import { Query } from "node-rest-objects/dist/data/queries";
 import { IUser } from "node-rest-objects/dist/data/user-management";
 import { loc } from "../definitions/ride-definitions";
 import { Navs, Screens } from "../definitions/screen-definitions";
@@ -39,6 +40,14 @@ export function createTravelGroup(navigation: typeNav, fromLocation: loc, toLoca
                 fromLocation,
                 toLocation
             }
+        }
+    })
+}
+export function openResponseForm(navigation:typeNav,updateData?:any){
+    navigation.navigate(Navs.APP, {
+        screen: Navs.GUIDE_ME,
+        params: {
+            screen: Screens.RESPONSE_CREATE,
         }
     })
 }

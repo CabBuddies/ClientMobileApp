@@ -80,7 +80,14 @@ export async function getAllComments(restObj: RESTObject<IQuery | IResponse>, re
     try {
         Reactotron.log!("GETTING ALL COMMENTS.......");
         let comment: Comment = new Comment();
-        comment.data.queryId = restObj.data._id;
+        if(restObj instanceof Query){
+            comment.data.queryId = restObj.data._id;
+        }
+        else{
+            comment.data.queryId = restObj.data.queryId;
+            comment.data.responseId = restObj.data._id
+        }
+        
         const searchComment = new SearchRESTObject(comment);
         searchComment.setRequest(request);
         await searchComment.search();
@@ -111,11 +118,17 @@ export async function createQuery(request) {
     }
 }
 
-export async function createComment(query: RESTObject<IQuery | IResponse>, request) {
+export async function createComment(restObj: RESTObject<IQuery | IResponse>, request) {
     try {
         let comment: Comment = new Comment();
         comment.data.body = request;
-        comment.data.queryId = query.data._id;
+        if(restObj instanceof Query){
+            comment.data.queryId = restObj.data._id;
+        }
+        else{
+            comment.data.queryId = restObj.data.queryId;
+            comment.data.responseId = restObj.data._id
+        }
         await comment.create();
         Reactotron.log!("comment-api-response", comment.data);
         return comment;

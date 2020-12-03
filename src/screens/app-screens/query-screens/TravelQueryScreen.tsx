@@ -124,7 +124,7 @@ function TravelQueryScreen({ navigation,getQueries, getQuery, queryData }: Trave
     }
 
     const renderItem = ({ item }) => {
-        return <View style={{margin: 5}}><QueryPreview query={item} itemNav={() => nav(item)} /></View>
+        return <View style={{margin: 5}}><QueryPreview query={item.data} itemNav={() => nav(item)} /></View>
     }
 
     return (
@@ -144,7 +144,7 @@ function TravelQueryScreen({ navigation,getQueries, getQuery, queryData }: Trave
                 value={searchQuery}
             />
             <FlatList data={userSuggestions} renderItem={renderItem}
-                keyExtractor={item => (item) ? item.data._id : `${Date.now()}`}
+                keyExtractor={item => (item) ? item._id : `${Date.now()}`}
                 ListEmptyComponent={placeholder}
                 contentContainerStyle={{backgroundColor:"white"}}
                 // ListHeaderComponent={() => (

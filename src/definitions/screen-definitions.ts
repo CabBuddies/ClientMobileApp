@@ -14,6 +14,7 @@ export enum Screens {
     GUIDE_ME = "Guide Me",
     QUERY_VIEW = "QueryView",
     QUERY_CREATE = "New Query",
+    RESPONSE_CREATE = "New Response",
     RIDE = "Find a ride",
     CREATE_GROUP = "Plan Ride",
     CHATS = "Chats",

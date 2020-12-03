@@ -7,6 +7,7 @@ import CreateQueryScreen from "../screens/app-screens/query-screens/CreateQueryS
 import { TouchableOpacity } from "react-native";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { Icon } from "native-base";
+import CreateResponseScreen from "../screens/app-screens/query-screens/CreateResponseScreen";
 
 const QueryNavigator = createStackNavigator();
 export type QueryStackParamList = {
@@ -32,6 +33,7 @@ export default function QueryNavigatorScreen(props: any) {
                         ({ title: route.params!.name })
                 }
             />
+            <QueryNavigator.Screen name={Screens.RESPONSE_CREATE} component={CreateResponseScreen} />
         </QueryNavigator.Navigator>
     )
 }

@@ -1,5 +1,5 @@
-import React,{ useRef, useMemo, useState } from 'react'
-import { StyleSheet, FlatList, View} from 'react-native'
+import React,{ useRef, useMemo, useState, useEffect } from 'react'
+import { StyleSheet, FlatList, View, Alert} from 'react-native'
 import { FullViewType, PlaceholderSize } from '../../definitions/common-definitions';
 import {Colors, Text, Title, Button as PaperButton, Divider, Card, TextInput,List} from 'react-native-paper';
 import PostFullView from './PostFullView';
@@ -8,8 +8,7 @@ import { connect } from 'react-redux';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 import { IQuery, IResponse } from 'node-rest-objects/dist/data/queries';
 import reactotron from 'reactotron-react-native';
-import { Formik } from 'formik';
-import * as yup from "yup";
+
 import { bindActionCreators } from 'redux';
 import { loadComments, writeComment, writeResponse } from '../../redux/actions/query-actions';
 
@@ -26,49 +25,17 @@ interface IResponseListProps{
 }
 const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:IResponseListProps) => {
     
-    const [showForm,toggleShowForm] = useState(false);
-    const formRef:any = useRef();
-    const responseInitialValues = {
-        title:"",
-        tags: ["RESPONSE"],
-        body:""
-    }
-    const querySchema = yup.object({
-        title: yup.string().required("A title is Required"),
-        body: yup.string().required("description is required")
-    });
+    const [answers,setAnswers] = useState<RESTObject<IResponse>[]>([]);
+    useEffect(() => {
+        setAnswers(responses!);
+    },[responses])
+
     const renderResponse=({item}) => {
         return <PostFullView type={FullViewType.RESPONSE} content={item} />
     }
 
     const memoizedRender = useMemo(() => renderResponse,[responses]);
-    const submit= () => {
-        if(formRef.current){
-            formRef.current.handleSubmit();
-        }
-    }
-    const headerComponent = () => (
-        <View>
-            <List.Accordion title="Add Response" expanded={showForm} onPress={() => toggleShowForm(!showForm)}>
-                <Formik
-                        innerRef={formRef}
-                        initialValues = {responseInitialValues}
-                        validationSchema={querySchema}
-                        onSubmit = {(values,actions) => {
-                            // reactotron.log!(values);
-                            newResponse(queryData,values).then(() => {
-                            });
-                            actions.resetForm();
-                            toggleShowForm(!showForm)
-                        }}
-                    >
-                        {(props) =>  <TextInput onChangeText={(text) => props.setFieldValue('body',text) } multiline placeholder="enter your response here" mode="flat"/>}
-                </Formik>
-                <PaperButton disabled ={loading} mode="text" onPress={submit} compact={true}>Post</PaperButton>
-            </List.Accordion>
-            <Title style={styles.title}>RESPONSES</Title>
-        </View>
-    )
+    
     const renderEmptyComponent = () => {
         if(loading){
             return <ContentLoading size={PlaceholderSize.MEDIUM}/>
@@ -89,10 +56,11 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
         }
     }
     return (
-        <FlatList data={responses} renderItem={memoizedRender}
+        <FlatList data={answers} renderItem={memoizedRender}
+            listKey = {"Responses-list"}
             keyExtractor = {item => (item)?item.data._id:`${Date.now()}`}
             ListEmptyComponent={renderEmptyComponent}
-            ListHeaderComponent={headerComponent}
+            ListHeaderComponent={() => (<Title style={styles.title}>RESPONSES</Title>)}
             ItemSeparatorComponent={() => <Divider />}
             extraData={responses}
         />

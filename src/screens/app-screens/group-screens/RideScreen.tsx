@@ -1,9 +1,9 @@
-import React, { useRef, useMemo, useState, useEffect } from 'react';
-import { Alert, Platform, StyleSheet, View } from 'react-native';
-import { Text, TextInput, Button, Colors, Title } from "react-native-paper";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Button, Colors } from "react-native-paper";
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { dh, dw } from "../../../utils/rn-utils";
-import { Grid, Row } from "react-native-easy-grid";
+import { Row } from "react-native-easy-grid";
 import * as Location from 'expo-location';
 import { LocationObject } from 'expo-location';
 import GooglePlacesInput from '../../../components/molecules/GooglePlacesInput';
@@ -192,12 +192,10 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                 </View>
 
                 {/* TODO - we have to disable the buttons until user enters from and to */}
-                <View>
                     <Row style={styles.btnContainer}>
                         <Button mode="contained" disabled={disable} onPress={() => showRidesNow(navigation, fromLocation, toLocation)} color={Colors.green700} style={styles.button}>Find Rides</Button>
                         <Button mode="contained" disabled={disable} onPress={() => createTravelGroup(navigation, fromLocation, toLocation)} color={Colors.blue700} style={styles.button}>Plan Ride</Button>
                     </Row>
-                </View>
             </View>
         </View>
     )
@@ -209,7 +207,7 @@ const styles = StyleSheet.create({
     },
     btnContainer: {
         justifyContent: "space-evenly",
-        top: dh() - dh(0.3),
+        top: dh() - dh(0.35),
         position: 'absolute',
         backgroundColor: 'rgba(25,255,23,0.005)',
         width: dw(),

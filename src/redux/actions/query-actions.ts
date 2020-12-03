@@ -2,7 +2,7 @@ import { CommentActions, CoreActions, IQueryAction, QueryActions } from "./actio
 import { apiActionGenerator, ApiError, IFetchActionCreators } from "./common-types"
 import Reactotron from "../../../dev/ReactotronConfig";
 import RESTObject from "node-rest-objects/dist/rest/rest.object";
-import { IQuery } from "node-rest-objects/dist/data/queries";
+import { IQuery, Query } from "node-rest-objects/dist/data/queries";
 import { createComment, createQuery, createResponse, deleteComment, deleteQuery, deleteResponse, getAllComments, getAllResponses, updateComment, updateQuery } from "../../api/query-api";
 import { ErrorType } from "../initialState";
 
@@ -61,10 +61,12 @@ const [
 // const commentFetchActions = apiActionGenerator(CoreActions.COMMENT_FETCH);
 
 
-export function fetchQuery(query:RESTObject<IQuery>){
-    Reactotron.log!("In query-list thunk",query);
+export function fetchQuery(queryData:IQuery){
+    Reactotron.log!("In query-list thunk",queryData);
     return async dispatch => {
         dispatch(queryFetchActions.createLoadingAction());
+       const query = new Query();
+       query.data._id = queryData._id;
        await query.read()
        .then(() => {
            Reactotron.log!("query-read-successful");

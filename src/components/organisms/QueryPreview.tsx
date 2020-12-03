@@ -16,7 +16,7 @@ import { timeSince } from "../../utils/Helpers";
 
 interface QueryPreviewProps {
 	
-	query:RESTObject<IQuery>
+	query:IQuery
 	style?: ViewStyle | Array<ViewStyle> | null;
 	headerNav?: () => void;
 	itemNav?: () => void;
@@ -38,7 +38,7 @@ export default function QueryPreview({
 		Alert.alert(`item clicked`);
 	},
 }: QueryPreviewProps) {
-	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats} = query.data;
+	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats} = query;
 
 	const date:string = timeSince(new Date(createdAt))||(createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5));
 
