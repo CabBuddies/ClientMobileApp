@@ -51,9 +51,14 @@ export const timeSince = (date:Date)=> {
     return val(Math.floor(seconds),'second');
   }
 
-  export function showToast(val:string){
+  export function showToast(val:string,duration:number = 3000){
       Toast.show({
           text:val,
-          duration:3000
+          duration:duration,
+          position:"bottom",
+          style:{
+              marginHorizontal:5,
+              borderRadius:25
+          }
       });
   }

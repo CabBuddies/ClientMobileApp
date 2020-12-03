@@ -36,32 +36,6 @@ const SimpleCard = ({
         // ray-start-arrow
 
 
-        const renderLeft = () => {
-            return <Col style={styles.cityContainer}>
-                <Row>
-                    <Col>
-                        <Icon type="MaterialCommunityIcons" name="calendar-clock" />
-                    </Col>
-                    <Col>
-                        <Text style={styles.text}>{si}</Text>
-                    </Col>
-                </Row>
-            </Col>
-        };
-
-        const renderRight = () => {
-            return <Col style={styles.cityContainer}>
-                <Row>
-                    <Col>
-                        <Text style={styles.text}>{m}</Text>
-                    </Col>
-                    <Col>
-                        <Icon type="MaterialCommunityIcons" name="account-group" />
-                    </Col>
-                </Row>
-            </Col>
-        };
-
 
         return (
             <Card onPress={onPress} elevation={3} style={{ margin: 10 }} >

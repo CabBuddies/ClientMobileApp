@@ -1,26 +1,23 @@
 import React, {useRef, useLayoutEffect, useMemo, useEffect} from 'react'
 import { View } from 'react-native';
-import { Container, Content, Body } from "native-base";
+import { Container } from "native-base";
 import { connect } from 'react-redux';
 import reactotron from '../../../../dev/ReactotronConfig';
 import PostFullView from '../../../components/organisms/PostFullView';
 import { HeaderBackButton, StackNavigationProp } from '@react-navigation/stack';
 import {QueryStackParamList} from "../../../navigations/QueryNavigator";
 import { Screens } from '../../../definitions/screen-definitions';
-import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 import { IQuery, Response, Query } from 'node-rest-objects/dist/data/queries';
 import { bindActionCreators } from 'redux';
 import { loadComments, writeComment,loadResponses,writeResponse } from '../../../redux/actions/query-actions';
 import { CButton } from '../../../components/atoms';
-import { Alert, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import CommentListView from '../../../components/molecules/CommentListView';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { ContentLoading } from '../../../components/molecules';
 import { FullViewType, PlaceholderSize } from '../../../definitions/common-definitions';
 import ResponseList from '../../../components/organisms/ResponseList';
 import { Colors } from 'react-native-paper';
-import { VirtualizedContent } from '../../../components/organisms';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { openResponseForm } from '../../../utils/nav-utils';
 import { FlatList } from 'react-native-gesture-handler';
 

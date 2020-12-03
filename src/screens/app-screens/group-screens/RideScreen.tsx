@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 import { Button, Colors } from "react-native-paper";
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { dh, dw } from "../../../utils/rn-utils";
@@ -197,10 +197,11 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                 
                 </View>
             </View>
-            <Row style={styles.btnContainer}>
-                    <Button mode="contained" disabled={!(fromLocation.show&& toLocation.show)} onPress={() => showRidesNow(navigation, fromLocation, toLocation)} color={Colors.green700} style={styles.button}>Find Rides</Button>
-                    <Button mode="contained" disabled={!(fromLocation.show&& toLocation.show)} onPress={() => createTravelGroup(navigation, fromLocation, toLocation)} color={Colors.blue700} style={styles.button}>Plan Ride</Button>
-            </Row>
+                <Row style={[styles.btnContainer,styles.btnWrap]}>
+                        <Button mode="contained" disabled={!(fromLocation.show&& toLocation.show)} onPress={() => showRidesNow(navigation, fromLocation, toLocation)} color={Colors.green700} style={styles.button}>Find Rides</Button>
+                        <Button mode="contained" disabled={!(fromLocation.show&& toLocation.show)} onPress={() => createTravelGroup(navigation, fromLocation, toLocation)} color={Colors.blue700} style={styles.button}>Plan Ride</Button>
+                </Row>
+            
         </View>
     )
 }
@@ -209,10 +210,12 @@ const styles = StyleSheet.create({
         width: dw(),
         height: dh(),
     },
-    btnContainer: {
-        justifyContent: "space-evenly",
+    btnWrap:{
         position:"absolute",
         bottom:10,
+    },
+    btnContainer: {
+        justifyContent: "space-evenly",
         backgroundColor: 'rgba(25,255,23,0.005)',
         width: dw(),
     },

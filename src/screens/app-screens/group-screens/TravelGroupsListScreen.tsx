@@ -9,11 +9,16 @@ import reactotron from '../../../../dev/ReactotronConfig';
 import SimpleCard from '../../../components/organisms/SimpleCard';
 import { getAllGroups } from '../../../api/groups-api';
 import { Icon, Row } from 'native-base';
+import { showGroupView } from '../../../utils/nav-utils';
+import { useNavigation } from '@react-navigation/native';
+import RESTObject from 'node-rest-objects/dist/rest/rest.object';
+import { IGroup,Group } from 'node-rest-objects/dist/data/groups';
 
 export default function TravelGroupsListScreen({ route }) {
 
     const [searchQuery, setSearchQuery] = React.useState('');
-    const [userSuggestions, setUserSuggestions] = React.useState<any[]>([]);
+    const [userSuggestions, setUserSuggestions] = React.useState<RESTObject<IGroup>[]>([]);
+    const navigation = useNavigation();
 
     // FIXME - if no from and to, show all rides available now from users location
     // TODO - use these coordinates and give user rides matching them
@@ -39,7 +44,7 @@ export default function TravelGroupsListScreen({ route }) {
     //     })
     // }, [searchQuery]);
 
-    const renderItem = ({ item }) => (<SimpleCard content={item} avatarSize={35} />)
+    const renderItem = ({ item }:{item:RESTObject<IGroup>}) => (<SimpleCard content={item as Group} onPress={() => showGroupView(navigation,item.data)} avatarSize={35} />)
 
     return (
         <>

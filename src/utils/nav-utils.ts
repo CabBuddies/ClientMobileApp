@@ -1,4 +1,5 @@
 import { NavigationProp } from "@react-navigation/native";
+import { IGroup } from "node-rest-objects/dist/data/groups";
 import { IResponse, Query } from "node-rest-objects/dist/data/queries";
 import { IUser } from "node-rest-objects/dist/data/user-management";
 import { loc } from "../definitions/ride-definitions";
@@ -80,6 +81,18 @@ export function goToQueryListScreen(navigation:typeNav){
         }
     })
 }
+export function showGroupView(navigation:typeNav,groupData:IGroup){
+    navigation.navigate(Navs.APP, {
+        screen: Navs.RIDE,
+        params: {
+            screen: Screens.GROUP_VIEW,
+            params:{
+                groupData:groupData
+            }
+        }
+    })
+}   
+
 export function showUserFollowers() {
 }
 export function showUserFollowing() {

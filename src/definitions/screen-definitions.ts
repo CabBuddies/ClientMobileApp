@@ -17,6 +17,7 @@ export enum Screens {
     RESPONSE_CREATE = "New Response",
     RIDE = "Find a ride",
     CREATE_GROUP = "Plan Ride",
+    GROUP_VIEW = "View Group",
     CHATS = "Chats",
     CHAT_GROUP = "Group",
     CHAT_DIRECT = "Direct",
