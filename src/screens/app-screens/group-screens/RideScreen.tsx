@@ -41,15 +41,21 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
         ...INIT_CENTER_DELTA
     });
 
-    const [fromLocation, setFromLocation] = React.useState<loc>({
-        lat: null,
-        lng: null,
+    interface locState extends loc{
+        show:boolean;
+    }
+
+    const [fromLocation, setFromLocation] = React.useState<locState>({
+        show:false,
+        lat: 0.0,
+        lng: 0.0,
         raw: {}
     });
 
-    const [toLocation, setToLocation] = React.useState<loc>({
-        lat: null,
-        lng: null,
+    const [toLocation, setToLocation] = React.useState<locState>({
+        show:false,
+        lat: 0.0,
+        lng: 0.0,
         raw: {}
     });
 
@@ -73,7 +79,7 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
     });
 
     React.useEffect(() => {
-        if (fromLocation.lat || toLocation.lat) {
+        if (fromLocation.show || toLocation.show) {
 
         } else {
             if (location) {
@@ -91,8 +97,8 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
 
         let temp = JSON.parse(JSON.stringify(centerLocation));
 
-        if (fromLocation.lat) {
-            if (toLocation.lat) {
+        if (fromLocation.show) {
+            if (toLocation.show) {
                 temp.latitude = (fromLocation.lat! + toLocation.lat!) / 2;
                 temp.longitude = (fromLocation.lng! + toLocation.lng!) / 2;
 
@@ -105,7 +111,7 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                 setCenterLocation({ ...temp, ...INIT_CENTER_DELTA })
             }
         } else {
-            if (toLocation.lat) {
+            if (toLocation.show) {
                 temp.latitude = toLocation.lat!;
                 temp.longitude = toLocation.lng!;
                 setCenterLocation({ ...temp, ...INIT_CENTER_DELTA })
@@ -114,7 +120,7 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
             }
         }
 
-        if (fromLocation.lat && toLocation.lat) {
+        if (fromLocation.show && toLocation.show) {
             setPolyData({
                 show: true,
                 gpsLocations: [
@@ -144,7 +150,7 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                 showsMyLocationButton
                 showsUserLocation followsUserLocation>
                 {
-                    fromLocation.lat && <Marker
+                    fromLocation.show && <Marker
                         coordinate={{
                             latitude: fromLocation.lat!,
                             longitude: fromLocation.lng!
@@ -152,7 +158,7 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                     />
                 }
                 {
-                    toLocation.lat && <Marker
+                    toLocation.show && <Marker
                         coordinate={{
                             latitude: toLocation.lat!,
                             longitude: toLocation.lng!
@@ -179,7 +185,7 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                             setShowTo(!suggestionsShowing);
                         }}
                         onLocationChanged={(data) => {
-                            setFromLocation(data);
+                            setFromLocation({...data,show:true});
                         }}
                     // elevation={10000}
                     />
@@ -187,14 +193,14 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                         //navigation.navigate(Screens.GROUPS_SCREEN);
                     }} top={70}
                         onLocationChanged={(data) => {
-                            setToLocation(data);
+                            setToLocation({...data,show:true});
                         }} />
                 </View>
 
                 {/* TODO - we have to disable the buttons until user enters from and to */}
                 <Row style={styles.btnContainer}>
-                    <Button mode="contained" disabled={disable} onPress={() => showRidesNow(navigation, fromLocation, toLocation)} color={Colors.green700} style={styles.button}>Find Rides</Button>
-                    <Button mode="contained" disabled={disable} onPress={() => createTravelGroup(navigation, fromLocation, toLocation)} color={Colors.blue700} style={styles.button}>Plan Ride</Button>
+                    <Button mode="contained" disabled={!(fromLocation.show&& toLocation.show)} onPress={() => showRidesNow(navigation, fromLocation, toLocation)} color={Colors.green700} style={styles.button}>Find Rides</Button>
+                    <Button mode="contained" disabled={!(fromLocation.show&& toLocation.show)} onPress={() => createTravelGroup(navigation, fromLocation, toLocation)} color={Colors.blue700} style={styles.button}>Plan Ride</Button>
                 </Row>
             </View>
         </View>

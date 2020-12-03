@@ -8,6 +8,7 @@ import { IGroup } from 'node-rest-objects/dist/data/groups';
 import reactotron from 'reactotron-react-native';
 import { Button, TextInput as PaperInput } from 'react-native-paper';
 import MyDatePicker from '../../../components/atoms/MyDatePicker';
+import * as GroupUtils from '../../../api/groups-api';
 
 type PickerMode = "date" | "time" | "datetime" | "countdown" | undefined;
 
@@ -51,6 +52,13 @@ const CreateGroupScreen = ({ route }) => {
                 onSubmit={(values, actions) => {
                     reactotron.log!("submiting create group", values);
                     actions.resetForm();
+                    const {planDestinationTime,planOriginPlace,title,planDestinationPlace,planOriginTime} = values;
+                    GroupUtils.createGroup(title,new Date(planOriginTime),planOriginPlace,new Date(planDestinationTime),planDestinationPlace)
+                    .then((result)=>{
+                        reactotron.log!(`creating group: `,result);
+                    }).catch((err)=>{
+                        reactotron.log!(`error creating group: `,err);
+                    });
                 }}
             >
                 {(props) => {
