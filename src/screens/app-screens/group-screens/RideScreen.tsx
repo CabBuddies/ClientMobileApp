@@ -179,7 +179,6 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
 
             <View style={styles.overlayContainer}>
                 <View style={{ position: 'relative' }}>
-                    {/* TODO - check if we can make them required. or else we have to handle many other cases */}
                     <GooglePlacesInput placeholder="from"
                         onSuggestionsShowing={(suggestionsShowing: boolean) => {
                             setShowTo(!suggestionsShowing);
@@ -195,14 +194,13 @@ export default function RideScreen({ navigation }: { navigation?: any }) {
                         onLocationChanged={(data) => {
                             setToLocation({...data,show:true});
                         }} />
+                
                 </View>
-
-                {/* TODO - we have to disable the buttons until user enters from and to */}
-                <Row style={styles.btnContainer}>
+            </View>
+            <Row style={styles.btnContainer}>
                     <Button mode="contained" disabled={!(fromLocation.show&& toLocation.show)} onPress={() => showRidesNow(navigation, fromLocation, toLocation)} color={Colors.green700} style={styles.button}>Find Rides</Button>
                     <Button mode="contained" disabled={!(fromLocation.show&& toLocation.show)} onPress={() => createTravelGroup(navigation, fromLocation, toLocation)} color={Colors.blue700} style={styles.button}>Plan Ride</Button>
-                </Row>
-            </View>
+            </Row>
         </View>
     )
 }
@@ -213,23 +211,20 @@ const styles = StyleSheet.create({
     },
     btnContainer: {
         justifyContent: "space-evenly",
-        top: dh() - dh(0.35),
-        position: 'absolute',
+        position:"absolute",
+        bottom:10,
         backgroundColor: 'rgba(25,255,23,0.005)',
         width: dw(),
     },
     overlayContainer: {
         // alignItems: "stretch",
-        // alignContent: "space-between",
+        alignContent: "space-between",
         backgroundColor: "transparent",
         width: dw() - 20,
         position: "absolute",
         marginTop: 20,
         paddingBottom: 10,
         flex: 1
-        // borderWidth:2,
-        // borderColor:Colors.blue500,
-        // elevation:1
     },
     button: {
         borderColor: Colors.green700,

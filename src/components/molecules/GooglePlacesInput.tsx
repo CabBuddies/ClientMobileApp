@@ -8,24 +8,6 @@ const GOOGLE_PLACES_API_KEY = 'AIzaSyDl4dmvk0tBIX0-BWCaOZy0MjAcTtLHo60';
 
 const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, allSet = () => { }, onFocus = () => { }, onBlur = () => { }, hide = false, elevation = 0, top = 0, onSuggestionsShowing = (b: boolean) => { }, onLocationChanged = (data: { lat: number, lng: number, raw: any }) => { } }) => {
 
-  // if(Platform.OS === 'ios'){
-  //   styles={
-  //     textInputContainer:{
-  //       position:'absolute',
-  //       top:top,
-  //       zIndex:elevation,
-  //       width:dw(0.9),
-  //       marginHorizontal:dw(0.05)
-  //     },
-  //     listView:{
-  //       position:"absolute",
-  //       zIndex:elevation+100000,
-  //       width:dw(0.9),
-  //       marginHorizontal:dw(0.05)
-  //     }
-  //   }
-  // }
-
   const [isFound, setFound] = React.useState(false);
   React.useEffect(() => {
     onSuggestionsShowing(isFound);
