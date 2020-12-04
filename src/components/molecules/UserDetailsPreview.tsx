@@ -11,7 +11,7 @@ import ContentLoading from './ContentLoading'
 import CustomAvatar from './CustomAvatar'
 import * as UserRelationAPI from '../../api/user-relation-api';
 
-export default function UserDetailsPreview({ user, isSelf, onEdit, isVerified }) {
+export default function UserDetailsPreview({ user, isSelf, onEdit, isVerified, signOut=()=>{} }) {
 
     if (!user) {
         return <ContentLoading size={PlaceholderSize.MEDIUM} />
@@ -43,7 +43,7 @@ export default function UserDetailsPreview({ user, isSelf, onEdit, isVerified })
                 {<CustomAvatar data={user} size={100} />}
                 <Title style={styles.title}>{name}</Title>
                 <Caption>{user.email}</Caption>
-                <RelationButton user={user} isSelf={isSelf} onEdit={onEdit} />
+                <RelationButton user={user} isSelf={isSelf} onEdit={onEdit} signOut={signOut} />
                 <View style={styles.row}>
                     <TouchableOpacity onPress={() => {
                         navigation.navigate(Screens.USER_RELATIONS, {screen: Screens.FOLLOWERS})
