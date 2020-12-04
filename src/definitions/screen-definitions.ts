@@ -18,6 +18,7 @@ export enum Screens {
     RIDE = "Find a ride",
     CREATE_GROUP = "Plan Ride",
     GROUP_VIEW = "View Group",
+    POST_CREATE = "Post Create",
     CHATS = "Chats",
     CHAT_GROUP = "Group",
     CHAT_DIRECT = "Direct",

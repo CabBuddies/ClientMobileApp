@@ -20,46 +20,53 @@ import { createPost } from '../../../api/groups-api';
 interface CResponseProps{
     route:any;
 }
-const CreateResponseScreen = ({route}:CResponseProps) => {
+const PostCreateScreen = ({route}:CResponseProps) => {
 
     const [loading,setLoading] = useState(false);
-    let group:IGroup;
+    let group:IGroup | null = null;
     let isUpdate = false;
-    type RespFormValues = {
+    type PostFormValues = {
         title:string;
         body:string;
+        server?:string;
     }
-    let responseInitialValues:RespFormValues = {
+    let postInitialValues:PostFormValues = {
         title:"",
         body:""
     }
     const navigation = useNavigation();
     if(route && route.params && route.params.groupData){
         group = route.params.groupData;
-        
+        isUpdate = route.params.isUpdate || false;
+    }
+    if(!group){
+        return (
+            <View>
+            <Text> Group Data not found</Text>
+            </View>
+        )
     }
     
     
-    const responseSchema = yup.object({
+    const postSchema = yup.object({
         // title: yup.string().required("A title is Required"),
         body: yup.string().required("description is required"),
-        media:yup.array()
+        // media:yup.array()
     });
     return (
         <Container>
             <KeyboardAwareScrollView>
             <Title >
                 <Text>Post to:</Text>
-                <Text style={styles.title}>{group?.data.title}</Text>
+                <Text style={styles.title}>{group!.data.title}</Text>
             </Title>
                 <Formik
-                        initialValues = {responseInitialValues}
-                        validationSchema={responseSchema}
+                        initialValues = {postInitialValues}
+                        validationSchema={postSchema}
                         onSubmit = {(values,actions) => {
-                            reactotron.log!(values);
-                            setLoading(true);
                             if(group){
                                 if(!isUpdate){
+                                    setLoading(true);
                                     createPost(group,values).then(() => {
                                         setLoading(false);
                                         goToQueryView(navigation);
@@ -68,15 +75,15 @@ const CreateResponseScreen = ({route}:CResponseProps) => {
                                         setLoading(false);
                                     })
                                 }
-                                else{
-                                    updateResponse(response,values).then(() => {
-                                        setLoading(false);
-                                        goToQueryView(navigation);
-                                    }).catch(error => {
-                                        actions.setFieldError('server',`Could not update response please try again`,);
-                                        setLoading(false);
-                                    })
-                                }
+                                // else{
+                                //     updateResponse(response,values).then(() => {
+                                //         setLoading(false);
+                                //         goToQueryView(navigation);
+                                //     }).catch(error => {
+                                //         actions.setFieldError('server',`Could not update response please try again`,);
+                                //         setLoading(false);
+                                //     })
+                                // }
                             }
                             else{
                                 actions.setFieldError('server',"Unexpected error! please try again");
@@ -90,16 +97,23 @@ const CreateResponseScreen = ({route}:CResponseProps) => {
                             {
                                 props.errors.server && <HelperText style={{fontSize:15}} type="error" >{props.errors.server}</HelperText>
                             }
+
+                            {/* <TextInput onChangeText={(text) => props.setFieldValue('body',text) } 
+                                multiline numberOfLines={10} 
+                                placeholder="enter the title of your post" 
+                                mode="outlined"
+                                style={styles.input}
+                            /> */}
                             
                             <TextInput onChangeText={(text) => props.setFieldValue('body',text) } 
                                 multiline numberOfLines={10} 
-                                placeholder="enter your response here" 
+                                placeholder="Enter your post here...." 
                                 mode="outlined"
                                 style={styles.input}
                             />
-                            <ImageSelectionContainer defaultValue={props.values.media} onChange={(values) => {props.setFieldValue('media',values)} }/>
+                            {/* <ImageSelectionContainer defaultValue={props.values.media} onChange={(values) => {props.setFieldValue('media',values)} }/> */}
 
-                            <PaperButton disabled={props.values.title!==""} mode="contained" 
+                            <PaperButton disabled={props.values.title!==""} mode="outlined" 
                             onPress={props.handleSubmit}style={styles.btn}
                             color={Colors.blue600} 
                             >
@@ -115,20 +129,21 @@ const CreateResponseScreen = ({route}:CResponseProps) => {
     )
 }
 
-function mapStateToProps(state:IAppState){
-    const { groupState } =  state;
-    return {
-        group:groupState.group
-    }
-}
+// function mapStateToProps(state:IAppState){
+//     const { groupState } =  state;
+//     return {
+//         group:groupState.group
+//     }
+// }
 
-function mapDispatchToProps(dispatch){
-    return {
-        newResponse: bindActionCreators(writeResponse,dispatch),
-    }
-}
+// function mapDispatchToProps(dispatch){
+//     return {
+//         newResponse: bindActionCreators(writeResponse,dispatch),
+//     }
+// }
 
-export default connect(mapStateToProps,mapDispatchToProps)(CreateResponseScreen);
+export default PostCreateScreen;
+// export default connect(mapStateToProps,mapDispatchToProps)(CreateResponseScreen);
 
 const styles = StyleSheet.create({
     input:{
@@ -136,7 +151,8 @@ const styles = StyleSheet.create({
     },
     btn:{
         marginHorizontal:40,
-        marginTop:30
+        marginTop:30,
+        borderRadius:50
     },
     title:{
         color:'black',

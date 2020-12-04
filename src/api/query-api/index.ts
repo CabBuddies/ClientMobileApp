@@ -93,9 +93,9 @@ export async function getAllComments(restObj: RESTObject<IQuery | IResponse>, re
         
         const searchComment = new SearchRESTObject(comment);
         searchComment.setRequest(request);
-        await searchComment.search();
-        const cmnts = searchComment.response.result;
-        const comments = await Promise.all(cmnts.map(commentReader));
+        await safePromise(searchComment.search());
+        const comments = searchComment.response.result;
+        // const comments = await Promise.all(cmnts.map(commentReader));
         Reactotron.log!("comments", comments);
         return comments;
     }

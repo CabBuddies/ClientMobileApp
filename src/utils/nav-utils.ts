@@ -101,6 +101,22 @@ export function goToGroups(navigation) {
     })
 }
 
+export function openPostCreateForm(navigation:typeNav,groupData:IGroup,isUpdate=false){
+    navigation.navigate(Navs.APP, {
+        screen: Navs.RIDE,
+        params: {
+            screen: Screens.GROUP_VIEW,
+            params:{
+                screen:Screens.POST_CREATE,
+                params:{
+                    groupData:groupData,
+                    isUpdate:isUpdate
+                }
+            }
+        }
+    })
+}
+
 export function showUserFollowers() {
 }
 export function showUserFollowing() {
