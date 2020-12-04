@@ -1,10 +1,14 @@
-import { Group, IGroup, Post } from 'node-rest-objects/dist/data/groups';
+import { Group, IGroup, IPost, Post } from 'node-rest-objects/dist/data/groups';
 import safePromise from 'node-rest-objects/dist/rest/safe.promise';
 import SearchRESTObject from 'node-rest-objects/dist/rest/search.rest.object';
 import Reactotron from '../../dev/ReactotronConfig';
 import { defaultRequest } from '../definitions/query-definitions';
 import { loc } from '../definitions/ride-definitions';
 import {TGAccess} from 'node-rest-objects/dist/data/groups/tg.access';
+import * as APIUtils from '../api/api-utils';
+import reactotron from '../../dev/ReactotronConfig';
+import { showToast } from '../utils/Helpers';
+
 export async function getAllGroups(request = defaultRequest) {
     try {
         const group: Group = new Group();
@@ -83,24 +87,60 @@ export async function createGroup(
     }
 }
 
-export async function createPost(group: IGroup, request) {
+export async function createPost(group: IGroup, request:{title:string,body:string,media:string[]}) {
     try {
         const post:Post =  new Post();
         post.data.groupId = group._id;
         post.data.title = request.title;
         post.data.body = request.body;
-        await post.create();
+        post.data.media = request.media;
+        await safePromise(post.create());
         return post;
     } catch (error) {
-        Reactotron.log!(`Query-API: error creating the response`, error);
+        Reactotron.log!(`Group-API: error creating the post`, error);
         throw error;
     }
 }
 
-export async function getAllPosts(group:IGroup){
-    const post:Post =  new Post();
-    post.data.groupId = group._id;
-    const sro = new SearchRESTObject(post);
+export async function updatePost(postData:IPost, request:{title:string,body:string,media:string[]}){
+   try {
+        const post:Post =  new Post();
+        post.data.groupId = postData.groupId;
+        post.data._id = postData._id;
+        post.data.title = request.title;
+        post.data.media = request.media;
+        post.data.body  = request.body;
+        await safePromise(post.update());
+        return post
+   } catch (error) {
+        Reactotron.log!(`Group-API: error updating the post`, error);
+        throw error;
+   }
+}
+
+
+export async function getAllPosts(sro:SearchRESTObject<IPost>,search='',attributes?:string[]){
+    try{
+        sro.request.query={
+            $and:[
+                {"active":true},
+                APIUtils.testSearchUtil(["title", "body"], search)
+            ]
+        };
+        sro.request.sort = {
+            "lastModifiedAt":-1
+        }
+        sro.request.pageSize = 5;
+        if(attributes)
+            sro.request.attributes = attributes;
+        await safePromise(sro.search());
+        return sro.response.result;
+    }
+    catch(error){
+        reactotron.log!("Groups API - post_list_fetch error",error);
+        showToast(`falied to load posts for this group`);
+    }
+    return [];
 }
 
 export async function becomeGroupMember(groupId:string,userId:string){

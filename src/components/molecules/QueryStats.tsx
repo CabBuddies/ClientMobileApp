@@ -5,10 +5,11 @@ import {ViewsAtom} from '../atoms';
 import { Grid, Col, Row } from 'react-native-easy-grid';
 import {Container, Content} from 'native-base';
 import { IQueryStats } from '../../definitions/query-definitions';
+import { IGroupStats } from '../../definitions/ride-definitions';
 
 
 interface QueryStatsProps{
-    stats: IQueryStats;
+    stats: IQueryStats | IGroupStats;
     onComment?: () => void;
     onDownVote?: (val:boolean) => void;
     onUpVote?: (val:boolean) => void;

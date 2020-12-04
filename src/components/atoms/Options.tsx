@@ -13,7 +13,7 @@ interface OptionProps{
     deletable?:boolean;
 }
 
-const createCrudItems =(onDelete,onEdit,onReport,editable=true,deletable=true) =>{
+const createCrudItems =(onDelete,onEdit,onReport,editable=false,deletable=false) =>{
 
     return [
         {
@@ -21,7 +21,7 @@ const createCrudItems =(onDelete,onEdit,onReport,editable=true,deletable=true) =
             icon: "pencil",
             title:"edit",
             onPress:onEdit,
-            disabled:editable
+            disabled:!editable
     
         },
         {
@@ -29,7 +29,7 @@ const createCrudItems =(onDelete,onEdit,onReport,editable=true,deletable=true) =
             icon:"delete",
             title:"delete",
             onPress: onDelete,
-            disabled:deletable,
+            disabled:!deletable,
         },
         {
             key:"1234bcB",
@@ -47,8 +47,8 @@ const Options = ({mode=MenuModes.CRUD,
     onDelete = () => {Alert.alert('delete pressed')},
     onEdit = () => {Alert.alert('edit pressed')},
     onReport = () => {Alert.alert('report pressed')},
-    editable = true,
-    deletable=true
+    editable = false,
+    deletable=false
     }:OptionProps
 ) => {
     const [isVisible,setVisible] = useState(false);

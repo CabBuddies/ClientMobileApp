@@ -2,7 +2,7 @@ import React,{ useRef, useMemo, useState, useEffect } from 'react'
 import { StyleSheet, FlatList, View, Alert} from 'react-native'
 import { FullViewType, PlaceholderSize } from '../../definitions/common-definitions';
 import {Colors, Text, Title, Button as PaperButton, Divider, Card, TextInput,List} from 'react-native-paper';
-import PostFullView from './PostFullView';
+import QRFullView from './QRFullView';
 import { ContentLoading } from '../molecules';
 import { connect } from 'react-redux';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
@@ -43,7 +43,7 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse,g
     }
 
     const renderResponse=({item}:{item:RESTObject<IResponse>}) => {
-        return <PostFullView type={FullViewType.RESPONSE} onComment={() => getCommentFunc(item)} content={item as Response} />
+        return <QRFullView type={FullViewType.RESPONSE} onComment={() => getCommentFunc(item)} content={item as Response} />
     }
 
     const memoizedRender = useMemo(() => renderResponse,[responses]);

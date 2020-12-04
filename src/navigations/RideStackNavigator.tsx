@@ -7,6 +7,7 @@ import TravelGroupsListScreen from '../screens/app-screens/group-screens/TravelG
 import CreateGroupScreen from '../screens/app-screens/group-screens/CreateGroupScreen';
 import GroupViewScreen from '../screens/app-screens/group-screens/GroupViewScreen';
 import PostCreateScreen from '../screens/app-screens/group-screens/PostCreateScreen';
+import PostViewScreen from '../screens/app-screens/group-screens/PostViewScreen';
 
 
 const RideNavigator = createStackNavigator();
@@ -28,6 +29,7 @@ export default function RideStackNavigator() {
             <RideNavigator.Screen name={Screens.CREATE_GROUP} component={CreateGroupScreen} />
             <RideNavigator.Screen name={Screens.GROUP_VIEW} component={GroupViewScreen} />
             <RideNavigator.Screen name={Screens.POST_CREATE} component={PostCreateScreen}/>
+            <RideNavigator.Screen name={Screens.POST_VIEW} component={PostViewScreen}/>
         </RideNavigator.Navigator>
     )
 }

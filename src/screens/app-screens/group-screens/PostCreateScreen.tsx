@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import { Container } from 'native-base';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import {TextInput, Button as PaperButton, Text, Title, HelperText, Colors, Badge} from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -11,7 +11,7 @@ import * as yup from "yup";
 import reactotron from '../../../../dev/ReactotronConfig';
 import ImageSelectionContainer from '../../../components/organisms/ImageSelectionContainer';
 import { IAppState } from '../../../redux/initialState';
-import { goToQueryView } from '../../../utils/nav-utils';
+import { goToQueryView, showGroupPost } from '../../../utils/nav-utils';
 import { VirtualizedContent } from '../../../components/organisms';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { IGroup, Post } from 'node-rest-objects/dist/data/groups';
@@ -28,11 +28,13 @@ const PostCreateScreen = ({route}:CResponseProps) => {
     type PostFormValues = {
         title:string;
         body:string;
+        media:string[];
         server?:string;
     }
     let postInitialValues:PostFormValues = {
         title:"",
-        body:""
+        body:"",
+        media:[],
     }
     const navigation = useNavigation();
     if(route && route.params && route.params.groupData){
@@ -49,27 +51,32 @@ const PostCreateScreen = ({route}:CResponseProps) => {
     
     
     const postSchema = yup.object({
-        // title: yup.string().required("A title is Required"),
+        title: yup.string(),
         body: yup.string().required("description is required"),
-        // media:yup.array()
+        media:yup.array()
     });
     return (
         <Container>
-            <KeyboardAwareScrollView>
-            <Title >
-                <Text>Post to:</Text>
-                <Text style={styles.title}>{group!.data.title}</Text>
-            </Title>
-                <Formik
+            <FlatList
+                ListHeaderComponent={() => (
+                    <Title >
+                        <Text>Post to:</Text>
+                        <Text style={styles.title}>{group!.title}</Text>
+                    </Title>
+                )}
+                data={[]}
+                renderItem={null}
+                ListFooterComponent ={() => (
+                    <Formik
                         initialValues = {postInitialValues}
                         validationSchema={postSchema}
                         onSubmit = {(values,actions) => {
                             if(group){
                                 if(!isUpdate){
                                     setLoading(true);
-                                    createPost(group,values).then(() => {
+                                    createPost(group,values).then((post) => {
                                         setLoading(false);
-                                        goToQueryView(navigation);
+                                        showGroupPost(navigation,post.data);
                                     }).catch(error => {
                                         actions.setFieldError('server',"Could not create response please try again");
                                         setLoading(false);
@@ -97,23 +104,20 @@ const PostCreateScreen = ({route}:CResponseProps) => {
                             {
                                 props.errors.server && <HelperText style={{fontSize:15}} type="error" >{props.errors.server}</HelperText>
                             }
-
-                            {/* <TextInput onChangeText={(text) => props.setFieldValue('body',text) } 
-                                multiline numberOfLines={10} 
-                                placeholder="enter the title of your post" 
-                                mode="outlined"
-                                style={styles.input}
-                            /> */}
-                            
-                            <TextInput onChangeText={(text) => props.setFieldValue('body',text) } 
-                                multiline numberOfLines={10} 
-                                placeholder="Enter your post here...." 
+                            <TextInput onChangeText={(text) => props.setFieldValue('title',text) } 
+                                placeholder="Enter the title of your post here...." 
                                 mode="outlined"
                                 style={styles.input}
                             />
-                            {/* <ImageSelectionContainer defaultValue={props.values.media} onChange={(values) => {props.setFieldValue('media',values)} }/> */}
+                            <TextInput onChangeText={(text) => props.setFieldValue('body',text) } 
+                                multiline numberOfLines={10} 
+                                placeholder="Describe your post here....." 
+                                mode="outlined"
+                                style={styles.input}
+                            />
+                            <ImageSelectionContainer defaultValue={props.values.media} onChange={(values) => {props.setFieldValue('media',values)} }/>
 
-                            <PaperButton disabled={props.values.title!==""} mode="outlined" 
+                            <PaperButton disabled={props.values.title==="" && props.values.body===""} mode="outlined" 
                             onPress={props.handleSubmit}style={styles.btn}
                             color={Colors.blue600} 
                             >
@@ -124,7 +128,8 @@ const PostCreateScreen = ({route}:CResponseProps) => {
                         )
                          }
                 </Formik>
-                </KeyboardAwareScrollView>
+                )}
+            />
         </Container>
     )
 }

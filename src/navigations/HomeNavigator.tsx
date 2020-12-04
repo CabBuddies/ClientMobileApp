@@ -25,7 +25,6 @@ const AppNavigator = createBottomTabNavigator();
 function HomeNavigator({ signOut, userFetch, isAnonymous, anonymousRedirect }: any) {
 
     useEffect(() => {
-        reactotron.log!('HomeNavigator', 'loaded fully');
         if (!isAnonymous) userFetch()
     }, [isAnonymous])
 

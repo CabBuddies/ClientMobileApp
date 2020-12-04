@@ -1,9 +1,10 @@
 import { NavigationProp } from "@react-navigation/native";
-import { IGroup } from "node-rest-objects/dist/data/groups";
+import { IGroup, IPost } from "node-rest-objects/dist/data/groups";
 import { IResponse, Query } from "node-rest-objects/dist/data/queries";
 import { IUser } from "node-rest-objects/dist/data/user-management";
 import { loc } from "../definitions/ride-definitions";
 import { Navs, Screens } from "../definitions/screen-definitions";
+import { showToast } from "./Helpers";
 
 type typeNav = NavigationProp<Record<string, object | undefined>, string, any, {}, {}>;
 
@@ -101,18 +102,28 @@ export function goToGroups(navigation) {
     })
 }
 
-export function openPostCreateForm(navigation:typeNav,groupData:IGroup,isUpdate=false){
+export function openPostCreateForm(navigation:typeNav,data:IGroup |IPost,isUpdate=false){
+    // showToast("exec entered nav-utils open-post create form");
     navigation.navigate(Navs.APP, {
         screen: Navs.RIDE,
         params: {
-            screen: Screens.GROUP_VIEW,
-            params:{
-                screen:Screens.POST_CREATE,
+            screen:Screens.POST_CREATE,
                 params:{
-                    groupData:groupData,
+                    groupData:data,
                     isUpdate:isUpdate
                 }
-            }
+        }
+    })
+}
+
+export function showGroupPost(navigation:typeNav,data:IPost){
+    navigation.navigate(Navs.APP, {
+        screen: Navs.RIDE,
+        params: {
+            screen:Screens.POST_VIEW,
+                params:{
+                    data:data,
+                }
         }
     })
 }
@@ -121,8 +132,7 @@ export function showUserFollowers() {
 }
 export function showUserFollowing() {
 }
-export function openPostFullView() {
-}
+
 export function openDirectChat() {
 }
 export function showCreatedQuery() {

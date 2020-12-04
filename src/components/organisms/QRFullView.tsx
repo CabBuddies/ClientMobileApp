@@ -6,8 +6,6 @@ import { IUser } from "node-rest-objects/dist/data/user-management";
 import { IQuery, IResponse, Query,Response } from "node-rest-objects/dist/data/queries";
 import { Badge, Card, Chip, Colors, Paragraph, Snackbar, Text } from "react-native-paper"; 
 import { Options } from "../atoms";
-import reactotron from "../../../dev/ReactotronConfig";
-import RESTObject from "node-rest-objects/dist/rest/rest.object";
 import { FullViewType, MenuModes, OpinionType } from "../../definitions/common-definitions";
 import { useNavigation } from "@react-navigation/native";
 import { Screens } from "../../definitions/screen-definitions";
@@ -21,7 +19,6 @@ import { showToast, timeSince } from "../../utils/Helpers";
 import TagView from "../molecules/TagView";
 import ImageSelectionContainer from "./ImageSelectionContainer";
 import { openResponseForm } from "../../utils/nav-utils";
-import { Toast } from "native-base";
 
 type T = any
 interface QueryViewProps{
@@ -42,7 +39,7 @@ interface QueryViewProps{
     itemNav?: () => void
 }
 
-const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
+const QRFullView = ({ type = FullViewType.QUERY, content,style = null,
 	onComment = () => Alert.alert(`happy commenting`),
 	commentDisabled=false,
 	headerNav = () => Alert.alert(`header clicked`),
@@ -129,7 +126,7 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
         <Card style={styles.card}>
 			<Badge visible size={25} style={[styles.badge,styles[type]]}>{type.toUpperCase()}</Badge>
 			<Card.Title title={published?.title} 
-				right={(props) => <Options {...props} mode={MenuModes.CRUD} deletable={!isCurrentUSer} editable={!isCurrentUSer} onDelete={onDelete} onEdit={onUpdate}/>}
+				right={(props) => <Options {...props} mode={MenuModes.CRUD} deletable={isCurrentUSer} editable={isCurrentUSer} onDelete={onDelete} onEdit={onUpdate}/>}
 				style={{margin:0}}
 			/>
 			<Card.Content>
@@ -175,7 +172,7 @@ function mapDispatchToProps(dispatch){
 	}
 }
 const connector = connect(mapStateToProps,mapDispatchToProps);
-export default connector(PostFullView)
+export default connector(QRFullView)
 
 const styles = StyleSheet.create({
 	card:{

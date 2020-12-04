@@ -2,8 +2,7 @@ import React, {useRef, useLayoutEffect, useMemo, useEffect, useState} from 'reac
 import { View } from 'react-native';
 import { Container } from "native-base";
 import { connect } from 'react-redux';
-import reactotron from '../../../../dev/ReactotronConfig';
-import PostFullView from '../../../components/organisms/PostFullView';
+import QRFullView from '../../../components/organisms/QRFullView';
 import { HeaderBackButton, StackNavigationProp } from '@react-navigation/stack';
 import {QueryStackParamList} from "../../../navigations/QueryNavigator";
 import { Screens } from '../../../definitions/screen-definitions';
@@ -110,7 +109,7 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
                             (loading && !queryData)?
                             (<ContentLoading size={PlaceholderSize.MEDIUM}/>)
                             : 
-                            <PostFullView key={queryData!.data._id} type={FullViewType.QUERY} content={queryData as Query} onComment={getCommentFunc} commentDisabled={loading} />
+                            <QRFullView key={queryData!.data._id} type={FullViewType.QUERY} content={queryData as Query} onComment={getCommentFunc} commentDisabled={loading} />
                         
                     )}
                     data={[]}
