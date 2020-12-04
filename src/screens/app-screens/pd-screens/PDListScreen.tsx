@@ -15,7 +15,7 @@ import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 import { IGroup,Group } from 'node-rest-objects/dist/data/groups';
 import { loc } from '../../../definitions/ride-definitions';
 
-export default function TravelGroupsListScreen({ route }) {
+export default function PDListScreen({ route }) {
 
     const [searchQuery, setSearchQuery] = React.useState('');
     const [userSuggestions, setUserSuggestions] = React.useState<RESTObject<IGroup>[]>([]);
@@ -56,7 +56,7 @@ export default function TravelGroupsListScreen({ route }) {
                     "$gt":new Date().toISOString()
                 }
             }
-        }).then(results => {
+        },'delivery').then(results => {
             setUserSuggestions(results);
         });
     }, []);

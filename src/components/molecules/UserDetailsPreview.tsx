@@ -10,6 +10,7 @@ import RelationButton from '../../screens/user-screens/RelationButton'
 import ContentLoading from './ContentLoading'
 import CustomAvatar from './CustomAvatar'
 import * as UserRelationAPI from '../../api/user-relation-api';
+import { showUserFollowers, showUserFollowing } from '../../utils/nav-utils'
 
 export default function UserDetailsPreview({ user, isSelf, onEdit, isVerified, signOut=()=>{} }) {
 
@@ -46,7 +47,7 @@ export default function UserDetailsPreview({ user, isSelf, onEdit, isVerified, s
                 <RelationButton user={user} isSelf={isSelf} onEdit={onEdit} signOut={signOut} />
                 <View style={styles.row}>
                     <TouchableOpacity onPress={() => {
-                        navigation.navigate(Screens.USER_RELATIONS, {screen: Screens.FOLLOWERS})
+                        showUserFollowers(navigation);
                     }}>
                         <View style={styles.section}>
                             <Paragraph style={[styles.paragraph, styles.caption]}>
@@ -56,7 +57,7 @@ export default function UserDetailsPreview({ user, isSelf, onEdit, isVerified, s
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => {
-                        navigation.navigate(Screens.USER_RELATIONS, { screen: Screens.FOLLOWING })
+                        showUserFollowing(navigation);
                     }}>
                         <View style={styles.section}>
                             <Paragraph style={[styles.paragraph, styles.caption]}>

@@ -13,7 +13,7 @@ import { goToGroups, showGroupView } from '../../../utils/nav-utils';
 
 type PickerMode = "date" | "time" | "datetime" | "countdown" | undefined;
 
-const CreateGroupScreen = ({ route, navigation }) => {
+const PDCreateScreen = ({ route, navigation }) => {
 
     // TODO - use these locations and let user plan a trip
     let fromLoc;
@@ -54,7 +54,7 @@ const CreateGroupScreen = ({ route, navigation }) => {
                     reactotron.log!("submiting create group", values);
                     actions.resetForm();
                     const { planDestinationTime, planOriginPlace, title, planDestinationPlace, planOriginTime } = values;
-                    GroupUtils.createGroup(title, new Date(planOriginTime), planOriginPlace, new Date(planDestinationTime), planDestinationPlace)
+                    GroupUtils.createGroup(title, new Date(planOriginTime), planOriginPlace, new Date(planDestinationTime), planDestinationPlace, 'delivery')
                         .then((result) => {
                             reactotron.log!(`creating group: `, result);
                             // //goToGroups(navigation);
@@ -124,7 +124,7 @@ const CreateGroupScreen = ({ route, navigation }) => {
     )
 }
 
-export default CreateGroupScreen
+export default PDCreateScreen;
 
 const styles = StyleSheet.create({
     btn:

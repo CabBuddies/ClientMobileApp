@@ -18,7 +18,7 @@ import { IAppState } from "../../redux/initialState";
 import { showToast, timeSince } from "../../utils/Helpers";
 import TagView from "../molecules/TagView";
 import ImageSelectionContainer from "./ImageSelectionContainer";
-import { openResponseForm } from "../../utils/nav-utils";
+import { goToQueryCreateScreen, goToQueryListScreen, openResponseForm } from "../../utils/nav-utils";
 
 type T = any
 interface QueryViewProps{
@@ -100,8 +100,8 @@ const QRFullView = ({ type = FullViewType.QUERY, content,style = null,
 			case FullViewType.QUERY:
 				Alert.alert(`this will delete the query ${content.data._id}`);
 				deleteQuery(content).then(() => {
-					navigation.navigate(Screens.GUIDE_ME);
-				})
+					goToQueryListScreen(navigation);
+				});
 				
 				break;
 			case FullViewType.RESPONSE:
@@ -113,9 +113,7 @@ const QRFullView = ({ type = FullViewType.QUERY, content,style = null,
 	const onUpdate = () => {
 		switch(type){
 			case FullViewType.QUERY:
-				navigation.navigate(Screens.QUERY_CREATE,{
-					formValues:content.data.published
-				})
+				goToQueryCreateScreen(navigation,content.data.published);
 				break;
 			case FullViewType.RESPONSE:
 				openResponseForm(navigation,content.data as IResponse)

@@ -32,7 +32,7 @@ const GooglePlacesInput = ({ placeholder = "search", currentLocation = false, al
         if (!isFound) {
           setFound(true);
         }
-        return <Text style={{ color: 'red' }}>{item.description}</Text>
+        return <Text style={{ color: 'black' }}>{item.description}</Text>
       }}
       fetchDetails
 

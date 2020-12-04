@@ -17,7 +17,7 @@ import { QueryFormType } from '../../../definitions/common-definitions';
 import { IQuery, Query } from 'node-rest-objects/dist/data/queries';
 import { updateQuery } from '../../../api/query-api';
 import reactotron from '../../../../dev/ReactotronConfig';
-import { goToQueryListScreen } from '../../../utils/nav-utils';
+import { goToQueryListScreen, goToQueryView } from '../../../utils/nav-utils';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type CreateQueryScreenNav = StackNavigationProp<QueryStackParamList>;
@@ -62,7 +62,7 @@ const CreateQueryScreen = ({navigation, createQuery,queryData,loading,error,rout
     });
 
     const cancelNav = () => {
-        navigation.navigate(Screens.GUIDE_ME);
+        goToQueryListScreen(navigation)
     }
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -87,7 +87,7 @@ const CreateQueryScreen = ({navigation, createQuery,queryData,loading,error,rout
                         if(!isUpdate){
                             createQuery(values).then(() => {
                                 reactotron.log!("create-query-screen:",queryData,loading);
-                                navigation.navigate(Screens.QUERY_VIEW,{name:values.title});
+                                goToQueryView(navigation, values.title);
                             });
                         }
                         else{

@@ -20,6 +20,7 @@ import reactotron from '../../../../dev/ReactotronConfig';
 import { useFocusEffect } from '@react-navigation/native';
 import SearchRESTObject from 'node-rest-objects/dist/rest/search.rest.object';
 import { IQuery, Query } from 'node-rest-objects/dist/data/queries';
+import { goToQueryView } from '../../../utils/nav-utils';
 
 interface QueryRequest {
     query?: any
@@ -115,6 +116,7 @@ function TravelQueryScreen({ navigation, getQueries, getQuery, queryData }: Trav
 
     const nav = (item) => {
         getQuery(item);
+        goToQueryView(navigation, "Query View");
         navigation.navigate(Screens.QUERY_VIEW, { name: "Query View" });
 
     }

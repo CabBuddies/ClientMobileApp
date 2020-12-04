@@ -10,6 +10,7 @@ import * as UserRelationAPI from '../../../api/user-relation-api';
 import SimpleCard from '../../../components/organisms/SimpleCard';
 import { Screens } from '../../../definitions/screen-definitions';
 import { IAppState } from '../../../redux/initialState';
+import { openDirectChat } from '../../../utils/nav-utils';
 
 const ChatListScreen = ({ isVerified, userId,isAnonymous }) => {
 
@@ -40,9 +41,7 @@ const ChatListScreen = ({ isVerified, userId,isAnonymous }) => {
                 }
                 return <View style={{margin:2}}>
                             <SimpleCard content={renderUser} avatarSize={40} onPress={() => {
-                                navigation.navigate(Screens.CHAT_DIRECT,{
-                                    user:renderUser.data
-                                })
+                                openDirectChat(navigation, renderUser.data);
                             }}/>
                         </View>
             }}

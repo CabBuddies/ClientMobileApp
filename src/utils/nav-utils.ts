@@ -33,6 +33,19 @@ export function showRidesNow(navigation: typeNav, fromLocation: loc, toLocation:
     })
 }
 
+export function showDeliveryRequestsNow(navigation: typeNav, fromLocation: loc, toLocation: loc) {
+    navigation.navigate(Navs.APP, {
+        screen: Navs.PACKAGE_DELIVERY,
+        params: {
+            screen: Screens.DELIVERY_LIST,
+            params: {
+                fromLocation,
+                toLocation
+            }
+        }
+    })
+}
+
 export function createTravelGroup(navigation: typeNav, fromLocation: loc, toLocation: loc) {
     navigation.navigate(Navs.APP, {
         screen: Navs.RIDE,
@@ -45,6 +58,21 @@ export function createTravelGroup(navigation: typeNav, fromLocation: loc, toLoca
         }
     })
 }
+
+export function createPackageDeliveryRequest(navigation: typeNav, fromLocation: loc, toLocation: loc) {
+    navigation.navigate(Navs.APP, {
+        screen: Navs.PACKAGE_DELIVERY,
+        params: {
+            screen: Screens.DELIVERY_CREATE,
+            params: {
+                fromLocation,
+                toLocation
+            }
+        }
+    })
+}
+
+
 export function openResponseForm(navigation:typeNav,updateData?:IResponse){
     if(!updateData){
         navigation.navigate(Navs.APP, {
@@ -66,14 +94,25 @@ export function openResponseForm(navigation:typeNav,updateData?:IResponse){
         })
     }
 }
-export function goToQueryView(navigation:typeNav){
+
+export function goToQueryView(navigation:typeNav, name?){
+    let extras:any={};
+    if(name){
+        extras={
+            params: {
+                name
+            }
+        };
+    }
     navigation.navigate(Navs.APP, {
         screen: Navs.GUIDE_ME,
         params: {
             screen: Screens.QUERY_VIEW,
+            ...extras
         }
     })
 }
+
 export function goToQueryListScreen(navigation:typeNav){
     navigation.navigate(Navs.APP, {
         screen: Navs.GUIDE_ME,
@@ -82,6 +121,19 @@ export function goToQueryListScreen(navigation:typeNav){
         }
     })
 }
+
+export function goToQueryCreateScreen(navigation: typeNav, formValues ) {
+    navigation.navigate(Navs.APP, {
+        screen: Navs.GUIDE_ME,
+        params: {
+            screen: Screens.QUERY_CREATE,
+            params: {
+                formValues
+            }
+        }
+    })
+}
+
 export function showGroupView(navigation:typeNav,groupData:IGroup){
     navigation.navigate(Navs.APP, {
         screen: Navs.RIDE,
@@ -93,6 +145,7 @@ export function showGroupView(navigation:typeNav,groupData:IGroup){
         }
     })
 }   
+
 export function goToGroups(navigation) {
     navigation.navigate(Navs.APP, {
         screen: Navs.RIDE,
@@ -128,12 +181,39 @@ export function showGroupPost(navigation:typeNav,data:IPost){
     })
 }
 
-export function showUserFollowers() {
+export function showUserFollowers(navigation: typeNav) {
+    navigation.navigate(Navs.APP, {
+        screen: Navs.PROFILE,
+        params: {
+            screen: Screens.USER_RELATIONS,
+            params: {
+                screen: Screens.FOLLOWERS
+            }
+        }
+    })
 }
-export function showUserFollowing() {
+export function showUserFollowing(navigation: typeNav) {
+    navigation.navigate(Navs.APP, {
+        screen: Navs.PROFILE,
+        params: {
+            screen: Screens.USER_RELATIONS,
+            params: {
+                screen: Screens.FOLLOWING
+            }
+        }
+    })
 }
 
-export function openDirectChat() {
+export function openDirectChat(navigation, user) {
+    navigation.navigate(Navs.APP, {
+        screen: Navs.CHATS,
+        params: {
+            screen: Screens.CHAT_DIRECT,
+            params: {
+                user
+            }
+        }
+    })
 }
 export function showCreatedQuery() {
 }

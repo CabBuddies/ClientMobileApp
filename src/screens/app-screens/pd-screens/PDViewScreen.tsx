@@ -20,7 +20,7 @@ interface IGroupViewScreenProps{
     userId: string;
 }
 
-const GroupViewScreen = ({route,navigation,userId,isVerified}) => {
+const PDViewScreen = ({route,navigation,userId,isVerified}) => {
 
     let groupData:IGroup|null = null;
     if(route && route.params && route.params.groupData){
@@ -125,6 +125,6 @@ function mapStateToProps(state: IAppState) {
     }
 }
 const connector = connect(mapStateToProps);
-export default connector(GroupViewScreen);
+export default connector(PDViewScreen);
 
 const styles = StyleSheet.create({})

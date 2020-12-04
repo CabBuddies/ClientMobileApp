@@ -1,4 +1,4 @@
-import React, {useRef, useLayoutEffect, useMemo, useEffect, useState} from 'react'
+import React, {useRef, useLayoutEffect, useMemo, useEffect, useState} from 'react';
 import { View } from 'react-native';
 import { Container } from "native-base";
 import { connect } from 'react-redux';
@@ -17,12 +17,13 @@ import { ContentLoading } from '../../../components/molecules';
 import { FullViewType, PlaceholderSize } from '../../../definitions/common-definitions';
 import ResponseList from '../../../components/organisms/ResponseList';
 import { Colors } from 'react-native-paper';
-import { openResponseForm } from '../../../utils/nav-utils';
+import { goToQueryListScreen, openResponseForm } from '../../../utils/nav-utils';
 import { FlatList } from 'react-native-gesture-handler';
 import { IAppState } from '../../../redux/initialState';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 
 type QueryViewScreenNav = StackNavigationProp<QueryStackParamList>;
+
 interface QueryViewScreenProps{
     navigation: QueryViewScreenNav;
     queryData:RESTObject<IQuery> | undefined;
@@ -50,7 +51,7 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
     const snapPoints = useMemo(() => [0,'25%','50%','75%'],[]);
     const [response,setResponse] = useState<Response | null>(null);
     const cancelNav = () => {
-        navigation.navigate(Screens.GUIDE_ME);
+        goToQueryListScreen(navigation);
     }
     const renderSheetHeader = () => {
         return (

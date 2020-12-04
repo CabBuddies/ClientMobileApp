@@ -28,6 +28,9 @@ export enum Screens {
     CHAT_LIST_SCREEN = "Chats",
     PACKAGE_DELIVERY = "Package Delivery",
     GROUPS_SCREEN = "Guilds",
+    DELIVERY_LIST = "Delivery List",
+    DELIVERY = "Delivery",
+    DELIVERY_CREATE = "Delivery Create"
 }
 export enum Navs {
     AUTH = "Welcome",
