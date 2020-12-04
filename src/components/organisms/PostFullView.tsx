@@ -61,16 +61,6 @@ const PostFullView = ({ type = FullViewType.QUERY, content,style = null,
 
 	const date:string = timeSince(new Date(createdAt))||(createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5));
 	let responseCount;
-	const generateTags = () => {
-		switch(type){
-			case FullViewType.QUERY:
-				responseCount = stats.responseCount;
-				return published?.tags;
-			case FullViewType.RESPONSE:
-				return ["RESPONSE"];
-		}
-	}
-	let tags = generateTags();
 
 	
 	const renderAvatar = (props) => {

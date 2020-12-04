@@ -1,4 +1,4 @@
-import React, {useRef, useLayoutEffect, useMemo, useEffect} from 'react'
+import React, {useRef, useLayoutEffect, useMemo, useEffect, useState} from 'react'
 import { View } from 'react-native';
 import { Container } from "native-base";
 import { connect } from 'react-redux';
@@ -7,7 +7,7 @@ import PostFullView from '../../../components/organisms/PostFullView';
 import { HeaderBackButton, StackNavigationProp } from '@react-navigation/stack';
 import {QueryStackParamList} from "../../../navigations/QueryNavigator";
 import { Screens } from '../../../definitions/screen-definitions';
-import { IQuery, Response, Query } from 'node-rest-objects/dist/data/queries';
+import { IQuery, Response, Query, Comment } from 'node-rest-objects/dist/data/queries';
 import { bindActionCreators } from 'redux';
 import { loadComments, writeComment,loadResponses,writeResponse } from '../../../redux/actions/query-actions';
 import { CButton } from '../../../components/atoms';
@@ -20,16 +20,18 @@ import ResponseList from '../../../components/organisms/ResponseList';
 import { Colors } from 'react-native-paper';
 import { openResponseForm } from '../../../utils/nav-utils';
 import { FlatList } from 'react-native-gesture-handler';
+import { IAppState } from '../../../redux/initialState';
+import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 
 type QueryViewScreenNav = StackNavigationProp<QueryStackParamList>;
 interface QueryViewScreenProps{
     navigation: QueryViewScreenNav;
-    queryData:Query;
+    queryData:RESTObject<IQuery> | undefined;
     responses:Response[];
     getResponses?:any;
     newComment?:any;
     getComments?:any;
-    loading:boolean;
+    loading:boolean | undefined;
     route?:any;
 }
 
@@ -47,6 +49,7 @@ const defaultRequest = {
 function QueryView({ navigation, queryData,loading, getComments,responses, getResponses }: QueryViewScreenProps) {
     const commentRef = useRef<any>();
     const snapPoints = useMemo(() => [0,'25%','50%','75%'],[]);
+    const [response,setResponse] = useState<Response | null>(null);
     const cancelNav = () => {
         navigation.navigate(Screens.GUIDE_ME);
     }
@@ -66,7 +69,6 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
                 commentRef.current.snapTo(1);
             }
         })
-        
     }
     
     useEffect(() => {
@@ -74,6 +76,10 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
             getResponses(queryData,defaultRequest); 
         }
     },[queryData])
+
+    useEffect(() => {
+        
+    },[responses])
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -84,6 +90,19 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
         });
     },[navigation])
 
+    // useEffect(() => {
+    //     setResponse(null);
+    // },[comments])
+
+    const onResponseComment = (response:Response) => {
+        setResponse(response);
+    }
+    const onRespCommentAdded = (success) => {
+        if(success){
+            setResponse(null);
+        }
+    }
+
     return (
         <Container>
                 <FlatList
@@ -91,12 +110,12 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
                             (loading && !queryData)?
                             (<ContentLoading size={PlaceholderSize.MEDIUM}/>)
                             : 
-                            <PostFullView key={queryData.data._id} type={FullViewType.QUERY} content={queryData} onComment={getCommentFunc} commentDisabled={loading} />
+                            <PostFullView key={queryData!.data._id} type={FullViewType.QUERY} content={queryData as Query} onComment={getCommentFunc} commentDisabled={loading} />
                         
                     )}
                     data={[]}
                     renderItem={null}
-                    ListFooterComponent={() =>  <ResponseList sheetRef={commentRef}/>}
+                    ListFooterComponent={() =>  <ResponseList onCommentPressed={onResponseComment} sheetRef={commentRef}/>}
                     onRefresh={() => {
                         getResponses(queryData,defaultRequest)
                     }}
@@ -107,20 +126,24 @@ function QueryView({ navigation, queryData,loading, getComments,responses, getRe
                     snapPoints = {snapPoints}
                     initialSnapIndex = {-1}
                     backgroundComponent={() => <View style={styles.bottomSheetBack}/>}
+                    handleComponent={renderSheetHeader}
                 >
-                    <CommentListView/> 
+                    {
+                        (response)?<CommentListView response={response} onCommentAdded={onRespCommentAdded}/>
+                        :<CommentListView />
+                    }
                 </BottomSheet>
                 
         </Container>
     )
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state:IAppState){
     const { queryState } = state;
     return {
         queryData : queryState.query,
         loading : queryState.loading,
-        responses:queryState.response
+        responses:queryState.response,
     }
 }
 function mapDispatchToProps(dispatch){

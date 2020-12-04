@@ -6,13 +6,11 @@ import PostFullView from './PostFullView';
 import { ContentLoading } from '../molecules';
 import { connect } from 'react-redux';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
-import { IQuery, IResponse } from 'node-rest-objects/dist/data/queries';
+import { IQuery, IResponse, Response } from 'node-rest-objects/dist/data/queries';
 import reactotron from 'reactotron-react-native';
-
 import { bindActionCreators } from 'redux';
 import { loadComments, writeComment, writeResponse } from '../../redux/actions/query-actions';
-import BottomSheet from '@gorhom/bottom-sheet';
-import { defaultRequest } from '../../definitions/query-definitions';
+
 
 // type ResponseListProps = ReduxProps
 interface IResponseListProps{
@@ -25,8 +23,9 @@ interface IResponseListProps{
     getComments?:any;
     newResponse?:any;
     sheetRef?:any;
+    onCommentPressed?:any;
 }
-const ResponseList = ({responses,loading,error,errorType,queryData,newResponse,getComments,sheetRef}:IResponseListProps) => {
+const ResponseList = ({responses,loading,error,errorType,queryData,newResponse,getComments,sheetRef,onCommentPressed}:IResponseListProps) => {
     
     const [answers,setAnswers] = useState<RESTObject<IResponse>[]>([]);
     useEffect(() => {
@@ -34,15 +33,17 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse,g
     },[responses])
 
     const getCommentFunc = (item) => {
-        getComments(item,defaultRequest)
+        onCommentPressed(item);
+        getComments(item,{query:{},sort:{createdAt:-1}})
         .then(() => {
             if(sheetRef.current){
                 sheetRef.current.snapTo(1);
             }
         })
     }
-    const renderResponse=({item}) => {
-        return <PostFullView type={FullViewType.RESPONSE} onComment={() => getCommentFunc(item)} content={item} />
+
+    const renderResponse=({item}:{item:RESTObject<IResponse>}) => {
+        return <PostFullView type={FullViewType.RESPONSE} onComment={() => getCommentFunc(item)} content={item as Response} />
     }
 
     const memoizedRender = useMemo(() => renderResponse,[responses]);

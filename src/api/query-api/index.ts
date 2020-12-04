@@ -9,6 +9,7 @@ import queryReducer from "../../redux/reducers/query-reducer";
 import { OpinionType } from "../../definitions/common-definitions";
 import * as APIUtils from './../api-utils';
 import safePromise from 'node-rest-objects/dist/rest/safe.promise';
+import { showToast } from "../../utils/Helpers";
 // const draftTemplateRequest = {
 //     title:"What can I do about the BART being unavailable to San Jose",
 //     tags: ["BART","Bay Area","San Jose","Public Transport"],
@@ -84,8 +85,10 @@ export async function getAllComments(restObj: RESTObject<IQuery | IResponse>, re
             comment.data.queryId = restObj.data._id;
         }
         else{
+            reactotron.log!("response detected");
             comment.data.queryId = restObj.data.queryId;
             comment.data.responseId = restObj.data._id
+            reactotron.log!("pre-API-comment-obj inside Response flow",comment);
         }
         
         const searchComment = new SearchRESTObject(comment);
@@ -98,6 +101,7 @@ export async function getAllComments(restObj: RESTObject<IQuery | IResponse>, re
     }
     catch (error) {
         reactotron.log!("Query-API: comment fetch api error", error);
+        showToast(`unable to fetch comments for ${restObj.data._id}`);
         throw error;
     }
 }

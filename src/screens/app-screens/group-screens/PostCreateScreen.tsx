@@ -9,23 +9,21 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as yup from "yup";
 import reactotron from '../../../../dev/ReactotronConfig';
-import { updateResponse } from '../../../api/query-api';
 import ImageSelectionContainer from '../../../components/organisms/ImageSelectionContainer';
-import { writeResponse } from '../../../redux/actions/query-actions';
 import { IAppState } from '../../../redux/initialState';
 import { goToQueryView } from '../../../utils/nav-utils';
 import { VirtualizedContent } from '../../../components/organisms';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { IGroup, Post } from 'node-rest-objects/dist/data/groups';
+import { createPost } from '../../../api/groups-api';
 
 interface CResponseProps{
-    group:RESTObject<IGroup> | undefined
-    newPost:any;
     route:any;
 }
-const CreateResponseScreen = ({group,route}:CResponseProps) => {
+const CreateResponseScreen = ({route}:CResponseProps) => {
 
     const [loading,setLoading] = useState(false);
+    let group:IGroup;
     let isUpdate = false;
     type RespFormValues = {
         title:string;
@@ -35,14 +33,12 @@ const CreateResponseScreen = ({group,route}:CResponseProps) => {
         title:"",
         body:""
     }
-    let post:Post;
     const navigation = useNavigation();
-    if(route && route.params && route.params.formData){
-        post= route.params.formData;
-        responseInitialValues.title = post.data.title;
-        responseInitialValues.body = post.data.body;
-        isUpdate=true;
+    if(route && route.params && route.params.groupData){
+        group = route.params.groupData;
+        
     }
+    
     
     const responseSchema = yup.object({
         // title: yup.string().required("A title is Required"),
@@ -53,8 +49,8 @@ const CreateResponseScreen = ({group,route}:CResponseProps) => {
         <Container>
             <KeyboardAwareScrollView>
             <Title >
-                <Text>Response to:</Text>
-                <Text style={styles.title}>{query?.data.published.title}</Text>
+                <Text>Post to:</Text>
+                <Text style={styles.title}>{group?.data.title}</Text>
             </Title>
                 <Formik
                         initialValues = {responseInitialValues}
@@ -62,9 +58,9 @@ const CreateResponseScreen = ({group,route}:CResponseProps) => {
                         onSubmit = {(values,actions) => {
                             reactotron.log!(values);
                             setLoading(true);
-                            if(query){
+                            if(group){
                                 if(!isUpdate){
-                                    newResponse(query,values).then(() => {
+                                    createPost(group,values).then(() => {
                                         setLoading(false);
                                         goToQueryView(navigation);
                                     }).catch(error => {
@@ -120,9 +116,9 @@ const CreateResponseScreen = ({group,route}:CResponseProps) => {
 }
 
 function mapStateToProps(state:IAppState){
-    const { queryState } =  state;
+    const { groupState } =  state;
     return {
-        query:queryState.query
+        group:groupState.group
     }
 }
 
