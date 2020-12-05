@@ -11,21 +11,25 @@ interface IUserProfileViewProps{
     isSelf:boolean;
     onEdit?:Function;
     isVerified:boolean;
-    signOut?:Function;
+    signOut?:any;
+    openChat?:any;
 }
 
-const UserProfileView = ({userData,userId,isSelf,onEdit,isVerified, signOut=()=>{}}:IUserProfileViewProps) => {
+const UserProfileView = ({userData,userId,isSelf,onEdit,isVerified, signOut=()=>{}, openChat=()=>{}}:IUserProfileViewProps) => {
     return (
         <>
             <UserDetailsPreview 
                 user={userData} 
                 onEdit={onEdit} 
                 isSelf={isSelf} 
-                isVerified={isVerified}/>
+                isVerified={isVerified}
+                signOut={signOut}
+                openChat={openChat}    
+            />
             {
                 isSelf && !isVerified && <Confirmation/>
             }
-            <UserActivityNavigator />
+            <UserActivityNavigator user={userData} />
         </>
     )
 }

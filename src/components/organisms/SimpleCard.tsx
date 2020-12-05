@@ -22,7 +22,7 @@ interface ISimpleCardProps {
 const SimpleCard = ({
     content, title = "Full Name", subTitle = "subtitle",
     actionTitle = "action", action,
-    onPress = () => Alert.alert('Card Pressed'), avatarSize = 24 }: ISimpleCardProps) => {
+    onPress = () => {}, avatarSize = 24 }: ISimpleCardProps) => {
     let data: IUser | IGroup;
     if (content instanceof User) {
         data = content.data;

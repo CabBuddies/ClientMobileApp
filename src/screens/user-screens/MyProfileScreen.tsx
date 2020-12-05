@@ -29,10 +29,10 @@ interface UserDetails {
     route: any;
     userId: string | undefined;
     isAnonymous: boolean;
-    signOut: Function;
+    logOut: Function;
 }
 
-function MyProfileScreen({ getUserDetails, route, userId, loading, updatedUser, updateUserDetails, isVerified, userProfile, signOut }: UserDetails) {
+function MyProfileScreen({ getUserDetails, route, userId, loading, updatedUser, updateUserDetails, isVerified, userProfile, logOut }: UserDetails) {
 
     useEffect(() => {
         setUser(updatedUser?.data);
@@ -101,7 +101,7 @@ function MyProfileScreen({ getUserDetails, route, userId, loading, updatedUser, 
 
     return (
         <Container>
-            <UserProfileView userData={user!} userId={userId} isSelf={true} isVerified={isVerified || false} onEdit={onEdit} signOut={signOut} />
+            <UserProfileView userData={user!} userId={userId} isSelf={true} isVerified={isVerified || false} onEdit={onEdit} signOut={logOut} />
             {console.log(`user: `, user)}
             <BottomSheet
                 ref={editProfileRef}
@@ -151,7 +151,7 @@ function mapDispatchToProps(dispatch) {
     return {
         getUserDetails: bindActionCreators(getUser, dispatch),
         updateUserDetails: bindActionCreators(saveUser, dispatch),
-        signOut: bindActionCreators(signOut, dispatch)
+        logOut: bindActionCreators(signOut, dispatch)
     }
 }
 

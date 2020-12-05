@@ -5,6 +5,7 @@ import { useLayoutEffect } from 'react';
 import { View, Text } from 'react-native'
 import { connect } from 'react-redux';
 import { IAppState } from '../../redux/initialState';
+import { openDirectChat, showUserProfile } from '../../utils/nav-utils';
 import UserProfileView from './UserProfileView';
 
 const UserProfileScreen = ({route,userId,isAnonymous,isVerified, navigation}) => {
@@ -14,9 +15,15 @@ const UserProfileScreen = ({route,userId,isAnonymous,isVerified, navigation}) =>
     if (route && route.params && route.params.user) {
         user = route.params.user;
         name = user.firstName+' '+user.lastName;
+        if(user.userId===userId){
+            showUserProfile(navigation,user,true);
+            return <></>
+        }
         return (
             <Container>
-                <UserProfileView userData={user} userId={userId} isSelf={false} isVerified={isVerified}/>
+                <UserProfileView userData={user} userId={userId} isSelf={false} isVerified={isVerified} openChat={()=>{
+                    openDirectChat(navigation, user );
+                }}/>
             </Container>
         )
     }

@@ -64,8 +64,8 @@ function SignInScreen({ navigation, guestLogin, userLogin, error, userSignUp }: 
 	};
 
 	const initialValues = {
-		email: "abhivadnala@gmail.com",
-		password: "123456",  
+		email: "",
+		password: "",  
 	};
 
 	const googleUserMapper = (googleUser) => {

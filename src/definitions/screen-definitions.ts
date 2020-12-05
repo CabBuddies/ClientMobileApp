@@ -9,6 +9,7 @@ export enum Screens {
     USER_QUERIES = "Queries",
     USER_GROUPS = "Groups",
     USER_RELATIONS = "Relations",
+    USER_DELIVERY = "User Deliveries",
     FOLLOWERS = "Followers",
     FOLLOWING = "Following",
     GUIDE_ME = "Guide Me",

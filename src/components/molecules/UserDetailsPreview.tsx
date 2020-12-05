@@ -12,7 +12,7 @@ import CustomAvatar from './CustomAvatar'
 import * as UserRelationAPI from '../../api/user-relation-api';
 import { showUserFollowers, showUserFollowing } from '../../utils/nav-utils'
 
-export default function UserDetailsPreview({ user, isSelf, onEdit, isVerified, signOut=()=>{} }) {
+export default function UserDetailsPreview({ user, isSelf, onEdit, isVerified, signOut=()=>{}, openChat=()=>{}}) {
 
     if (!user) {
         return <ContentLoading size={PlaceholderSize.MEDIUM} />
@@ -44,7 +44,7 @@ export default function UserDetailsPreview({ user, isSelf, onEdit, isVerified, s
                 {<CustomAvatar data={user} size={100} />}
                 <Title style={styles.title}>{name}</Title>
                 <Caption>{user.email}</Caption>
-                <RelationButton user={user} isSelf={isSelf} onEdit={onEdit} signOut={signOut} />
+                <RelationButton user={user} openChat={openChat} isSelf={isSelf} onEdit={onEdit} signOut={signOut} />
                 <View style={styles.row}>
                     <TouchableOpacity onPress={() => {
                         showUserFollowers(navigation);

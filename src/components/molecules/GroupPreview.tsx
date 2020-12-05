@@ -1,26 +1,30 @@
 import { Icon } from 'native-base';
 import { IGroup } from 'node-rest-objects/dist/data/groups';
+import { User } from 'node-rest-objects/dist/data/user-management';
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Caption, Colors, Paragraph, Title } from 'react-native-paper'
 import { showToast } from '../../utils/Helpers';
 import GroupJoinButton from '../atoms/GroupJoinButton';
+import SimpleCard from '../organisms/SimpleCard';
 import CustomAvatar from './CustomAvatar';
 
 
-interface IGroupPreviewProps{
-    group:IGroup;
+interface IGroupPreviewProps {
+    group: IGroup;
     userId: string;
     isVerified: boolean;
 }
-const GroupViewScreen = ({group, userId, isVerified}:IGroupPreviewProps) => {
-    group.displayPicture=group.displayPicture || "https://p1.pxfuel.com/preview/608/208/981/road-road-trip-trip.jpg";
+const GroupViewScreen = ({ group, userId, isVerified }: IGroupPreviewProps) => {
+    group.displayPicture = group.displayPicture || "https://p1.pxfuel.com/preview/608/208/981/road-road-trip-trip.jpg";
+    
+    
     return (
         <View>
             <View style={styles.avatar} >
                 {<CustomAvatar data={group} size={100} />}
                 <Title style={styles.title}>{group.title}</Title>
-                {group.description!=="" && <Caption>{group.description}</Caption>}
+                {group.description !== "" && <Caption>{group.description}</Caption>}
                 <GroupJoinButton groupId={group._id} groupAuthorId={group.author.userId} userId={userId} isVerified={isVerified} />
                 {/* TODO -  to and from and times */}
                 <View style={styles.row}>
@@ -29,8 +33,8 @@ const GroupViewScreen = ({group, userId, isVerified}:IGroupPreviewProps) => {
                     }}>
                         <View style={styles.section}>
                             <Paragraph style={[styles.paragraph, styles.caption]}>
-                                {group.stats.memberCount+1}
-                        </Paragraph>
+                                {group.stats.memberCount + 1}
+                            </Paragraph>
                             <Icon type="MaterialCommunityIcons" name="account-group" />
                         </View>
                     </TouchableOpacity>

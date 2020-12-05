@@ -11,7 +11,7 @@ import reactotron from '../../../dev/ReactotronConfig';
 /**
  * (Bottom sheet || Modal Screen) to show the view of a user
  */
-export default function RelationButton({ user ,isSelf, onEdit, signOut}) {
+export default function RelationButton({ user ,isSelf, onEdit, signOut,openChat=()=>{}}) {
     const name = user.firstName + ' ' + user.lastName;
 
     const [relation,setRelation] = React.useState<UserRelation|null>(null);
@@ -177,9 +177,11 @@ export default function RelationButton({ user ,isSelf, onEdit, signOut}) {
     return (
         <View style={styles.container}>
             <Button style={{...styles.baseStyle,...buttonState.style.btn}} labelStyle={buttonState.style.text} mode={buttonState.mode} onPress={()=>{buttonState.op()}} disabled={!buttonState.enabled}>{buttonState.label}</Button>
-            { isSelf && <Button onPress={signOut}>
+            { isSelf ? <Button onPress={signOut}>
                 Sign Out
-                </Button>}
+                </Button>:
+                <Button onPress={openChat}>Message</Button>
+                }
         </View>
     );
 }

@@ -123,8 +123,8 @@ const QRFullView = ({ type = FullViewType.QUERY, content,style = null,
     return (
         <Card style={styles.card}>
 			<Badge visible size={25} style={[styles.badge,styles[type]]}>{type.toUpperCase()}</Badge>
-			<Card.Title title={published?.title} 
-				right={(props) => <Options {...props} mode={MenuModes.CRUD} deletable={isCurrentUSer} editable={isCurrentUSer} onDelete={onDelete} onEdit={onUpdate}/>}
+			<Card.Title title={published?.title} titleNumberOfLines={5}
+				right={(props) => <Options {...props}  mode={MenuModes.CRUD} deletable={isCurrentUSer} editable={isCurrentUSer} onDelete={onDelete} onEdit={onUpdate}/>}
 				style={{margin:0}}
 			/>
 			<Card.Content>
