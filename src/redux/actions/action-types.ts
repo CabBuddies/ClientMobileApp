@@ -59,13 +59,15 @@ export enum FetchActions{
     SUCCESS = "success",
     FAILURE = "failure"
 }
-export enum AuthActions{
+export enum AuthActions {
     LOGIN = "login",
     SIGN_UP = "sign-up",
-    AUTH_ERROR="auth-error",
+    AUTH_ERROR = "auth-error",
     ANONYMOUS = "anonymous",
     REFRESH = "refresh-token",
-    LOGOUT = "logout"
+    LOGOUT = "logout",
+    CONFIRM_FAILURE = "CONFIRM_FAILURE",
+    CONFIRM = "CONFIRM"
 }
 
 export enum QueryListActions{

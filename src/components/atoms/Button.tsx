@@ -1,8 +1,8 @@
 import React from 'react';
 import { ViewStyle, TextStyle, TouchableNativeFeedbackBase } from 'react-native';
 import { Button, Text, Icon } from 'native-base';
-import { NativeBase } from "native-base";
 import { Grid , Col, Row } from 'react-native-easy-grid';
+import { IconType } from '../../definitions/common-definitions';
 
 const containerStyle = {
     flex:1,
@@ -12,7 +12,6 @@ const containerStyle = {
     justifyContent:"center"
 
 }
-type IconType = "AntDesign" | "Entypo" | "EvilIcons" | "Feather" | "FontAwesome" | "FontAwesome5" | "Foundation" | "Ionicons" | "MaterialCommunityIcons" | "MaterialIcons" | "Octicons" | "SimpleLineIcons" | "Zocial" | undefined;
 export interface ButtonProps{
     container?: any;
     title?: string;

@@ -4,48 +4,65 @@ import {Content, Container, Footer, Text } from "native-base";
 import { CButton as Button } from "../../../components/atoms"
 import { Formik } from "formik";
 import * as yup from "yup";
-import Reactotron from 'reactotron-react-native';
+// import Reactotron from 'reactotron-react-native';
 import { QueryForm } from '../../../components/organisms';
 import { bindActionCreators } from 'redux';
-import { writeQuery } from "../../../redux/actions/query-actions";
+import { editQuery, writeQuery } from "../../../redux/actions/query-actions";
 import { connect } from 'react-redux';
 import { Screens } from '../../../definitions/screen-definitions';
 import { StackNavigationProp, HeaderBackButton } from "@react-navigation/stack";
 import { QueryStackParamList } from "../../../navigations/QueryNavigator";
-import reactotron from 'reactotron-react-native';
+// import reactotron from '../..';
 import { QueryFormType } from '../../../definitions/common-definitions';
+import { IQuery, Query } from 'node-rest-objects/dist/data/queries';
+import { updateQuery } from '../../../api/query-api';
+import reactotron from '../../../../dev/ReactotronConfig';
+import { goToQueryListScreen, goToQueryView } from '../../../utils/nav-utils';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type CreateQueryScreenNav = StackNavigationProp<QueryStackParamList>;
 
 interface CreateQueryScreenProps{
     navigation:CreateQueryScreenNav;
     createQuery:any;
-    queryData:any;
+    queryData:IQuery;
     loading?:boolean;
     error?:string;
+    route?:any;
+    changeQuery?:any
 }
 interface QFormValues{
     title:string;
     tags:string[];
-    body:string
+    body:string;
+    media:string[]
+}
+const defaultInitialValues:QFormValues ={
+    title:"",
+    tags: [],
+    body:"",
+    media:[]
 }
 
-const CreateQueryScreen = ({navigation, createQuery,queryData,loading,error}:CreateQueryScreenProps) => {
+const CreateQueryScreen = ({navigation, createQuery,queryData,loading,error,route,changeQuery}:CreateQueryScreenProps) => {
     
     const formRef:any = useRef();
-    const queryInitialValues:QFormValues = {
-        title:"",
-        tags: [],
-        body:""
+    let formValues = defaultInitialValues;
+    let isUpdate = false;
+    if(route && route.params && route.params.formValues){
+        formValues = route.params.formValues;
+        isUpdate= true;
     }
+    
     const querySchema = yup.object({
         title: yup.string().required("A title is Required"),
         tags: yup.array().min(1).required("Tags are Required"),
-        body: yup.string().required("description is required")
+        body: yup.string().required("description is required"),
+        media:yup.array()
     });
 
     const cancelNav = () => {
-        navigation.navigate(Screens.GUIDE_ME);
+        goToQueryListScreen(navigation)
     }
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -60,24 +77,41 @@ const CreateQueryScreen = ({navigation, createQuery,queryData,loading,error}:Cre
     },[navigation])
     return (
         <Container>
-            <Content>
+            <KeyboardAwareScrollView>
                 <Formik
                     innerRef = {formRef}
-                    initialValues = {queryInitialValues}
+                    initialValues = {formValues}
                     validationSchema={querySchema}
                     onSubmit = {(values,actions) => {
-                        Reactotron.log!(values);
-                        createQuery(values).then(() => {
-                            reactotron.log!("create-query-screen:",queryData,loading);
-                            navigation.navigate(Screens.QUERY_VIEW,{name:"created Query"});
-                        });
+                        reactotron.log!("onSubmit","isUpdate",isUpdate,"Values",values);
+                        if(!isUpdate){
+                            createQuery(values).then(() => {
+                                reactotron.log!("create-query-screen:",queryData,loading);
+                                goToQueryView(navigation, values.title);
+                            });
+                        }
+                        else{
+                            reactotron.log!("CreateQueryScreen Pre Update");
+                            try {
+                                reactotron.log!("CreateQueryScreen Pre Update",queryData._id,values);
+                                updateQuery(queryData._id,values).then(resp => {
+                                    reactotron.log!("post-update-query",resp,values);
+                                    goToQueryListScreen(navigation);
+                                }).catch(error => {
+                                    reactotron.log!("post-update-query-error",error);
+                                })
+                            } catch (error) {
+                                reactotron.log!("CreateQueryScreen Update Error",error,queryData);
+                            }
+                        }
+                        
                         actions.resetForm();
                         
                     }}
                 >
                     {(props) => <QueryForm mode={QueryFormType.QUERY} formik={props}/>}
                 </Formik>
-            </Content>
+                </KeyboardAwareScrollView>
         </Container>
     )
 }
@@ -91,7 +125,8 @@ function mapStateToProps(state){
 }
 function mapDispatchToProps(dispatch){
     return {
-        createQuery: bindActionCreators(writeQuery,dispatch)
+        createQuery: bindActionCreators(writeQuery,dispatch),
+        changeQuery: bindActionCreators(editQuery,dispatch)
     }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(CreateQueryScreen);

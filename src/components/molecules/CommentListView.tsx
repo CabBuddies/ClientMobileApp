@@ -14,6 +14,7 @@ import RESTObject from 'node-rest-objects/dist/rest/rest.object';
 import { defaultRequest } from '../../definitions/query-definitions';
 import { Grid,Row,Col } from 'react-native-easy-grid';
 import { BottomSheetFlatList, TouchableOpacity as SheetTouchable } from '@gorhom/bottom-sheet'
+import { showToast } from '../../utils/Helpers';
 
 type T = any
 interface CommentViewProps{
@@ -24,12 +25,12 @@ interface CommentViewProps{
     loading:boolean;
     newComment:any
     getComments?:any;
-    
+    onCommentAdded?:(val:boolean) => void   
 }
 const commentInitialValues = {
     comment:''
 }
-const CommentListView = ({query,comments,error,loading,getComments,newComment }:CommentViewProps) => {
+const CommentListView = ({query,comments,error,loading,getComments,newComment,response,onCommentAdded }:CommentViewProps) => {
 
     const renderListItem = ({item}) => {
         return <CommentView comment={item}/>           
@@ -40,10 +41,24 @@ const CommentListView = ({query,comments,error,loading,getComments,newComment }:
                 initialValues = {commentInitialValues}
                 onSubmit = {(values,actions) => {
                     reactotron.log!(values);
-                    newComment(query,values.comment).then(() => {
-                        actions.resetForm()
-                        // getComments(query,defaultRequest)
-                    })
+                    if(!response){
+                        newComment(query,values.comment).then(() => {
+                            actions.resetForm()
+                            // getComments(query,defaultRequest)
+                        })
+                    }
+                    else{
+
+                        newComment(response,values.comment).then(() => {
+                            onCommentAdded!(true);
+                            actions.resetForm();
+                            showToast(`comment added for ${response.data._id}`);
+                        }).catch(error => {
+                            onCommentAdded!(false);
+                            showToast(`could not add comment for ${response.data._id}`);
+                        });
+                    }
+                    
                     actions.setSubmitting(false)
                 }}
             >

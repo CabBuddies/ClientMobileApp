@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
-import React, { useState, useMemo, useEffect } from "react";
-import { Platform, StatusBar, StyleSheet, View } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet } from "react-native";
 import RootStackNavigator from "./src/navigations/RootNavigator";
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Root } from "native-base";
@@ -13,9 +13,11 @@ if (__DEV__) {
 }
 import Reactotron from 'reactotron-react-native';
 import { applyLocalDefinitions } from "./src/api/api-definitions";
+import { LogBox } from "react-native";
 
 Reactotron.log!("Hello there!")
 
+LogBox.ignoreAllLogs();
 export default function App() {
   const store = configureStore();
   // reset api definitions on component mount
@@ -26,6 +28,7 @@ export default function App() {
   let [fontsLoaded] = useFonts({
     Roboto: require("native-base/Fonts/Roboto.ttf"),
     Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+    Signatra: require('./assets/Signatra.otf')
   });
 
   const theme = {
@@ -51,10 +54,7 @@ export default function App() {
         <Root>
           <ReduxProvider store={store}>
             <PaperProvider theme={theme}>
-              <View style={styles.container}>
-                {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
-                <RootStackNavigator />
-              </View>
+              <RootStackNavigator />
             </PaperProvider>
           </ReduxProvider>
         </Root>

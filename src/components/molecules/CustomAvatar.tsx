@@ -2,6 +2,7 @@ import { IGroup } from 'node-rest-objects/dist/data/groups';
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 import { Avatar, Colors } from 'react-native-paper';
+import reactotron from '../../../dev/ReactotronConfig';
 import { IUserDetails } from '../../definitions/common-definitions';
 interface ICustomAvatarProps{
     data:IUserDetails | IGroup;
@@ -14,11 +15,13 @@ const CustomAvatar = ({data,rest,size=30}:ICustomAvatarProps) => {
 	if(data.firstName){
 		text = data.firstName.charAt(0)+data.lastName.charAt(0);
 	}
-	else if(data.title){
-		text = data.title.subString(0,2);
-	}
-	if(data?.displayPicture){
+	// else if(data.title){
+	// 	text = data.title.subString(0,2);
+	// }
+	if(data?.displayPicture && data?.displayPicture!==""){
 		const uri = data.displayPicture;
+		console.log(`data in custom avatar: `, data);
+		console.log(`image uri in custom avatar: `, uri);
 		return <Avatar.Image size={size} {...rest} source={{uri:uri}} />
 	}
 	else{

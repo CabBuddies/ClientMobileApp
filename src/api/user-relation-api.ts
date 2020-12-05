@@ -21,6 +21,28 @@ export async function getRelation(userId:string){
     return null;
 }
 
+export async function getAllRelations(
+    status:'accepted'|'rejected'|'requested'|'blocked'|'any'='accepted',
+    type:'followeeId'|'followerId'|'any'='any',
+    ownUserId?:string) {
+    try {
+        const userRelation:UserRelation = new UserRelation();
+        const sro = new SearchRESTObject<IUserRelation>(userRelation);
+        sro.request.query={};
+        if(status!=='any')
+            sro.request.query['status']=status;
+        if(type!=='any')
+            sro.request.query[type]=ownUserId;
+        sro.request.pageSize=100;
+        reactotron.log!(userRelation);
+        await sro.search();
+        return sro.response.result.map((iur)=>{return iur as UserRelation;})
+    } catch (error) {
+        
+    }
+    return [];
+}
+
 export async function sendFollowRequest(userId:string) {
     try {
         const userRelation:UserRelation = new UserRelation();

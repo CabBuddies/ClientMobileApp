@@ -1,18 +1,16 @@
-import React,{ useRef, useMemo } from 'react'
-import { StyleSheet, FlatList, View} from 'react-native'
-import { FullViewType, PlaceholderSize, QueryFormType } from '../../definitions/common-definitions';
-import {Colors, Text, Title, Button as PaperButton, Divider, Card } from 'react-native-paper';
-import PostFullView from './PostFullView';
+import React,{ useRef, useMemo, useState, useEffect } from 'react'
+import { StyleSheet, FlatList, View, Alert} from 'react-native'
+import { FullViewType, PlaceholderSize } from '../../definitions/common-definitions';
+import {Colors, Text, Title, Button as PaperButton, Divider, Card, TextInput,List} from 'react-native-paper';
+import QRFullView from './QRFullView';
 import { ContentLoading } from '../molecules';
 import { connect } from 'react-redux';
 import RESTObject from 'node-rest-objects/dist/rest/rest.object';
-import { IQuery, IResponse } from 'node-rest-objects/dist/data/queries';
+import { IQuery, IResponse, Response } from 'node-rest-objects/dist/data/queries';
 import reactotron from 'reactotron-react-native';
-import { Formik } from 'formik';
-import * as yup from "yup";
-import QueryForm from './QueryForm';
 import { bindActionCreators } from 'redux';
 import { loadComments, writeComment, writeResponse } from '../../redux/actions/query-actions';
+
 
 // type ResponseListProps = ReduxProps
 interface IResponseListProps{
@@ -23,54 +21,33 @@ interface IResponseListProps{
     errorType?:string;
     newComments?:any;
     getComments?:any;
-    newResponse?:any
+    newResponse?:any;
+    sheetRef?:any;
+    onCommentPressed?:any;
 }
-const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:IResponseListProps) => {
+const ResponseList = ({responses,loading,error,errorType,queryData,newResponse,getComments,sheetRef,onCommentPressed}:IResponseListProps) => {
     
-    const formRef:any = useRef();
-    const responseInitialValues = {
-        title:"",
-        tags: ["RESPONSE"],
-        body:""
+    const [answers,setAnswers] = useState<RESTObject<IResponse>[]>([]);
+    useEffect(() => {
+        setAnswers(responses!);
+    },[responses])
+
+    const getCommentFunc = (item) => {
+        onCommentPressed(item);
+        getComments(item,{query:{},sort:{createdAt:-1}})
+        .then(() => {
+            if(sheetRef.current){
+                sheetRef.current.snapTo(1);
+            }
+        })
     }
-    const querySchema = yup.object({
-        title: yup.string().required("A title is Required"),
-        body: yup.string().required("description is required")
-    });
-    const renderResponse=({item}) => {
-        return <PostFullView type={FullViewType.RESPONSE} content={item} />
+
+    const renderResponse=({item}:{item:RESTObject<IResponse>}) => {
+        return <QRFullView type={FullViewType.RESPONSE} onComment={() => getCommentFunc(item)} content={item as Response} />
     }
 
     const memoizedRender = useMemo(() => renderResponse,[responses]);
-    const submit= () => {
-        if(formRef.current){
-            formRef.current.handleSubmit();
-        }
-    }
-    const headerComponent = () => (
-        <View>
-            <Card>
-            <Card.Title title="Add Response"/>
-            <Card.Actions>
-            <Formik
-                    innerRef={formRef}
-                    initialValues = {responseInitialValues}
-                    validationSchema={querySchema}
-                    onSubmit = {(values,actions) => {
-                        // reactotron.log!(values);
-                        newResponse(queryData,values).then(() => {
-                        });
-                        actions.resetForm();
-                    }}
-                >
-                    {(props) => <QueryForm mode={QueryFormType.RESPONSE} formik={props}/>}
-            </Formik>
-            <PaperButton disabled ={loading} mode="text" onPress={submit} compact={true}>Post</PaperButton>
-            </Card.Actions>
-            </Card>
-            <Title style={styles.title}>RESPONSES</Title>
-        </View>
-    )
+    
     const renderEmptyComponent = () => {
         if(loading){
             return <ContentLoading size={PlaceholderSize.MEDIUM}/>
@@ -85,16 +62,17 @@ const ResponseList = ({responses,loading,error,errorType,queryData,newResponse}:
         else{
             return (
                 <View style={styles.errorContainer}>
-                    <Text style={styles.emptyText}>No Responses Yet! for this query, mind creating one?😃</Text>
+                    <Text style={styles.emptyText}>No Responses Yet!!!</Text>
                 </View>
             )
         }
     }
     return (
-        <FlatList data={responses} renderItem={memoizedRender}
+        <FlatList data={answers} renderItem={memoizedRender}
+            listKey = {"Responses-list"}
             keyExtractor = {item => (item)?item.data._id:`${Date.now()}`}
             ListEmptyComponent={renderEmptyComponent}
-            ListHeaderComponent={headerComponent}
+            ListHeaderComponent={() => (<Title style={styles.title}>RESPONSES</Title>)}
             ItemSeparatorComponent={() => <Divider />}
             extraData={responses}
         />
@@ -129,9 +107,8 @@ export default connector(ResponseList);
 const styles = StyleSheet.create({
     errorContainer:{
         flex:1,
-        justifyContent:"center",
-        alignContent:"center",
-        alignItems:"center"
+        alignItems:"center",
+        padding: 20,
     },
     errorText:{
         color:Colors.red300,

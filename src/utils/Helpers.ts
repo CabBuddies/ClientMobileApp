@@ -1,3 +1,5 @@
+import { Toast } from "native-base";
+
 export const filterPassword = (key:string,value:any) => {
     if(key === "password" || key === "confirmPassword"){
         return undefined;
@@ -16,10 +18,16 @@ export const timeSince = (date:Date)=> {
 
     var seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
   
+    const isPast = seconds>0;
+
+    seconds = (isPast?1:-1)*seconds;
+
+    console.log('nkLogTimeSince',seconds,isPast);
+
     var interval = seconds / 31536000;
     
     const val = (num:number,suf:string) => {
-        return `${num} ${suf}${num>1?'s':''} ago`;
+        return `${num} ${suf}${num>1?'s':''} `+(isPast?'ago':'from now');
     }
 
     if (interval > 1) {
@@ -47,4 +55,16 @@ export const timeSince = (date:Date)=> {
     }
     
     return val(Math.floor(seconds),'second');
+  }
+
+  export function showToast(val:string,duration:number = 3000){
+      Toast.show({
+          text:val,
+          duration:duration,
+          position:"bottom",
+          style:{
+              marginHorizontal:5,
+              borderRadius:25
+          }
+      });
   }

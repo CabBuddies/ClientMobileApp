@@ -1,5 +1,7 @@
 import { IUser } from "node-rest-objects/dist/data/user-management";
 
+export type IconType = "AntDesign" | "Entypo" | "EvilIcons" | "Feather" | "FontAwesome" | "FontAwesome5" | "Foundation" | "Ionicons" | "MaterialCommunityIcons" | "MaterialIcons" | "Octicons" | "SimpleLineIcons" | "Zocial" | undefined;
+
 export enum MenuModes{
     CRUD = "crud",
     TEXT = "text"

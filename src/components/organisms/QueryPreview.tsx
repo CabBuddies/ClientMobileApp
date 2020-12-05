@@ -16,13 +16,17 @@ import { timeSince } from "../../utils/Helpers";
 
 interface QueryPreviewProps {
 	
-	query:RESTObject<IQuery>
+	query:IQuery
 	style?: ViewStyle | Array<ViewStyle> | null;
 	headerNav?: () => void;
 	itemNav?: () => void;
 }
 
 
+
+function randBetween(a,b){
+	return Math.floor(Math.random() * b) + a  ;
+}
 
 export default function QueryPreview({
 	query,
@@ -34,8 +38,7 @@ export default function QueryPreview({
 		Alert.alert(`item clicked`);
 	},
 }: QueryPreviewProps) {
-	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats} = query.data;
-	
+	const { createdAt,author,published,stats }:{createdAt:string,author:IUser,published:IQueryContent,stats:IQueryStats} = query;
 
 	const date:string = timeSince(new Date(createdAt))||(createdAt.split('T')[0] +" "+createdAt.split('T')[1].substring(0,5));
 
@@ -50,9 +53,9 @@ export default function QueryPreview({
 		}
 	} 
 	return (
-		<Card onPress={itemNav} style={styles.card}>
+		<Card elevation={3} onPress={itemNav} style={styles.card}>
 			<Card.Title title={published?.title} right={(props) => <Options {...props} mode={MenuModes.CRUD}/>}/>
-			<Card.Title title={author?.firstName +' '+ author?.lastName} subtitle={date} left={(props) => renderAvatar(props)}/>
+			<Card.Title title={author?.firstName +' '+ author?.lastName} subtitle={""} left={(props) => renderAvatar(props)}/>
 			<Card.Actions style={styles.actions}>
 				<QueryStats stats={stats} onComment = {() => Alert.alert(`open the query to comment`)} scoreOnly/>
 			</Card.Actions>

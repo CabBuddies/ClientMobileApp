@@ -7,12 +7,14 @@ import { Grid, Row, Col } from 'react-native-easy-grid';
 import { bindActionCreators } from 'redux';
 import { confirmAccount, reqNewVerificationToken } from '../../api/auth-api';
 import { connect } from 'react-redux';
+import { getUser } from '../../redux/actions/user-action';
 
 interface ConfirmationViewProps {
-    verifyEmail?: any
+    verifyEmail?: any,
+    getUserDetails?: any
 }
 
-const ConfirmationView = ({ verifyEmail }: ConfirmationViewProps) => {
+const ConfirmationView = ({ verifyEmail, getUserDetails }: ConfirmationViewProps) => {
 
     const confirmationInitialValues = {
         confirmationCode: ''
@@ -24,6 +26,7 @@ const ConfirmationView = ({ verifyEmail }: ConfirmationViewProps) => {
         reqNewVerificationToken().then((resp) => {
             reactotron.log!(`response for resend confirmation: `, resp);
             setSendConfirmation(resp);
+
         }).catch(err => {
             reactotron.log!(err);
         })
@@ -39,6 +42,7 @@ const ConfirmationView = ({ verifyEmail }: ConfirmationViewProps) => {
                         reactotron.log!(values);
                         verifyEmail(values.confirmationCode).then(() => {
                             // TODO: toast for confirmation
+                            getUserDetails();
                         }).catch(err => {
                             reactotron.log!(`Error confirming account: `, err);
                         })
@@ -79,9 +83,10 @@ const ConfirmationView = ({ verifyEmail }: ConfirmationViewProps) => {
     )
 }
 
-function mapDispatchToProps(disptach) {
+function mapDispatchToProps(dispatch) {
     return {
-        verifyEmail: bindActionCreators(confirmAccount, disptach),
+        verifyEmail: bindActionCreators(confirmAccount, dispatch),
+        getUserDetails: bindActionCreators(getUser, dispatch)
     }
 }
 

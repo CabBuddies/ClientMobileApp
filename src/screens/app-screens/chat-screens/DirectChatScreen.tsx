@@ -1,15 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-community/async-storage'
 import { StyleSheet, TextInput, View, LogBox, Button } from 'react-native'
-import RealtimeDatabase from 'node-rest-objects/dist/rest/realtime.database'
+//import RealtimeDatabase from 'node-rest-objects/dist/rest/realtime.database'
 import { IAppState } from '../../../redux/initialState'
 import { connect } from 'react-redux'
+import reactotron from '../../../../dev/ReactotronConfig'
+import { IUser } from 'node-rest-objects/dist/data/user-management'
 
-interface IMessage{
-    author:string,
-    text:string,
-    time:number
+import * as NROMessage from 'node-rest-objects/dist/data/messages';
+import { Colors } from 'react-native-paper'
+import { useNavigation } from '@react-navigation/native'
+
+interface IMessage {
+    author: string,
+    text: string,
+    time: number
 }
 
 const firebaseConfig = {
@@ -24,7 +30,9 @@ const firebaseConfig = {
     measurementId: "G-VQLJ1DMMJ5"
 }
 
-RealtimeDatabase.getApp({ options: firebaseConfig })
+NROMessage.connectToFirebase(firebaseConfig);
+
+
 
 //@ts-ignore
 // if (firebase.apps.length === 0) {
@@ -36,80 +44,112 @@ RealtimeDatabase.getApp({ options: firebaseConfig })
 // const db = RealtimeDatabase.getDb({options: firebaseConfig})
 // const chatsRef = db.collection('chats')
 
+function nkLog(a?,b?,c?,d?,e?) {
+    console.log('nk-log', a,b,c,d,e)
+    reactotron.log!('nk-log', a,b,c,d,e);
+}
 
-function DirectChatScreen({ userName, _user }) {
-    userName = userName.toLowerCase();
-    const friendMap = {
-        "abhilash": "karthik",
-        "karthik": "abhilash"
-    };
-    const [user, setUser] = useState<any>(null)
-    const [name, setName] = useState('')
+let lastTS ="";
+
+function DirectChatScreen(
+    { ownUserProfile, ownUserId, route }:
+        { ownUserProfile: IUser, ownUserId: string, route }
+) {
+    const friend = route.params.user as IUser;
+
     const [messages, setMessages] = useState([])
-    // useEffect(() => {
-    //     readUser()
-    //     const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
-    //         const messagesFirestore = querySnapshot
-    //             .docChanges()
-    //             .filter(({ type }) => type === 'added')
-    //             .map(({ doc }) => {
-    //                 const message = doc.data()
-    //                 //createdAt is firebase.firestore.Timestamp instance
-    //                 //https://firebase.google.com/docs/reference/js/firebase.firestore.Timestamp
-    //                 return { ...message, createdAt: message.createdAt.toDate() }
-    //             })
-    //             .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    //         appendMessages(messagesFirestore)
-    //     })
-    //     RealtimeDatabase.observePath({path:`user/${friendMap[]}`})
-    //     return () => unsubscribe()
-    // }, [])
+    const [extras,setExtras] = useState<{lastTs,message}>({lastTs:"",message:""});
+   
+    nkLog(`you are  :`, ownUserProfile,ownUserId);
+    nkLog(`user to chat with :`, route.params.user);
+
+    const navigation = useNavigation();
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            title: friend.firstName
+        })
+    }, [])
+
     useEffect(()=>{
-        RealtimeDatabase.observePath({path:`user/${userName}`,callback:(val)=>{
-            appendMessages([val]);
-        }})
-    },[])
+        if(extras.message!=='')
+        appendMessages([extras.message]);
+    },[extras])
+
+
+    useEffect(() => {
+        nkLog(`main effect  :`, ownUserProfile,ownUserId);
+        NROMessage.listenLiveMessages({
+            ownUserId,
+            directChatMessageReceived: (m) => {
+                nkLog(`direct chat message`, m)
+                if(m.from === friend.userId){
+                    const gcm = {
+                        "text": m.message,
+                        "user": {
+                            "_id": m.from,
+                            "name": friend.firstName
+                        },
+                        "createdAt": new Date(parseInt(m.ts)).toString(),
+                        "_id": m.ts
+                    };
+                    nkLog('gcm',gcm);
+                    processNewMessage(gcm);
+                }
+            },
+            otherMessageReceived: (message) => {
+                nkLog('other', message)
+            },
+        });
+    }, [])
+
+    const processNewMessage=(message)=>{
+        nkLog(extras.lastTs,message["_id"]);
+        if(extras.lastTs!=message["_id"] && extras.message["text"] != message["text"]){
+            nkLog('new message confirmed');
+            setExtras({lastTs:message["_id"],message:message});
+        }
+    };
+
     const appendMessages = useCallback(
         (messages) => {
+
             setMessages((previousMessages) => GiftedChat.append(previousMessages, messages))
         },
         [messages]
     )
-    async function readUser() {
-        const user = await AsyncStorage.getItem('user')
-        if (user) {
-            setUser(JSON.parse(user))
-        }
-    }
-    async function handlePress() {
-        const _id = Math.random().toString(36).substring(7)
-        const user = { _id, name }
-        await AsyncStorage.setItem('user', JSON.stringify(user))
-        setUser(user)
-    }
+
     async function handleSend(messages) {
-        console.log(`messages: `, messages[0].text, 'username', userName,'message',messages[0]);
+        nkLog(`messages: `, messages[0].text, 'message', messages[0]);
+        nkLog(messages[0]);
+        NROMessage.sendDirectChatMessage(ownUserId, friend.userId, messages[0].text);
         //const message:IMessage = {author:userName,text:messages[0].text,time:new Date().getTime()};
-        RealtimeDatabase.pushToPath({path:`user/${friendMap[userName]}`,value:messages[0]});
-        appendMessages(messages)
+        //RealtimeDatabase.pushToPath({path:`user/${friendMap[userName]}`,value:messages[0]});
+        processNewMessage(messages[0])
     }
 
-    if (!user) {
-        return (
-            <View style={styles.container}>
-                <TextInput style={styles.input} placeholder="Enter your name" value={name} onChangeText={setName} />
-                <Button onPress={handlePress} title="Enter the chat" />
-            </View>
-        )
+    if(!ownUserProfile){
+        return <View></View>
     }
 
-    return <GiftedChat messages={messages} user={user} onSend={handleSend} />
+    const gUser = { _id: ownUserId, name: `${ownUserProfile.firstName} ${ownUserProfile.lastName}` };
+
+    nkLog('pre-render',messages,gUser,handleSend);
+
+    return (
+    <View style={{backgroundColor: Colors.white, flex:1}}>
+        <GiftedChat
+        messages={messages} 
+        user={gUser} 
+        onSend={handleSend} />
+    </View>)
 }
 
 function mapStateToProps(state: IAppState) {
-    const { userState } = state;
+    const { userState, authState } = state;
     return {
-        userName: userState.user?.data.firstName
+        ownUserProfile: userState.user?.data,
+        ownUserId: authState.userId
     }
 }
 

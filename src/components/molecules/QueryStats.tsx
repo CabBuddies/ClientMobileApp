@@ -5,13 +5,14 @@ import {ViewsAtom} from '../atoms';
 import { Grid, Col, Row } from 'react-native-easy-grid';
 import {Container, Content} from 'native-base';
 import { IQueryStats } from '../../definitions/query-definitions';
+import { IGroupStats } from '../../definitions/ride-definitions';
 
 
 interface QueryStatsProps{
-    stats: IQueryStats;
+    stats: IQueryStats | IGroupStats;
     onComment?: () => void;
-    onDownVote?: () => void;
-    onUpVote?: () => void;
+    onDownVote?: (val:boolean) => void;
+    onUpVote?: (val:boolean) => void;
     scoreOnly?:boolean;
     commentDisabled?:boolean
 }
@@ -21,9 +22,9 @@ export function QueryStats({stats, onComment, onDownVote, onUpVote, scoreOnly=fa
         <Grid >
             <Row style = {{alignItems: 'center'}}>
             
-                <VotesAtom scoreOnly={scoreOnly} voteCount = {stats.score} onUpVote={onUpVote} onDownVote={onDownVote}/>
+                <VotesAtom scoreOnly={scoreOnly} voteCount={stats.score} onUpVote={onUpVote} onDownVote={onDownVote}/>
             
-                <CommentsAtom commentCount = {stats.commentCount} onCommentPress={onComment} commentDisabled={commentDisabled}/>
+                <CommentsAtom commentCount = {stats.responseCount} onCommentPress={onComment} commentDisabled={commentDisabled}/>
             
                 <ViewsAtom views = {stats.viewCount}/>
             
