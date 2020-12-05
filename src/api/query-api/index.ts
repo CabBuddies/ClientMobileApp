@@ -16,7 +16,7 @@ import { showToast } from "../../utils/Helpers";
 //     body: "It has been a while since the San Jose BART lines have been built,\
 //     but the stations are still not open, what can I do about this? ",
 // }
-const defaultSearchRequest = {
+const defaultSearchRequest:any = {
     sort: {
         "createdAt": -1
     }

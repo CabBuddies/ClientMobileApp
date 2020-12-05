@@ -8,17 +8,18 @@ import { showToast } from "./Helpers";
 
 type typeNav = NavigationProp<Record<string, object | undefined>, string, any, {}, {}>;
 
-export function showUserProfile(navigation: typeNav, userData: IUser) {
+export function showUserProfile(navigation: typeNav, userData: IUser, isSelf=false) {  
     navigation.navigate(Navs.APP, {
         screen: Navs.PROFILE,
         params: {
-            screen: Screens.USER_PROFILE,
+            screen: isSelf ? Screens.MY_PROFILE : Screens.USER_PROFILE,
             params: {
                 user: userData
             }
         }
     });
 }
+
 
 export function showRidesNow(navigation: typeNav, fromLocation: loc, toLocation: loc) {
     navigation.navigate(Navs.APP, {
@@ -204,7 +205,7 @@ export function showUserFollowing(navigation: typeNav) {
     })
 }
 
-export function openDirectChat(navigation, user) {
+export function openDirectChat(navigation: typeNav, user: IUser) {
     navigation.navigate(Navs.APP, {
         screen: Navs.CHATS,
         params: {
